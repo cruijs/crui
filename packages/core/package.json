@@ -1,0 +1,27 @@
+{
+  "name": "@crui/core",
+  "author": "Salvatore Pelligra",
+  "version": "0.1.0",
+  "description": "Foundation on which the CRUI library builds on",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.12",
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {},
+  "jest": {
+    "transform": {
+      ".ts": "ts-jest"
+    },
+    "testRegex": ".test.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  }
+}

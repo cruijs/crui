@@ -1,0 +1,44 @@
+{
+  "name": "reactive-ui-todos",
+  "author": "time-bridge",
+  "version": "0.1.0",
+  "description": "Todos example implement in ReactiveUI",
+  "scripts": {
+    "serve": "webpack-dev-server --open",
+    "build": "webpack --mode=development",
+    "watch": "webpack --mode=development --watch",
+    "build-prod": "webpack --mode=production",
+    "test": "jest --"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@types/jest": "^23.3.3",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-macros": "^2.4.2",
+    "clean-webpack-plugin": "^0.1.19",
+    "jest": "^23.6.0",
+    "source-map-loader": "^0.2.4",
+    "ts-jest": "^23.10.3",
+    "ts-mockito": "^2.3.1",
+    "typescript": "^3.1.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
+  },
+  "dependencies": {
+    "mobx": "^5.9.4"
+  },
+  "jest": {
+    "transform": {
+      ".ts": "ts-jest"
+    },
+    "testRegex": ".test.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  }
+}

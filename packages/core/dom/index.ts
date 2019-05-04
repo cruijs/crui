@@ -7,7 +7,7 @@ export type Component = <N extends Node>(dom: DOM<N>) => Rendered<N>
 
 export type DOM<N extends Node = any> = {
     create: (tag: Tag) => N
-    createText: (s: string) => N
+    createText: (s: string) => N & { textContent: string|null }
     remove: (parent: N, child: N) => void
     insert: (parent: N, child: N) => void
     insertBefore: (parent: N, ref: N|null, node: N) => void

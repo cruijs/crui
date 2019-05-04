@@ -49,10 +49,10 @@ describe(handleSplice, () => {
                     run({
                         upd: remove(1, [1, 3]),
                         list,
-                        imap: [null, null, null, 0],
+                        imap: [undefined, undefined, undefined, 0],
                     }, {
                         list,
-                        imap: [null, 0]
+                        imap: [undefined, 0]
                     })
                 })
             })
@@ -62,10 +62,10 @@ describe(handleSplice, () => {
                     run({
                         upd: remove(0, [2, 4]),
                         list: [2, 4, 6],
-                        imap: [0, 1, null, 2],
+                        imap: [0, 1, undefined, 2],
                     }, {
                         list: [6],
-                        imap: [null, 0]
+                        imap: [undefined, 0]
                     })
                 })
             })
@@ -74,11 +74,11 @@ describe(handleSplice, () => {
                 it('remove all matches', () => {
                     run({
                         list: [2, 4, 6, 8],
-                        imap: [0, null, 1, null, 2, 3],
+                        imap: [0, undefined, 1, undefined, 2, 3],
                         upd: remove(0, [2, 3]),
                     }, {
                         list: [4, 6, 8],
-                        imap: [0, null, 1, 2],
+                        imap: [0, undefined, 1, 2],
                     })
                 })
             })
@@ -91,10 +91,10 @@ describe(handleSplice, () => {
                     run({
                         upd: remove(2, [1, 3]),
                         list,
-                        imap: [null, 0, null, null, null],
+                        imap: [undefined, 0, undefined, undefined, undefined],
                     }, {
                         list,
-                        imap: [null, 0, null]
+                        imap: [undefined, 0, undefined]
                     })
                 })
             })
@@ -116,11 +116,11 @@ describe(handleSplice, () => {
                 it('remove all matches', () => {
                     run({
                         list: [2, 4, 6, 8],
-                        imap: [0, null, null, 1, null, 2, 3],
+                        imap: [0, undefined, undefined, 1, undefined, 2, 3],
                         upd: remove(2, [3, 4, 5, 6]),
                     }, {
                         list: [2, 8],
-                        imap: [0, null, 1],
+                        imap: [0, undefined, 1],
                     })
                 })
             })
@@ -133,7 +133,7 @@ describe(handleSplice, () => {
                     run({
                         upd: remove(1, [1, 3]),
                         list,
-                        imap: [0, null, null],
+                        imap: [0, undefined, undefined],
                     }, {
                         list,
                         imap: [0]
@@ -158,11 +158,11 @@ describe(handleSplice, () => {
                 it('remove all matches', () => {
                     run({
                         list: [2, 4, 8],
-                        imap: [0, 1, null, null, 2],
+                        imap: [0, 1, undefined, undefined, 2],
                         upd: remove(3, [3, 8]),
                     }, {
                         list: [2, 4],
-                        imap: [0, 1, null],
+                        imap: [0, 1, undefined],
                     })
                 })
             })
@@ -180,7 +180,7 @@ describe(handleSplice, () => {
                         imap: [0],
                     }, {
                         list,
-                        imap: [null, null, 0]
+                        imap: [undefined, undefined, 0]
                     })
                 })
             })
@@ -190,10 +190,10 @@ describe(handleSplice, () => {
                     run({
                         upd: added(0, [2, 4]),
                         list: [6],
-                        imap: [0, null],
+                        imap: [0, undefined],
                     }, {
                         list: [2, 4, 6],
-                        imap: [0, 1, 2, null]
+                        imap: [0, 1, 2, undefined]
                     })
                 })
             })
@@ -202,11 +202,11 @@ describe(handleSplice, () => {
                 it('add all matches', () => {
                     run({
                         list: [4, 6],
-                        imap: [0, null, 1, null],
+                        imap: [0, undefined, 1, undefined],
                         upd: added(0, [0, 1, 2]),
                     }, {
                         list: [0, 2, 4, 6],
-                        imap: [0, null, 1, 2, null, 3, null],
+                        imap: [0, undefined, 1, 2, undefined, 3, undefined],
                     })
                 })
             })
@@ -219,10 +219,10 @@ describe(handleSplice, () => {
                     run({
                         upd: added(2, [1, 3]),
                         list,
-                        imap: [null, 0, null],
+                        imap: [undefined, 0, undefined],
                     }, {
                         list,
-                        imap: [null, 0, null, null, null]
+                        imap: [undefined, 0, undefined, undefined, undefined]
                     })
                 })
             })
@@ -244,11 +244,11 @@ describe(handleSplice, () => {
                 it('add all matches', () => {
                     run({
                         list: [2, 8],
-                        imap: [0, null, 1],
+                        imap: [0, undefined, 1],
                         upd: added(2, [3, 4, 5, 6]),
                     }, {
                         list: [2, 4, 6, 8],
-                        imap: [0, null, null, 1, null, 2, 3],
+                        imap: [0, undefined, undefined, 1, undefined, 2, 3],
                     })
                 })
             })
@@ -264,7 +264,7 @@ describe(handleSplice, () => {
                         upd: added(2, [1, 3]),
                     }, {
                         list,
-                        imap: [0, null, null],
+                        imap: [0, undefined, undefined],
                     })
                 })
             })
@@ -286,11 +286,11 @@ describe(handleSplice, () => {
                 it('add all matches', () => {
                     run({
                         list: [2, 4],
-                        imap: [0, 1, null],
+                        imap: [0, 1, undefined],
                         upd: added(3, [3, 8]),
                     }, {
                         list: [2, 4, 8],
-                        imap: [0, 1, null, null, 2],
+                        imap: [0, 1, undefined, undefined, 2],
                     })
                 })
             })

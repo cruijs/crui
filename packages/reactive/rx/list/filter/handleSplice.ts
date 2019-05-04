@@ -30,7 +30,7 @@ function calcIndex<T>(upd: Splice<T>, indexMap: Index): number {
     if (indexMap.length === 0) {
         return 0
     }
-    let n: number|null
+    let n: number|undefined
     const last = upd.index + upd.removed.length
     for (let i = upd.index; i <= last; ++i) {
         n = indexMap[i]

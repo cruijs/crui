@@ -16,7 +16,7 @@ export function handleUpdate<T>(upd: UpdateItem<T>, { p, $nl, indexMap }: Payloa
     }
     // remove
     if (matches === false && i != null) {
-        indexMap[upd.index] = null;
+        indexMap[upd.index] = undefined;
         updateIndex(indexMap, upd.index, (n) => n - 1);
         $nl.splice(i, 1, []);
         return indexMap;

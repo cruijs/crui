@@ -15,9 +15,9 @@ describe(handleReplace, () => {
         const actual = handleReplace(upd, {
             $nl,
             p: isEven,
-            indexMap: [null, 0]
+            indexMap: [undefined, 0]
         })
         expect($nl.get()).toEqual([2, 4])
-        expect(actual).toEqual([null, 0, null, 1])
+        expect(actual).toEqual([undefined, 0, undefined, 1])
     })
 })

@@ -37,7 +37,7 @@ describe(handleUpdate, () => {
         describe('and new value does not match predicate', () => {
             it('do nothing', () => {
                 const upd = update(2, 3)
-                const imap = [null, 0]
+                const imap = [undefined, 0]
                 const list = [6]
                 run({ upd, imap, list }, { imap, list })
             })
@@ -49,7 +49,7 @@ describe(handleUpdate, () => {
                     run({
                         upd: update(0, 4),
                         list: [],
-                        imap: [null],
+                        imap: [undefined],
                     }, {
                         list: [4],
                         imap: [0]
@@ -62,7 +62,7 @@ describe(handleUpdate, () => {
                     run({
                         upd: update(0, 4),
                         list: [6],
-                        imap: [null, 0],
+                        imap: [undefined, 0],
                     }, {
                         list: [4, 6],
                         imap: [0, 1]
@@ -74,10 +74,10 @@ describe(handleUpdate, () => {
                     run({
                         upd: update(2, 4),
                         list: [2, 6],
-                        imap: [null, 0, null, null, 1]
+                        imap: [undefined, 0, undefined, undefined, 1]
                     }, {
                         list: [2, 4, 6],
-                        imap: [null, 0, 1, null, 2]
+                        imap: [undefined, 0, 1, undefined, 2]
                     })
                 })
             })
@@ -86,10 +86,10 @@ describe(handleUpdate, () => {
                     run({
                         upd: update(4, 6),
                         list: [2, 4],
-                        imap: [null, 0, 1, null, null]
+                        imap: [undefined, 0, 1, undefined, undefined]
                     }, {
                         list: [2, 4, 6],
-                        imap: [null, 0, 1, null, 2],
+                        imap: [undefined, 0, 1, undefined, 2],
                     })
                 })
             })
@@ -100,7 +100,7 @@ describe(handleUpdate, () => {
         describe('and value matches too', () => {
             it('update value', () => {
                 const upd = update(1, 4)
-                const imap = [null, 0]
+                const imap = [undefined, 0]
                 const list = [6]
                 run({ upd, imap, list }, { imap, list: [4] })
             })
@@ -111,11 +111,11 @@ describe(handleUpdate, () => {
                 it('is removed', () => {
                     run({
                         list: [2],
-                        imap: [null, 0],
+                        imap: [undefined, 0],
                         upd: update(1, 3),
                     }, {
                         list: [],
-                        imap: [null, null]
+                        imap: [undefined, undefined]
                     })
                 })
             })
@@ -124,11 +124,11 @@ describe(handleUpdate, () => {
                 it('is removed', () => {
                     run({
                         list: [2, 4],
-                        imap: [null, 0, null, 1],
+                        imap: [undefined, 0, undefined, 1],
                         upd: update(1, 3),
                     }, {
                         list: [4],
-                        imap: [null, null, null, 0]
+                        imap: [undefined, undefined, undefined, 0]
                     })
                 })
             })
@@ -137,11 +137,11 @@ describe(handleUpdate, () => {
                 it('is removed', () => {
                     run({
                         list: [2, 4, 6],
-                        imap: [0, 1, null, 2, null],
+                        imap: [0, 1, undefined, 2, undefined],
                         upd: update(1, 3),
                     }, {
                         list: [2, 6],
-                        imap: [0, null, null, 1, null]
+                        imap: [0, undefined, undefined, 1, undefined]
                     })
                 })
             })
@@ -154,7 +154,7 @@ describe(handleUpdate, () => {
                         upd: update(2, 3),
                     }, {
                         list: [2, 4],
-                        imap: [0, 1, null]
+                        imap: [0, 1, undefined]
                     })
                 })
             })

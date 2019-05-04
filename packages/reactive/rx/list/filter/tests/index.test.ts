@@ -1,4 +1,4 @@
-import { filter } from '..';
+import { $filter } from '..';
 import { StreamList, Update, UpdateType } from '../../index'
 import { Predicate } from '../types';
 
@@ -10,7 +10,7 @@ const isEven: Predicate<number> = (n) => n % 2 === 0
 function setup(xs: number[], p = isEven) {
     upd = undefined
     list = new StreamList(xs)
-    const res = filter(list, p)
+    const res = $filter(list, p)
     filtered = res.list
     filtered.subscribe((u) => upd = u)
     return list
@@ -20,7 +20,7 @@ function setup(xs: number[], p = isEven) {
 describe('filter', () => {
     it('correctly filter list', () => {
         const list = new StreamList([1, 2, 3, 4, 5, 6])
-        const { list: filtered } = filter(list, isEven)
+        const { list: filtered } = $filter(list, isEven)
         expect(filtered.get()).toEqual([2, 4, 6])
     })
     describe('Replace source list', () => {

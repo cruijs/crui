@@ -5,14 +5,14 @@ import { with$Bind } from './with$Bind';
 import { Bind } from './with$Bind';
 import { Reactive, with$Props } from './with$Props';
 
-export type Config<P, $P> = Base<P> & {
+export type Config<P, $P, C> = Base<P, C> & {
     $bind?: Bind,
     $props?: Reactive<$P>
 }
-export function h$<P, $P>(tag: Tag, config: Config<P, $P>): Component {
+export function h$<P, $P, C>(tag: Tag, config: Config<P, $P, C>): Component<C> {
     const component = h(tag, config)
-    return (dom) => {
-        const r = component(dom)
+    return (dom, ctxt) => {
+        const r = component(dom, ctxt)
         const { unsub, beforeUnmount } = mergeCleanups([
             r,
             with$Props(r.node, config.$props!),

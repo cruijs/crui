@@ -3,7 +3,7 @@ import { Unsubscribe } from '../type';
 
 export type Tag = string
 export type Node = {}
-export type Component = <N extends Node>(dom: DOM<N>) => Rendered<N>
+export type Component<C = {}> = <N extends Node>(dom: DOM<N>, context: C) => Rendered<N>
 
 export type DOM<N extends Node = any> = {
     create: (tag: Tag) => N
@@ -17,12 +17,13 @@ export type DOM<N extends Node = any> = {
     listen: Listen<N>
 }
 
-export function render<N extends Node>(
+export function render<N extends Node, Ctxt extends C, C>(
     dom: DOM<N>,
     root: N,
-    comp: Component,
+    comp: Component<C>,
+    context: Ctxt
 ): Cleanup {
-    const r = comp(dom)
+    const r = comp(dom, context)
     dom.insert(root, r.node)
     return r
 }

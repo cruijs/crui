@@ -16,8 +16,8 @@ export const defCleanup: Cleanup = {
 }
 
 type CollectCleanup = {
-    unsubs: Unsubscribe[],
-    bu: AsyncUnmount[],
+    us: Unsubscribe[],
+    bs: AsyncUnmount[],
 }
 export function mergeCleanups(cs: Cleanup[]): Cleanup {
     if (cs.length === 0) {
@@ -29,14 +29,14 @@ export function mergeCleanups(cs: Cleanup[]): Cleanup {
 
     const collected = cs.reduce(
         (z, c) => {
-            z.unsubs.push(c.unsub)
-            z.bu.push(c.beforeUnmount)
+            z.us.push(c.unsub)
+            z.bs.push(c.beforeUnmount)
             return z
         },
-        { unsubs: [], bu: [] } as CollectCleanup
+        { us: [], bs: [] } as CollectCleanup
     )
     return {
-        unsub: combine(collected.unsubs),
-        beforeUnmount: combineAsync(collected.bu)
+        unsub: combine(collected.us),
+        beforeUnmount: combineAsync(collected.bs)
     }
 }

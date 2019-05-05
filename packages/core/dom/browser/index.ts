@@ -15,8 +15,8 @@ const withFragment = (ns: Node[]) => {
     return fragment
 }
 
-export function mount(root: Node, comp: Component) {
-    return render(dom, root, comp)
+export function mount<Ctxt extends C, C>(root: Node, comp: Component<C>, context: Ctxt) {
+    return render(dom, root, comp, context)
 }
 
 export const dom: DOM<Node> = {

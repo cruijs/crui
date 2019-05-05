@@ -6,34 +6,35 @@ import { Events, withEvents } from './withEvents';
 import { Lifecycle, withLifecycles } from './withLifecycles';
 import { withProps } from './withProps';
 
-export type Config<P> = {
+export type Config<P, C> = {
     props?: P,
     events?: Events,
-    children?: Component[],
+    children?: Component<C>[],
     lifecycles?: Lifecycle,
 }
 
-export function h<P>(tag: Tag, config?: Config<P>): Component {
-    return (dom) => {
+export function h<P, C>(tag: Tag, config?: Config<P, C>): Component<C> {
+    return (dom, ctxt) => {
         const node = dom.create(tag)
-        const { beforeUnmount, unsub } = withAll(dom, node, config)
+        const { beforeUnmount, unsub } = withAll(dom, ctxt, node, config)
         return { node, beforeUnmount, unsub }
     }
 }
 
-type WithAll = <N, P>(
+type WithAll = <N, C, P>(
     dom: DOM<N>,
+    context: C,
     node: N,
-    config?: Config<P>,
+    config?: Config<P, C>,
 ) => Cleanup
 
-export const withAll: WithAll = (dom, node, config) => {
+export const withAll: WithAll = (dom, ctxt, node, config) => {
     if (config == null) {
         return defCleanup
     }
     withProps(node, config.props)
     return mergeCleanups([
-        withChildren(dom, node, config.children),
+        withChildren(dom, ctxt, node, config.children),
         withEvents(dom, node, config.events),
         withLifecycles(node, config.lifecycles),
     ])

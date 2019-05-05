@@ -1,6 +1,7 @@
 {
   "name": "@crui/core",
   "author": "Salvatore Pelligra",
+  "license": "GPL-3.0",
   "version": "0.1.0",
   "description": "Foundation on which the CRUI library builds on",
   "scripts": {

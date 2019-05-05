@@ -1,4 +1,5 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
+import { compatibleInputEvent } from '@crui/core/dom/events';
 import { Cleanup, defCleanup } from '@crui/core/elems/rendered';
 import { combine } from '@crui/core/utils/combine';
 import { keys } from '@crui/core/utils/object';
@@ -27,6 +28,7 @@ export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Cleanup {
     }
 
     const unsubs: Unsubscribe[] = []
+    const event = compatibleInputEvent(node)
     keys(bind).forEach((prop) => {
         const $s: Stream<any> | undefined = bind[prop]
         if ($s == null) {
@@ -34,7 +36,7 @@ export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Cleanup {
         }
         const atomic = makeAtomic()
         unsubs.push(
-            dom.listen(node, 'change', atomic(() => {
+            dom.listen(node, event, atomic(() => {
                 $s.set((node as any)[prop])
             })),
             $s.subscribe(atomic((val) => {

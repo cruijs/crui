@@ -1,3 +1,4 @@
+export { Component } from './dom';
 export { h } from './elems';
 export { text } from './elems/text';
 export { hc } from './elems/withChildren';

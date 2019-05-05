@@ -14,14 +14,13 @@ export type DOM<N extends Node = any> = {
     batchInsert: (parent: N, children: N[]) => void
     batchInsertBefore: (parent: N, ref: N|null, node: N[]) => void
     nextChild: (parent: N, ref: N) => N|null
-    mount: (comp: Component, node: N) => Cleanup
     listen: Listen<N>
 }
 
 export function render<N extends Node>(
     dom: DOM<N>,
+    root: N,
     comp: Component,
-    root: N
 ): Cleanup {
     const r = comp(dom)
     dom.insert(root, r.node)

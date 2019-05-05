@@ -1,4 +1,5 @@
 import { DOM, Listen, render } from '..';
+import { Component } from '../index'
 
 const listen: Listen<Node> = (elem, event, handler) => {
     elem.addEventListener(event, handler)
@@ -12,6 +13,10 @@ const withFragment = (ns: Node[]) => {
     }
     ns.forEach((n) => fragment!.appendChild(n))
     return fragment
+}
+
+export function mount(root: Node, comp: Component) {
+    return render(dom, root, comp)
 }
 
 export const dom: DOM<Node> = {
@@ -31,6 +36,5 @@ export const dom: DOM<Node> = {
         (p).insertBefore(withFragment(ns), r)
     },
     nextChild: (_, ref) => ref.nextSibling,
-    mount: (c, n) => render(dom, c, n),
     listen,
 }

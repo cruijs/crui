@@ -24,7 +24,7 @@ const Component = hc('dl', [
 mount(document.getElementById('root'), Component)
 ```
 
-This will mount a tree like the following on the `root` element:
+This code is equivalent to:
 ```html
 <dl>
     <dt>CRUI</dt>
@@ -34,17 +34,16 @@ This will mount a tree like the following on the `root` element:
     <dd>Inteface</dt>
 </dl>
 ```
-It will building build all the required elements in one shot before adding them into the DOM and therefore ensuring that only one redraw & reflow is performed.
-That's said, the Core package only cares about composability and nothing else, so this component is fully static.
+It builds all the required elements in one shot before adding them into the DOM and therefore ensuring that only one redraw & reflow is performed.  
+The Core package only cares about composability and nothing else, so this component is fully static.
 
 To learn more about core, see its [README](packages/core/README.md).
 
 ## Reactive
-To make a component reactive we'll need `@crui/reactive` package.
-This package is quite small and for some use cases could be too bare bone, however the fact that Reactivity is just a library ensure it can be changed with something more powerful if needed. That's said, for the majority of applications this should be more than enough.
+To make a component reactive we'll need `@crui/reactive` package.  
+This package is quite small and for some use cases could be too simple, however the fact that Reactivity is just a library ensures it can be changed with something more powerful when needed. That's said, for the majority of applications this should be more than enough.
 
-This package implements Reactivity through Streams and **do not** relay on any Virtual DOM.
-Here is an example of a reactive component:
+This package implements Reactivity through Streams and **do not** relay on any Virtual DOM. Here is an example of a reactive component:
 ```typescript
 import { hc, ht, Component } from '@crui/core'
 import { mount } from '@crui/core/dom/browser'
@@ -77,7 +76,7 @@ The rendered equivalent would be:
 </section>
 ```
 
-All functions that have a `$` work with Streams rather than simple values. Through `$bind` we bound input `value` property to `echo`, which is a StreamBox, ie a stream containing a single value at a time. Now, every time we alter the input value, the message will change too!
+All functions that have a `$` work with Streams rather than simple values. Through `$bind` we bound input `value` property to `echo`, which is a StreamBox, ie a stream containing a single value at a time. Now, every time we alter the input value, the message will change too!  
 But there is more to it: binding is a two way matter and therefore any change to `echo` will change input value too.
 
 So, if we add this:
@@ -88,8 +87,8 @@ setTimeout(() => {
 ```
 After 3 seconds the input content will be set to `Hello, world!`.
 
-As we said before, we do not relay on any Virtual DOM, but don't worry, we don't use `.innerHTML` or similar either ;)
-Static nodes gets rendered exactly once on the page and as soon as the component is mounted, while the reactive ones are rendered and updated only when a new value is available on the Stream.
+As we said before, we do not relay on any Virtual DOM, but don't worry, we don't use `.innerHTML` or similar either ;)  
+All nodes are rendered as soon as the component is mounted, but the reactive ones are also updated as soon as a new value is available on the Stream.  
 So, every time we enter something in the input, only the text node inside `p` changes; when `echo` change its value programmatically, given that we know this stream is bound to `value` prop, we **do not** render the whole input element again, but rather update the `value` property itself.
 
 Long story short: we have surgical updates in par with a VDOM, but without all the calculation, diffs and patching required by it and therefore achieving better performance.
@@ -100,16 +99,16 @@ To know more about `@crui/reactive`, see the dedicated [README](packages/reactiv
 - `packages/eg-reactive-todos`: the usual ToDo demo
 
 ## More to come
-- [] A sane Context API
-- [] Transactions & Animations
-- [] Easy testing 
-- [] CSS-in-JS support
-- [] Server side rendering
-- [] Use in JS projects while still keeping all possible imports
-- [] Better documentation
+- [ ] A sane Context API
+- [ ] Transactions & Animations
+- [ ] Easy testing 
+- [ ] CSS-in-JS support
+- [ ] Server side rendering
+- [ ] Use in JS projects while still keeping all possible imports
+- [ ] Better documentation
 
 ## A big thank you
 This library has been heavily inspired by the awesome work done by:
 - Michel Weststrate (@mweststrate) on [mobx](https://github.com/mobxjs/mobx)
 - Rich Harris (@Rich_Harris) on [Svelte](https://github.com/sveltejs/svelte)
-- Facebook and all the community behind for [React](https://github.com/facebook/react)
+- Facebook and all the community behind [React](https://github.com/facebook/react)

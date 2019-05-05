@@ -1,10 +1,8 @@
 import { Component, Tag } from '@crui/core/dom';
 import { combine } from '@crui/core/utils/combine';
-import { noop } from '@crui/core/utils/noop';
 import { keys } from '@crui/core/utils/object';
-import { asyncNoop } from '@crui/core/utils/noop';
-import { Stream, Unsubscribe } from '../rx/stream';
-import { Cleanup, defCleanup } from '../../core/elems/rendered'
+import { Cleanup, defCleanup } from '../../core/elems/rendered';
+import { Stream } from '../rx/stream';
 
 export function h$p<P>(tag: Tag, props: Reactive<P>): Component {
     return (dom) => {

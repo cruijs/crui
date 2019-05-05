@@ -1,7 +1,5 @@
 import { DOM, Tag } from '../dom';
 import { Component } from '../dom/index';
-import { AsyncUnmount } from '../type';
-import { asyncNoop } from '../utils/noop';
 import { Cleanup, defCleanup, mergeCleanups } from './rendered';
 import { withChildren } from './withChildren';
 import { Events, withEvents } from './withEvents';

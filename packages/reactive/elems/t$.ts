@@ -1,6 +1,6 @@
 import { Stream } from '../rx/stream';
-import { Component } from '../../../core/dom/index'
-import { defCleanup } from '../../../core/elems/rendered'
+import { Component } from '@crui/core/dom'
+import { defCleanup } from '@crui/core/elems/rendered'
 
 export function t$(s: Stream<string>): Component {
     return (dom) => {

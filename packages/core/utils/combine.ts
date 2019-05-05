@@ -15,6 +15,7 @@ export function combine(fs: Fn0[]): Fn0 {
 }
 
 type AsyncFn0 = () => PromiseLike<void>
+const logError = (e: Error) => console.error(e)
 export function combineAsync(fs: AsyncFn0[]): AsyncFn0 {
     if (fs.length === 0) {
         return asyncNoop
@@ -25,7 +26,7 @@ export function combineAsync(fs: AsyncFn0[]): AsyncFn0 {
     return () => (
         Promise
             .all(fs.map(f => f()))
-            .then(noop)
+            .then(noop, logError)
     )
 }
 

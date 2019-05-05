@@ -21,7 +21,7 @@ const Component = hc('dl', [
     ht('dd', 'User'),
     ht('dd', 'Inteface'),
 ])
-mount(document.getElementById('root'), Component)
+mount(document.getElementById('root'), Component, {})
 ```
 
 This code is equivalent to:
@@ -65,7 +65,8 @@ const Component = (input: StreamBox<string>) => (
 const echo = new StreamBox('Hello')
 mount(
     document.getElementById('root'),
-    Component(echo)
+    Component(echo),
+    {}
 )
 ```
 

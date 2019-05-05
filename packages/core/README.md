@@ -1,16 +1,13 @@
 # @crui/core
 The aim of this package is to be the foundation on top of which all the other builds on. For this reason, we value composability and performance over everything else.
 
-## What is a Component?
-A component is just a simple function that receive a DOM and Context (more on this later) and return a [Rendered](elems/rendered.ts).
-To ensure composability, Components should always use the DOM object passed to them rather than accessing directly the `document` object.
-
-We have many helper function to build all the static structure that we need.
+## Build elements
+We have many functions to build all the static structure that we need.
 
 ### e
-The simplest of them all, return an empty node for the given elemet:
+The simplest of them all, returns an empty node for the given element:
 ```typescript
-import { e } from './elems/elem'
+import { e } from '@crui/core/elems/elem'
 
 const div = e('div')
 ```
@@ -20,21 +17,21 @@ Equivalent to:
 ```
 
 ### text
-A simple text node, used to display text and avoid XSS altogether:
+A simple text node, use it to display text and avoid XSS altogether:
 ```typescript
-import { text } from './elems/text'
+import { text } from '@crui/core/elems/text'
 
 const msg = text('<span>Message</span>')
 ```
-Equivalent to:
+Roughly equivalent to:
 ```html
 &lt;span&gt;Message&lt;/span&gt;
 ```
 
 ### hc
-The "c" in "hc" stands for "children", so this function define a node with **c**hildren:
+Define a node with **c**hildren:
 ```typescript
-import { hc } from './elems/hc'
+import { hc } from '@crui/core/elems/children'
 
 const list = hc('ul', [
     hc('li', [ text('a') ])
@@ -52,10 +49,10 @@ Equivalent to:
 ```
 
 ### ht
-A handy function that render some **t**ext into an element:
+A handy function that renders some **t**ext into an element:
 ```typescript
-import { hc } from './elems/hc'
-import { ht } from './elems/ht'
+import { hc } from '@crui/core/elems/children'
+import { ht } from '@crui/core/elems/ht'
 
 const list = hc('ul', [
     ht('li', 'a')
@@ -73,9 +70,9 @@ Equivalent to:
 ```
 
 ### hp
-Render an element with **p**roperties:
+Renders an element with **p**roperties:
 ```typescript
-import { hp } from './elems/hp'
+import { hp } from '@crui/core/elems/props'
 
 const inp = hp('input', {
     id: 'test',
@@ -89,7 +86,7 @@ Equivalent to:
 <input id="test" name="test" type="number" value="123" />
 ```
 
-Please be careful to not confuse properties with *attributes*. They are almost equivalent, but there are indeed some differences. The most known one is the attribute `class` and the attribute `className`:
+Please be careful to not confuse properties with *attributes*. HTML tags have attributes which are then materialized into properties in the DOM Nodes. They are almost equivalent in terms of name, but some differs. The most known one is the attribute `class` that is bound to `className` property:
 ```typescript
 hp('div', { className: 'test' })
 ```
@@ -101,7 +98,7 @@ Equivalent to:
 ### he
 Add **e**vents listeners to an element:
 ```typescript
-import { hp } from './elems/he'
+import { hp } from '@crui/core/elems/events'
 
 const alert = he('button', {
     click: () => alert('Hi, there!')
@@ -116,14 +113,15 @@ Events will be properly cleaned up once the element is unmounted.
 ### hlc
 A node with a particular **l**ife**c**ycles:
 ```typescript
-import { hlc } from './elems/lifecycles'
+import { hlc } from '@crui/core/elems/lifecycles'
+import { noop } from '@crui/core/utils/noop'
 
 const special = hlc('div', {
     mounted: (node) => {
         console.log('Here we go!')
         node.className = 'intro'
         // nothing to unsubscribe
-        return () => {}
+        return noop
     },
     willUnmount: (node) => {
         node.className = 'outro'
@@ -134,23 +132,28 @@ const special = hlc('div', {
 })
 
 ```
-As soon as the `div` element will be mounted, it will add the className `intro`, which could for example trigger an animation. This expect to return an `unsubscribe` function in case we need to do some extra cleanup once unmounted.
-Once the node is ready to be unmounted, it will then trigger the `willUnmount`, which in this case change the class to be `outro' that perhaps trigger an another animation that last for 500 milliseconds. The return is a Promise that will delay the actual removal from the DOM, so that the animation will have enough time to fully run.
+As soon as the `div` element will be mounted, it will add the className `intro`, which could for example trigger an animation. This expect to return an `unsubscribe` function in case we need to do some extra cleanup once unmounted.  
+Once the node is ready to be unmounted, it will then trigger the `willUnmount`, which in this case change the class to be `outro` that perhaps trigger another animation that last for 500 milliseconds. The return is a Promise that will delay the actual removal from the DOM, so that the animation will have enough time to fully run.
 
-It's worth mentioning that lifecycles have a cascading effect, so if one or more descendants children (no matter at which depth) of a node have a `willUnmount` lifecycle setup, the parent node will be removed only once all of those Promises have been resolved.
+It's worth mentioning that lifecycles have a cascading effect, so if one or more descendants children (doesn't matter at which depth) of a node have a `willUnmount` lifecycle setup, the parent node will be removed only once all of those Promises have been resolved.
 
-All promises at same depth run in parallel, while each promise 
-
-If one promise throw an error, it will be logged in the console but the node is still unmounted.
-
+All promises run in parallel. If one promise throw an error, it will be logged in the console but the node will still be removed from the DOM.
 
 ### h
-Ok, we can add properties, events and children, but what if we want an attribute with *all* of them? Here it comes `h`!
+Ok, we can add properties, events, children and even tapping into the lifecycle of each node, but what if we want an attribute with *all* of them? Here it comes `h`!
 ```typescript
-import { h } from './elems'
+import { h } from '@crui/core/elems'
+import { noop } from '@crui/core/utils/noop'
 
 const tree = h('ul', {
     props: { className: 'list' },
+    lifecycles: {
+        mounted: (node) => {
+            console.log('Look, I\'m here!')
+            console.log(node)
+            return noop
+        }
+    }
     children: ['a', 'b', 'c'].map((letter) => (
         h('li', {
             props: { className: 'item' },
@@ -164,7 +167,7 @@ const tree = h('ul', {
     ))
 })
 ```
-Equivalent to:
+Roughly equivalent to:
 ```html
 <ul class="list">
     <li class="item" onClick="alert('A')">a</li>
@@ -176,10 +179,69 @@ This function aggregates the functionality of all the other ones and each of the
 
 It's usually better to rely on the others elements if possible given that are a little cleaner to write.
 
-## Context API
-Sometimes we need to pass a particular piece of information down in the components tree. We could thread this information through all the components, but this become unpractical very soon.
-A practical example is internationalization (i18n). Let's say we have a component that can render a translated message given a key:
+## What is a Component?
+A Component is just a function that receives a [DOM](#abstract-dom) and [Context](#context-api) and returns a rendered Node plus two others cleanup functions. This is all we need to make a composable interface.
 
+All functions that we have seen so far can be considered as very simple component builders and that's what you will interact with.
+
+For example, let's say that we want to abstract the concept of a list of items:
+```typescript
+import { hc, text, Component } from '@crui/core'
+import { mount } from '@crui/core/browser'
+
+const List = (items: T[], map: (val: T) => Component): Component => (
+    hc('ul', items.map((val) => 
+        hc('li', map(val))
+    ))
+)
+
+mount(
+    document.getElementById('root'),
+    List(['a', 'b', 'c'], text),
+    {}
+)
+```
+This will again produce:
+```html
+<ul>
+    <li>a</li>
+    <li>b</li>
+    <li>c</li>
+</ul>
+```
+
+## Abstract DOM
+As we have seen, Components receive a DOM, but why? Can't they just use `document` directly?
+
+Given that we want to be composable, bounding ourselves to a global variable and a specific environment makes things a lot harder. What we do instead is to abstract out what a DOM and Node is and do so while making it totally transparent to the library user.
+
+The first big benefit is that each Component can be tested in isolation and in a controlled environment:
+```typescript
+import { e } from '@crui/core/elems/elem'
+
+type Node = { tag: string }
+const mockDOM = {
+    create(tag): Node {
+        return { tag }
+    }
+    // ... mock all other methods ...
+}
+
+describe(e, () => {
+    it('generates a node with the right tag', () => {
+        expect(
+            e('div')(mockDOM, {})
+        ).toEquals({ tag: 'div' })
+    })
+})
+```
+Given that all functions rely on the passed DOM, you can already see how easy would be to support snapshot testing, which is something will be provided as a library. For this reason is very important that each component builder you will make respect the contract and never use global or environment specific code.
+
+Testing it's not the only area were this abstraction will be useful: SSR (Server Side Rendering) should be possible, even though it's not as straightforward once reactivity is mixed in the bag.
+
+## Context API
+Sometimes we need to pass a particular piece of information down in the components tree. We could thread this information through all the components, but it becomes unpractical and tedious very soon.  
+A practical example is internationalization (i18n). Let's say we need a component that can render a translated message given a key:
 ```typescript
 type I18n = {
     t: (key: string) => string
@@ -194,16 +256,16 @@ const t = (i18n: I18n, key: string) =>
 We would then pass down the `i18n` object each time we need to use it, eg:
 ```typescript
 const homeTitle = (i18n: I18n) => 
-    hc('h1', t(i18n, 'home'))
+    hc('h1', t(i18n, 'home.title'))
 ```
 Even when you don't really care about translations per se:
 ```typescript
 const home = (i18n: I18n) => hc(
-    homeTitle(),
+    homeTitle(i18n),
     homeContent()
 )
 ```
-This works, but it's quite boilerplatey and the number of args that we will need to pass could explode depending on how much central state we have.
+This works, but it's tedious to write right and the number of args that we will need to pass could explode depending on how much central state we have.
 
 A better approach would be to let only the `t` component care about `i18n` and nothing else. To do so, we can use the Context API: a piece of information that will be automatically threaded through our elements by CRUI.
 ```typescript
@@ -211,7 +273,7 @@ import { useContext } from '@crui/core/elems/useContext'
 import { text } from '@crui/core/elems/text'
 
 const t = (key: string) => useContext(
-    (i18n: I18n) => i18n.t(key),
+    (context: I18n) => context.t(key),
     (msg) => (
         h('span', { 
             props: { className: 'i18n' },
@@ -222,9 +284,9 @@ const t = (key: string) => useContext(
 ```
 The component will now capture the context, which in this case is just `I18n`, use it to get the translated key and then pass it down to `text` component.
 
-Now any other components don't need to know about i18n anymore and code is more streamlined:
+Now any other component don't need to know about i18n anymore and code is cleaner:
 ```typescript
-const homeTitle = hc('h1', t('home'))
+const homeTitle = hc('h1', t('home-title'))
 
 const home = hc(
     homeTitle(),
@@ -239,7 +301,7 @@ import { mount } from '@crui/core/dom/browser'
 mount(
     document.getElementById('root'),
     home,
-    new I18n()
+    makeI18n()
 )
 ```
 One nice gain of using typescript, is that now `mount` will complain if we don't pass the right Context, telling as exactly what is needed to satisfy the whole tree.

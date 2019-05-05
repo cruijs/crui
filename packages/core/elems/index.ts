@@ -1,10 +1,10 @@
 import { DOM, Tag } from '../dom';
 import { Component } from '../dom/index';
 import { Cleanup, defCleanup, mergeCleanups } from './rendered';
-import { withChildren } from './withChildren';
-import { Events, withEvents } from './withEvents';
-import { Lifecycle, withLifecycles } from './withLifecycles';
-import { withProps } from './withProps';
+import { withChildren } from './children';
+import { Events, withEvents } from './events';
+import { Lifecycle, withLifecycles } from './lifecycles';
+import { withProps } from './props';
 
 export type Config<P, C> = {
     props?: P,

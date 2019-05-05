@@ -49,16 +49,18 @@ import { hc, ht, Component } from '@crui/core'
 import { mount } from '@crui/core/dom/browser'
 import { StreamBox, h$, t$ } from '@crui/reactive'
 
-const Component = (input: StreamBox<string>) => hc('section',
-    ht('h1', 'Echo'),
-    h$('input', {
-        props: { type: 'text' },
-        $bind: { value: input }
-    }),
-    hc('p', [
-        t$(input)
+const Component = (input: StreamBox<string>) => (
+    hc('section', [
+        ht('h1', 'Echo'),
+        h$('input', {
+            props: { type: 'text' },
+            $bind: { value: input }
+        }),
+        hc('p', [
+            t$(input)
+        ])
     ])
-])
+)
 
 const echo = new StreamBox('Hello')
 mount(
@@ -97,9 +99,8 @@ To know more about `@crui/reactive`, see the dedicated [README](packages/reactiv
 
 ## Examples
 - `packages/eg-reactive-todos`: the usual ToDo demo
-
 ## More to come
-- [ ] A sane Context API
+- [x] A sane Context API
 - [ ] Transactions & Animations
 - [ ] Easy testing 
 - [ ] CSS-in-JS support

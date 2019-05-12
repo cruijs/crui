@@ -30,7 +30,8 @@
   },
   "dependencies": {
     "@crui/core": "^0.1.0",
-    "@crui/reactive": "^0.1.0"
+    "@crui/reactive": "^0.1.0",
+    "@crui/transition": "^0.1.0"
   },
   "jest": {
     "transform": {

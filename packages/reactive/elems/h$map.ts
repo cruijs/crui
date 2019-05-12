@@ -1,10 +1,13 @@
 import { Component, DOM } from '@crui/core/dom';
 import { Rendered } from '@crui/core/elems/rendered';
 import { last } from '@crui/core/utils/array';
-import { combine } from '@crui/core/utils/combine';
+import { combine, combineAsync } from '@crui/core/utils/combine';
+import { DOMNode } from '../../core/dom/index';
+import { modify } from '../../core/utils/modify';
 import { StreamList, UpdateType } from '../rx/list';
 import { $map } from '../rx/list/map';
 import { Unsubscribe } from '../rx/stream';
+import { asyncBind } from '../../core/utils/combine'
 
 type Guard = (f: () => void) => () => void
 const makeGuard = () => {
@@ -18,22 +21,37 @@ const makeGuard = () => {
     return { guard, prevent }
 }
 
-type Replace = <N>(
+type MakeReplace = <N extends DOMNode>(
+    guard: Guard,
+    dom: DOM<N>,
+    parent: N
+) => Replace<N>
+
+type Replace<N> = (
     toRemove: Rendered<N>[],
     toAdd: Rendered<N>[],
-    insert: (nodes: N[]) => void
+    insert: (node: N) => void
 ) => Promise<void>
 
-const makeReplace = (guard: Guard): Replace => (toRemove, toAdd, insert) => (
-    Promise.all(
-        toRemove.map(unmount)
-    ).then(guard(() => {
-        insert(toAdd.map((r) => r.node))
-    }))
-)
+const makeReplace: MakeReplace = 
+    (guard, dom, parent) => (toRemove, toAdd, insert) => (
+        Promise.all(
+            toRemove.map(onUnmount)
+        ).then(guard(() => {
+            toRemove.forEach((r) => {
+                dom.remove(parent, r.node)
+            })
+            toAdd.forEach((r) => {
+                insert(r.node)
+            })
+            return Promise.all(toAdd.map(
+                (r) => r.onMounted()
+            ))
+        }))
+    )
 
-function unmount(r: Rendered): PromiseLike<void> {
-    return r.beforeUnmount().then(r.unsub)
+function onUnmount(r: Rendered): PromiseLike<void> {
+    return r.onUnmount().then(r.unsub)
 }
 
 export function h$map<T>(
@@ -41,46 +59,64 @@ export function h$map<T>(
     $list: StreamList<T>,
     item: (i: T) => Component
 ): Component {
-    return (dom) => {
-        const p = container(dom)
+    return (dom, ctxt) => {
+        const p = container(dom, ctxt)
 
-        const render = (todo: T) => item(todo)(dom)
-        const r = $map($list, render)
-        const $children = r.$list
+        const render = (todo: T) => item(todo)(dom, ctxt)
+        const mapRes = $map($list, render)
+        const $children = mapRes.$list
 
         $children.forEach((r) => {
             dom.insert(p.node, r.node)
         })
 
-        return { 
-            node: p.node, 
-            beforeUnmount: p.beforeUnmount,
-            unsub: combine([
+        return modify(p, (m) => { 
+            m.unsub = combine([
                 setup(dom, p.node, $children),
-                r.unsub,
+                mapRes.unsub,
+                p.unsub,
             ])
-        }
+            m.onMounted = asyncBind(
+                p.onMounted,
+                () => combineAsync(
+                    $children.map((r) => r.onMounted)
+                )(),
+            )
+            m.onUnmount = asyncBind(
+                () => combineAsync(
+                    $children.map((r) => r.onUnmount)
+                )(),
+                p.onUnmount,
+            )
+        })
     }
 }
 
-function setup<N>(dom: DOM<N>, parent: N, $children: StreamList<Rendered<N>>): Unsubscribe {
+function setup<N extends DOMNode>(dom: DOM<N>, parent: N, $children: StreamList<Rendered<N>>): Unsubscribe {
     const { guard, prevent } = makeGuard()
-    const replace = makeReplace(guard)
+    const replace = makeReplace(guard, dom, parent)
 
     const unsub = $children.subscribe((upd) => {
         switch (upd.type) {
             case UpdateType.Replace: {
-                replace(upd.oldList, upd.newList, (nodes) => {
-                    dom.batchInsert(parent, nodes)
+                replace(upd.oldList, upd.newList, (node) => {
+                    dom.insert(parent, node)
                 })
                 break
             }
 
             case UpdateType.Update: {
-                const ref = dom.nextChild(parent, upd.oldValue.node)
-                unmount(upd.oldValue).then(guard(() => {
-                    dom.insertBefore(parent, ref, upd.newValue.node)
-                }))
+                const ref = dom.nextChild(
+                    parent,
+                    upd.oldValue.node
+                )
+                replace(
+                    [upd.oldValue],
+                    [upd.newValue],
+                    (node) => {
+                        dom.insertBefore(parent, ref, node)
+                    }
+                )
                 break
             }
 
@@ -88,8 +124,8 @@ function setup<N>(dom: DOM<N>, parent: N, $children: StreamList<Rendered<N>>): U
                 const rl = last(upd.removed)
                 const ref = rl ? dom.nextChild(parent, rl.node) : null
 
-                replace(upd.removed, upd.added, (ns) => {
-                    dom.batchInsertBefore(parent, ref, ns)
+                replace(upd.removed, upd.added, (node) => {
+                    dom.insertBefore(parent, ref, node)
                 })
                 break
             }

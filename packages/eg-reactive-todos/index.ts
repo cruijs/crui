@@ -1,8 +1,9 @@
-import { render } from '../../src/index'
+import { mount } from '@crui/core/dom/browser'
 import { TodoPage } from './src/page';
 import { TodoStore } from './src/store'
 
-render(
-    TodoPage( new TodoStore),
-    document.querySelector('#root')
+mount(
+    document.querySelector('#root'),
+    TodoPage(new TodoStore),
+    {}
 )

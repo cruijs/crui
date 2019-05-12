@@ -1,11 +1,11 @@
-import { Cleanup, Rendered } from '../elems/rendered';
+import { Rendered } from '../elems/rendered';
 import { Unsubscribe } from '../type';
 
 export type Tag = string
-export type Node = {}
-export type Component<C = {}> = <N extends Node>(dom: DOM<N>, context: C) => Rendered<N>
+export type DOMNode = GlobalEventHandlers & { style: CSSStyleDeclaration } 
+export type Component<C = {}> = <N extends DOMNode>(dom: DOM<N>, context: C) => Rendered<N>
 
-export type DOM<N extends Node = any> = {
+export type DOM<N extends DOMNode = any> = {
     create: (tag: Tag) => N
     createText: (s: string) => N & { textContent: string|null }
     remove: (parent: N, child: N) => void
@@ -17,18 +17,18 @@ export type DOM<N extends Node = any> = {
     listen: Listen<N>
 }
 
-export function render<N extends Node, Ctxt extends C, C>(
+export function render<N extends DOMNode, Ctxt extends C, C>(
     dom: DOM<N>,
     root: N,
     comp: Component<C>,
     context: Ctxt
-): Cleanup {
+): Rendered<N> {
     const r = comp(dom, context)
     dom.insert(root, r.node)
     return r
 }
 
-export type Listen<N extends Node> = (
+export type Listen<N extends DOMNode> = (
     node: N,
     event: string,
     handler: (e: Event) => void

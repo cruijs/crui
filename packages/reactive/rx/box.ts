@@ -1,4 +1,5 @@
 import { Stream } from './stream';
+import { Unsubscribe } from '../../core/type'
 
 export class StreamBox<T> extends Stream<T> {
     set(val: T) {
@@ -6,11 +7,11 @@ export class StreamBox<T> extends Stream<T> {
         this.notify(val)
     }
 
-    map<P>(f: (val: T) => P): StreamBox<P> {
-        const s = new StreamBox(f(this.get()))
-        this.subscribe((val) => {
-            s.set(f(val))
+    map<P>(f: (val: T) => P): { stream: StreamBox<P>, unsub: Unsubscribe } {
+        const stream = new StreamBox(f(this.get()))
+        const unsub = this.subscribe((val) => {
+            stream.set(f(val))
         })
-        return s
+        return { stream, unsub }
     }
 }

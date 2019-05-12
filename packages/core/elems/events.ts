@@ -1,7 +1,8 @@
-import { Component, DOM, Node, Tag } from '../dom';
+import { Component, DOM, Tag } from '../dom';
 import { combine } from '../utils/combine';
+import { Modifiable } from '../utils/modify';
 import { keys } from '../utils/object';
-import { Cleanup, defCleanup } from './rendered';
+import { defRendered, Rendered } from './rendered';
 
 export type Events = {
     change?: EventListener
@@ -11,18 +12,18 @@ export type Events = {
 export function he(tag: Tag, on?: Events): Component {
     return (dom) => {
         const node = dom.create(tag)
-        const { beforeUnmount, unsub } = withEvents(dom, node, on)
-        return { node, beforeUnmount, unsub }
+        return withEvents(dom, node, on)
     }
 }
 
-export function withEvents(dom: DOM, elem: Node, on?: Events): Cleanup {
-    return !on ? defCleanup : {
-        beforeUnmount: defCleanup.beforeUnmount,
-        unsub: combine(
+export function withEvents<N>(dom: DOM, elem: N, on?: Events): Rendered<N> {
+    const r = defRendered(elem)
+    if (on) {
+        (r as Modifiable<Rendered<N>>).unsub = combine(
             keys(on).map((event) =>
                 dom.listen(elem, event, on[event]!)
             )
         )
     }
+    return r
 }

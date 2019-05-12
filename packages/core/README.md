@@ -110,50 +110,14 @@ Equivalent to:
 ```
 Events will be properly cleaned up once the element is unmounted.
 
-### hlc
-A node with a particular **l**ife**c**ycles:
-```typescript
-import { hlc } from '@crui/core/elems/lifecycles'
-import { noop } from '@crui/core/utils/noop'
-
-const special = hlc('div', {
-    mounted: (node) => {
-        console.log('Here we go!')
-        node.className = 'intro'
-        // nothing to unsubscribe
-        return noop
-    },
-    willUnmount: (node) => {
-        node.className = 'outro'
-        return new Promise((resolve) => setTimeout(resolve, 500)).then(
-            () => console.log('unmounted')
-        )
-    }
-})
-
-```
-As soon as the `div` element will be mounted, it will add the className `intro`, which could for example trigger an animation. This expect to return an `unsubscribe` function in case we need to do some extra cleanup once unmounted.  
-Once the node is ready to be unmounted, it will then trigger the `willUnmount`, which in this case change the class to be `outro` that perhaps trigger another animation that last for 500 milliseconds. The return is a Promise that will delay the actual removal from the DOM, so that the animation will have enough time to fully run.
-
-It's worth mentioning that lifecycles have a cascading effect, so if one or more descendants children (doesn't matter at which depth) of a node have a `willUnmount` lifecycle setup, the parent node will be removed only once all of those Promises have been resolved.
-
-All promises run in parallel. If one promise throw an error, it will be logged in the console but the node will still be removed from the DOM.
-
 ### h
-Ok, we can add properties, events, children and even tapping into the lifecycle of each node, but what if we want an attribute with *all* of them? Here it comes `h`!
+Ok, we can add properties, events and children, but what if we want an attribute with *all* of them? Here it comes `h`!
 ```typescript
 import { h } from '@crui/core/elems'
 import { noop } from '@crui/core/utils/noop'
 
 const tree = h('ul', {
     props: { className: 'list' },
-    lifecycles: {
-        mounted: (node) => {
-            console.log('Look, I\'m here!')
-            console.log(node)
-            return noop
-        }
-    }
     children: ['a', 'b', 'c'].map((letter) => (
         h('li', {
             props: { className: 'item' },
@@ -175,9 +139,7 @@ Roughly equivalent to:
     <li class="item" onClick="alert('C')">c</li>
 </ul>
 ```
-This function aggregates the functionality of all the other ones and each of them is optional, as you can notice from the fact the `ul` only has `children` and `props`.
-
-It's usually better to rely on the others elements if possible given that are a little cleaner to write.
+This function aggregates the functionality of all the other ones and each of them is optional, as you can notice from the fact that `ul` only has `children` and `props`.
 
 ## What is a Component?
 A Component is just a function that receives a [DOM](#abstract-dom) and [Context](#context-api) and returns a rendered Node plus two others cleanup functions. This is all we need to make a composable interface.
@@ -235,7 +197,7 @@ describe(e, () => {
     })
 })
 ```
-Given that all functions rely on the passed DOM, you can already see how easy would be to support snapshot testing, which is something will be provided as a library. For this reason is very important that each component builder you will make respect the contract and never use global or environment specific code.
+Given that all functions rely on the passed DOM, you can already see how easy would be to support snapshot testing, which is something will be provided as a library. For this reason is very important that each component builder respects the contract and never use global or environment specific code.
 
 Testing it's not the only area were this abstraction will be useful: SSR (Server Side Rendering) should be possible, even though it's not as straightforward once reactivity is mixed in the bag.
 
@@ -262,10 +224,10 @@ Even when you don't really care about translations per se:
 ```typescript
 const home = (i18n: I18n) => hc(
     homeTitle(i18n),
-    homeContent()
+    homeContent
 )
 ```
-This works, but it's tedious to write right and the number of args that we will need to pass could explode depending on how much central state we have.
+This works, but it's tedious to write right and the number of args needed could explode depending on how much central state we have.
 
 A better approach would be to let only the `t` component care about `i18n` and nothing else. To do so, we can use the Context API: a piece of information that will be automatically threaded through our elements by CRUI.
 ```typescript
@@ -289,8 +251,8 @@ Now any other component don't need to know about i18n anymore and code is cleane
 const homeTitle = hc('h1', t('home-title'))
 
 const home = hc(
-    homeTitle(),
-    homeContent()
+    homeTitle,
+    homeContent
 )
 ```
 

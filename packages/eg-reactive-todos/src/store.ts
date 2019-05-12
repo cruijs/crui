@@ -24,20 +24,24 @@ export class TodoStore {
 
     private readonly todos: TodoList
     private readonly visibleTodos: TodoList
-    private readonly unsubs: Unsubscribe[]
+
+    private unsubVisibleTodos: Unsubscribe
+    private unsubFilteredList: Unsubscribe
+    private unsubListByVisibility: Unsubscribe
 
     constructor() {
         this.input = new StreamBox('')
         this.todos = new StreamList<Todo>([])
         this.visibleTodos = new StreamList<Todo>([])
         this.visibility = new StreamBox<Visibility>(Visibility.ALL)
-        this.unsubs = [
-            noop, // visibleTodos
-            noop, // filtered list
+
+        this.unsubVisibleTodos = noop
+        this.unsubFilteredList = noop
+        this.unsubListByVisibility = 
             this.visibility.subscribe(
                 this.setListByVisibility
             )
-        ]
+
         this.setListByVisibility(Visibility.ALL)
     }
 
@@ -46,8 +50,8 @@ export class TodoStore {
     }
 
     private setListByVisibility = (v: Visibility) => {
-        this.unsubs[0]()
-        this.unsubs[0] = keepSynced(
+        this.unsubVisibleTodos()
+        this.unsubVisibleTodos = keepSynced(
             this.getTodoByVisibility(v),
             this.visibleTodos
         )
@@ -80,15 +84,19 @@ export class TodoStore {
     }
 
     private makeFiltered(p: Predicate<Todo>) {
-        this.unsubs[1]()
+        this.unsubFilteredList()
 
         const { unsub, list } = $filter(this.todos, p)
-        this.unsubs[1] = unsub
+        this.unsubFilteredList = unsub
 
         return list
     }
 
     dispose() {
-        runAll(this.unsubs)
+        runAll([
+            this.unsubVisibleTodos,
+            this.unsubFilteredList,
+            this.unsubListByVisibility
+        ])
     }
 }

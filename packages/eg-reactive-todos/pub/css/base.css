@@ -1,0 +1,27 @@
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+body {
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    font-size: 1rem;
+    font-family: sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Quattrocento', serif;
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.2;
+    color: inherit;
+}
+a {
+    text-decoration: none;
+}
+button, input, optgroup, select, textarea {
+    line-height: inherit;
+}
+
+.active {
+    color: red
+}

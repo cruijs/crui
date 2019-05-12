@@ -57,7 +57,7 @@ module.exports = {
 	plugins: [
 		new CheckerPlugin(),
 		new HtmlWebpackPlugin({
-			title: 'ReactiveUI - Todos Example',
+			title: 'CRUI - Todos Example',
 			filename: DIST + '/index.html',
 			template: __dirname + '/index.ejs',
 		}),

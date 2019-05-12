@@ -1,16 +1,13 @@
 import { Component, Tag } from '../dom/index';
 import { keys } from '../utils/object';
-import { defCleanup } from './rendered';
+import { defRendered } from './rendered';
 
 export function hp<P>(tag: Tag, props: P): Component {
     return (dom) => {
         const node = dom.create(tag)
         withProps(props)
 
-        return {
-            ...defCleanup,
-            node
-        }
+        return defRendered(node)
     }
 }
 

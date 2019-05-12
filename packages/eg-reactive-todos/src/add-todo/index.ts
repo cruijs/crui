@@ -1,5 +1,5 @@
 import { h } from '@crui/core/elems';
-import { hc } from '@crui/core/elems/withChildren';
+import { hc } from '@crui/core/elems/children';
 import { h$ } from '@crui/reactive/elems';
 import { TodoStore } from '../store';
 

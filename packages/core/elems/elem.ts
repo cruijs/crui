@@ -1,13 +1,8 @@
-import { Tag, Component } from '../dom/index'
-import { defCleanup } from './rendered'
+import { Component, Tag } from '../dom/index';
+import { defRendered } from './rendered';
 
 export function e(tag: Tag): Component {
-    return (dom) => {
-        const node = dom.create(tag)
-        return {
-            node,
-            unsub: defCleanup.unsub,
-            beforeUnmount: defCleanup.beforeUnmount
-        }
-    }
+    return (dom) => defRendered(
+        dom.create(tag)
+    )
 }

@@ -1,6 +1,6 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { compatibleInputEvent } from '@crui/core/dom/events';
-import { Cleanup, defCleanup } from '@crui/core/elems/rendered';
+import { defRendered, modRendered, Rendered } from '@crui/core/elems/rendered';
 import { combine } from '@crui/core/utils/combine';
 import { keys } from '@crui/core/utils/object';
 import { Stream, Unsubscribe } from '../rx/stream';
@@ -13,18 +13,13 @@ export type Bind = {
 export function h$b(tag: Tag, bind?: Bind): Component {
     return (dom) => {
         const node = dom.create(tag)
-        const { beforeUnmount, unsub } = with$Bind(dom, node, bind)
-        return {
-            node,
-            unsub,
-            beforeUnmount,
-        }
+        return with$Bind(dom, node, bind)
     }
 }
 
-export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Cleanup {
+export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Rendered<N> {
     if (!bind) {
-        return defCleanup
+        return defRendered(node)
     }
 
     const unsubs: Unsubscribe[] = []
@@ -45,10 +40,9 @@ export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Cleanup {
         )
     })
 
-    return {
-        unsub: combine(unsubs),
-        beforeUnmount: defCleanup.beforeUnmount
-    }
+    return modRendered(node, (r) => {
+        r.unsub = combine(unsubs)
+    })
 }
 
 type Atomic = <E>(f: (val: E) => void) => (val: E) => void

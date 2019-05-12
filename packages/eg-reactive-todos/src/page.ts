@@ -1,5 +1,6 @@
-import { hc } from '@crui/core/elems/withChildren';
+import { hc } from '@crui/core/elems/children';
 import { AddTodo } from './add-todo';
+import { Footer } from './footer';
 import { TodoStore } from './store';
 import { TodoList } from './todo-list';
 

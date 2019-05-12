@@ -1,42 +1,54 @@
-import { AsyncUnmount, Node, Unsubscribe } from '../type';
+import { AsyncFn, Node, Unsubscribe } from '../type';
 import { combine, combineAsync } from '../utils/combine';
 import { asyncNoop, noop } from '../utils/noop';
+import { Modify, modify } from '../utils/modify'
 
-export type Rendered<N extends Node = Node> = Cleanup & {
-    node: N,
-}
-export type Cleanup = {
-    unsub: Unsubscribe,
-    beforeUnmount: AsyncUnmount,
-}
-
-export const defCleanup: Cleanup = {
-    unsub: noop,
-    beforeUnmount: asyncNoop
+export type Rendered<N extends Node = Node> = {
+    readonly node: N,
+    readonly unsub: Unsubscribe,
+    readonly onMounted: AsyncFn,
+    readonly onUnmount: AsyncFn,
 }
 
-type CollectCleanup = {
-    us: Unsubscribe[],
-    bs: AsyncUnmount[],
-}
-export function mergeCleanups(cs: Cleanup[]): Cleanup {
-    if (cs.length === 0) {
-        return defCleanup
+export function defRendered<N>(node: N): Rendered<N> {
+    return {
+        node,
+        unsub: noop,
+        onMounted: asyncNoop,
+        onUnmount: asyncNoop
     }
-    if (cs.length === 1) {
-        return cs[0]
+}
+
+export function modRendered<N>(node: N, f: Modify<Rendered<N>>): Rendered<N> {
+    return modify(defRendered(node), f)
+}
+
+type Collected = {
+    unsub: Unsubscribe[],
+    onMounted: AsyncFn[],
+    onUnmount: AsyncFn[],
+}
+export function mergeRendered<N>(p: N, rs: Rendered<N>[]): Rendered<N> {
+    if (rs.length === 0) {
+        return defRendered(p)
+    }
+    if (rs.length === 1) {
+        return rs[0]
     }
 
-    const collected = cs.reduce(
-        (z, c) => {
-            z.us.push(c.unsub)
-            z.bs.push(c.beforeUnmount)
+    const collected = rs.reduce(
+        (z, r) => {
+            z.unsub.push(r.unsub)
+            z.onMounted.push(r.onMounted)
+            z.onUnmount.push(r.onUnmount)
             return z
         },
-        { us: [], bs: [] } as CollectCleanup
+        { unsub: [], onMounted: [], onUnmount: [] } as Collected
     )
     return {
-        unsub: combine(collected.us),
-        beforeUnmount: combineAsync(collected.bs)
+        node: p,
+        unsub: combine(collected.unsub),
+        onMounted: combineAsync(collected.onMounted),
+        onUnmount: combineAsync(collected.onUnmount),
     }
 }

@@ -1,11 +1,12 @@
 import { Rendered } from '../elems/rendered';
-import { Unsubscribe } from '../type';
+import { Unsubscribe, AsyncFn } from '../type'
+import { Style } from './style';
 
 export type Tag = string
-export type DOMNode = GlobalEventHandlers & { style: CSSStyleDeclaration } 
-export type Component<C = {}> = <N extends DOMNode>(dom: DOM<N>, context: C) => Rendered<N>
+export type DOMNode = { style: Style } 
+export type Component<C = {}> = <N>(dom: DOM<N>, context: C) => Rendered<N>
 
-export type DOM<N extends DOMNode = any> = {
+export interface DOM<N> {
     create: (tag: Tag) => N
     createText: (s: string) => N & { textContent: string|null }
     remove: (parent: N, child: N) => void
@@ -14,10 +15,12 @@ export type DOM<N extends DOMNode = any> = {
     batchInsert: (parent: N, children: N[]) => void
     batchInsertBefore: (parent: N, ref: N|null, node: N[]) => void
     nextChild: (parent: N, ref: N) => N|null
-    listen: Listen<N>
+    listen: Listen<N>,
+    applyStyle: (node: N, style: Style) => N
+    runOnMount: (f: AsyncFn) => PromiseLike<void>
 }
 
-export function render<N extends DOMNode, Ctxt extends C, C>(
+export function render<N, Ctxt extends C, C>(
     dom: DOM<N>,
     root: N,
     comp: Component<C>,
@@ -28,7 +31,7 @@ export function render<N extends DOMNode, Ctxt extends C, C>(
     return r
 }
 
-export type Listen<N extends DOMNode> = (
+export type Listen<N> = (
     node: N,
     event: string,
     handler: (e: Event) => void

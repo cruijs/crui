@@ -1,13 +1,12 @@
 import { Component, DOM } from '@crui/core/dom';
 import { Rendered } from '@crui/core/elems/rendered';
 import { last } from '@crui/core/utils/array';
-import { combine, combineAsync } from '@crui/core/utils/combine';
-import { DOMNode } from '../../core/dom/index';
-import { modify } from '../../core/utils/modify';
+import { asyncBind, combine, combineAsync } from '@crui/core/utils/combine';
+import { modify } from '@crui/core/utils/modify';
+import { noop } from '@crui/core/utils/noop';
 import { StreamList, UpdateType } from '../rx/list';
 import { $map } from '../rx/list/map';
 import { Unsubscribe } from '../rx/stream';
-import { asyncBind } from '../../core/utils/combine'
 
 type Guard = (f: () => void) => () => void
 const makeGuard = () => {
@@ -21,7 +20,7 @@ const makeGuard = () => {
     return { guard, prevent }
 }
 
-type MakeReplace = <N extends DOMNode>(
+type MakeReplace = <N>(
     guard: Guard,
     dom: DOM<N>,
     parent: N
@@ -44,9 +43,11 @@ const makeReplace: MakeReplace =
             toAdd.forEach((r) => {
                 insert(r.node)
             })
-            return Promise.all(toAdd.map(
-                (r) => r.onMounted()
-            ))
+            return dom.runOnMount(() =>
+                Promise.all(toAdd.map(
+                    (r) => r.onMounted()
+                )).then(noop)
+            )
         }))
     )
 
@@ -92,7 +93,7 @@ export function h$map<T>(
     }
 }
 
-function setup<N extends DOMNode>(dom: DOM<N>, parent: N, $children: StreamList<Rendered<N>>): Unsubscribe {
+function setup<N>(dom: DOM<N>, parent: N, $children: StreamList<Rendered<N>>): Unsubscribe {
     const { guard, prevent } = makeGuard()
     const replace = makeReplace(guard, dom, parent)
 

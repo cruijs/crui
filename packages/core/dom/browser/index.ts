@@ -1,5 +1,6 @@
 import { DOM, Listen, render } from '..';
-import { Component } from '../index'
+import { Component } from '../index';
+import { keys } from '../../utils/object';
 
 const listen: Listen<Node> = (elem, event, handler) => {
     elem.addEventListener(event, handler)
@@ -17,7 +18,7 @@ const withFragment = (ns: Node[]) => {
 
 export function mount<Ctxt extends C, C>(root: Node, comp: Component<C>, context: Ctxt) {
     const r = render(dom, root, comp, context)
-    r.onMounted()
+    window.requestAnimationFrame(r.onMounted)
     return r
 }
 
@@ -39,4 +40,17 @@ export const dom: DOM<Node> = {
     },
     nextChild: (_, ref) => ref.nextSibling,
     listen,
+    applyStyle: (node, style) => {
+        if (node instanceof HTMLElement)
+            keys(style).forEach((k) => {
+                node.style[k] = style[k]
+            })
+        return node
+    },
+    runOnMount: (f) => {
+        const nextFrame = new Promise((resolve) => {
+            window.requestAnimationFrame(resolve)
+        })
+        return nextFrame.then(f)
+    }
 }

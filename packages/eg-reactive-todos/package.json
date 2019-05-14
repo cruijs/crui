@@ -1,8 +1,8 @@
 {
-  "name": "reactive-ui-todos",
-  "author": "time-bridge",
+  "name": "crui-todos",
+  "author": "Salvatore Pelligra",
   "version": "0.1.0",
-  "description": "Todos example implement in ReactiveUI",
+  "description": "CRUI - Todos example",
   "scripts": {
     "serve": "webpack-dev-server --open",
     "build": "webpack --mode=development",
@@ -13,16 +13,13 @@
   "devDependencies": {
     "@babel/core": "^7.0",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@types/jest": "^23.3.3",
+    "acorn": "^6.1.1",
     "awesome-typescript-loader": "^5.2.1",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.6.0",
     "babel-plugin-macros": "^2.4.2",
     "clean-webpack-plugin": "^0.1.19",
-    "jest": "^23.6.0",
+    "html-webpack-plugin": "^3.2.0",
     "source-map-loader": "^0.2.4",
-    "ts-jest": "^23.10.3",
-    "ts-mockito": "^2.3.1",
     "typescript": "^3.1.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
@@ -31,16 +28,6 @@
   "dependencies": {
     "@crui/core": "^0.1.0",
     "@crui/reactive": "^0.1.0",
-    "@crui/transition": "^0.1.0"
-  },
-  "jest": {
-    "transform": {
-      ".ts": "ts-jest"
-    },
-    "testRegex": ".test.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "@crui/transitions": "^0.1.0"
   }
 }

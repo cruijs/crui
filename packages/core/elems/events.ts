@@ -16,7 +16,7 @@ export function he(tag: Tag, on?: Events): Component {
     }
 }
 
-export function withEvents<N>(dom: DOM, elem: N, on?: Events): Rendered<N> {
+export function withEvents<N>(dom: DOM<N>, elem: N, on?: Events): Rendered<N> {
     const r = defRendered(elem)
     if (on) {
         (r as Modifiable<Rendered<N>>).unsub = combine(

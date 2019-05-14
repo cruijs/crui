@@ -2,6 +2,52 @@
 
 Add transactions to CRUI components.
 
+## cssTx
+CSS Transitions allow simple micro-transitions, so they can be easily setup through `cssTx`:
+```typescript
+import { cssTx } from '@crui/transitions/cssTx'
+import { mount } from '@crui/core/dom/browser'
+
+const SlideLeft = cssTx(
+    { transform: 500, opacity: 500 },
+    { transform: 'translateX(-1em)', opacity: 0 },
+    { transform: 'translateX(0)', opacity: 1 },
+)
+
+const comp = SlideLeft(ht('div', 'Enter from the left, exit from the right'))
+const r = mount(
+    document.getElementById('root'),
+    comp,
+    {}
+)
+setTimeout(() => r.onUnmount(), 5000)
+```
+This code will create a div that will enter from the left and, after 5 seconds, will exit from where it came.
+
+Let's analyze the type signature, simplified for explanation purposes
+```typescript
+type cssTx = (transitions: Milliseconds<Style>, from: Style, to: Style) => Component => Component
+type Milliseconds<T> = {[K in keyof T]: T[K]}
+```
+The first argument `transitions` represents the transition duration for each property.
+
+The second argument `from` will set the initial style, before the node enter the DOM. This will be also used during the unmount phase.
+
+The third and last argument `to` will set the style just after the node is inserted in the DOM and will trigger the animation.
+
+Initial rendering would be equivalent to:
+```html
+<div style="transition: transform 500ms, opacity: 500ms; opacity: 0; transform: translateX('-1em')">
+    Enter from the left, exit from the right
+</div>
+```
+But just after adding it to the DOM, it will become:
+```html
+<div style="transition: transform 500ms, opacity: 500ms; opacity: 1; transform: translateX(0)">
+    Enter from the left, exit from the right
+</div>
+```
+
 ## TX
 TX in this case stands for "transition" and it enhances an element with animation on both intro (when the element enters the DOM) and outro (when the element exits the DOM).
 

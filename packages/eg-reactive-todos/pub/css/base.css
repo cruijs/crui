@@ -22,6 +22,22 @@ button, input, optgroup, select, textarea {
     line-height: inherit;
 }
 
+#root {
+    margin
+}
+
 .active {
     color: red
+}
+
+.todo-wrapper {
+    width: 20em;
+}
+
+.todo {
+    display: block;
+}
+
+.todo-list {
+    list-style: none;
 }

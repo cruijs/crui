@@ -1,11 +1,10 @@
-import { Component } from '@crui/core/dom';
+import { Component, Tag } from '@crui/core/dom';
 import { h } from '@crui/core/elems';
 import { hc } from '@crui/core/elems/children';
 import { text } from '@crui/core/elems/text';
 import { h$ } from '@crui/reactive/elems';
 import { h$map } from '@crui/reactive/elems/h$map';
-import { DOMNode, Tag } from '../../../core/dom/index';
-import { tx } from '../../../transactions/index';
+import { cssTx } from '@crui/transitions/cssTx';
 import { Todo, TodoStore } from '../store';
 
 const hcc = (tag: Tag, className: string, children?: Component[]) =>
@@ -40,24 +39,8 @@ function TodoComponent(todo: Todo): Component {
     ])
 }
 
-const trans = (node: DOMNode, f: (node: DOMNode) => void) => () => new Promise<void>((resolve) => {
-    f(node)
-    node.ontransitionend = () => resolve()
-    node.ontransitioncancel = node.ontransitionend
-})
-
-const Slide = tx((node) => {
-    const moveOut = (node: DOMNode) => {
-        node.style.transform = 'translateX(-1em)'
-        node.style.opacity = '0'
-    }
-    moveOut(node)
-
-    return {
-        intro: trans(node, (node) => {
-            node.style.transform = 'translateX(0)'
-            node.style.opacity = '1'
-        }),
-        outro: trans(node, moveOut)
-    }
-})
+const Slide = cssTx(
+    { transform: 500, opacity: 500 },
+    { transform: 'translateX(-1em)', opacity: 0 },
+    { transform: 'translateX(0)', opacity: 1 },
+)

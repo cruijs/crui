@@ -60,12 +60,19 @@ export class TodoStore {
     private getTodoByVisibility(v: Visibility) {
         switch (v) {
             case Visibility.ALL:
-                return this.todos
+                return this.getAll()
             case Visibility.DONE:
                 return this.getCompleted()
             case Visibility.TODO:
                 return this.getUncompleted()
         }
+    }
+
+    private getAll(): TodoList {
+        this.unsubFilteredList()
+        const $list = new StreamList(this.todos.get())
+        this.unsubFilteredList = keepSynced(this.todos, $list)
+        return $list
     }
 
     private getCompleted(): TodoList {

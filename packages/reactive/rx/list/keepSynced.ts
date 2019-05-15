@@ -5,7 +5,10 @@ export function keepSynced<T>(
     $source: StreamList<T>,
     $dest: StreamList<T>
 ): Unsubscribe {
-    $dest.set($source.get())
+    if ($dest === $source) {
+        throw Error('Sync on same stream is not supported')
+    }
+    $dest.set($source.get().slice())
     return $source.subscribe((upd) => {
         switch (upd.type) {
             case UpdateType.Update:

@@ -4,6 +4,6 @@ import { TodoStore } from './src/store'
 
 mount(
     document.getElementById('root')!,
-    TodoPage(new TodoStore),
+    TodoPage(window.store = new TodoStore),
     {}
 )

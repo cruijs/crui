@@ -20,7 +20,7 @@ const Filter = (
     label: string
 ): Component => {
     const { stream: className, unsub } = $vis.map((v) => (
-        v === vis ? 'active' : ''
+        'filter ' + (v === vis ? 'active' : '')
     ))
 
     return h$('button', {

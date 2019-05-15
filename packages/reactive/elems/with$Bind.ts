@@ -29,6 +29,8 @@ export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Rendered<N> {
         if ($s == null) {
             return
         }
+        (node as any)[prop] = $s.get()
+
         const atomic = makeAtomic()
         unsubs.push(
             dom.listen(node, event, atomic(() => {
@@ -47,7 +49,7 @@ export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Rendered<N> {
 
 type Atomic = <E>(f: (val: E) => void) => (val: E) => void
 function makeAtomic(): Atomic {
-    let running = true
+    let running = false
     return (f) => (e) => {
         if (running) {
             return

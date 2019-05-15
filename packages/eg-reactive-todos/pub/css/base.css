@@ -23,21 +23,45 @@ button, input, optgroup, select, textarea {
 }
 
 #root {
-    margin
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%)
 }
 
 .active {
-    color: red
+    color: red;
 }
 
-.todo-wrapper {
-    width: 20em;
+.filter {
+    margin-left: 0.5rem;
+}
+.filter:first-child {
+    margin-left: 0;
 }
 
 .todo {
     display: block;
+    background-color: aliceblue;
+    padding: 0.25rem 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.todo > input {
+    vertical-align: middle;
+    margin-right: 0.5rem;
 }
 
 .todo-list {
     list-style: none;
+    padding: 0;
+}
+
+.add-todo-input {
+    width: 13rem;
+}
+
+.add-todo-submit {
+    margin-left: 0.5em;
 }

@@ -14,7 +14,6 @@ export function handleSplice<T>(upd: Splice<T>, { indexMap, p, $nl }: Payload<T>
 
     const rf = filteredList(upd.added, p);
     const inc = rf.filtered.length;
-    debugger;
     updateIndex(rf.indexMap, -1, (n) => n + index);
     indexMap.splice(upd.index, remLen, ...rf.indexMap);
 

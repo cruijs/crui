@@ -24,9 +24,6 @@ export function TodoList(store: TodoStore) {
 function TodoComponent(todo: Todo): Component {
     return hcc('li', 'todo-wrapper', [
         Slide(hcc('label', 'todo', [
-            hc('span', [
-                text(todo.text)
-            ]),
             h$('input', {
                 props: {
                     type: 'checkbox',
@@ -34,7 +31,10 @@ function TodoComponent(todo: Todo): Component {
                 $bind: {
                     checked: todo.done
                 }
-            })
+            }),
+            hc('span', [
+                text(todo.text)
+            ]),
         ]))
     ])
 }

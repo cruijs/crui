@@ -73,7 +73,7 @@ export class TodoStore {
     }
 
     private getUncompleted(): TodoList {
-        return this.makeFiltered((todo) => !todo.done)
+        return this.makeFiltered((todo) => !todo.done.get())
     }
 
     addTodo(todo: string): void {

@@ -1,16 +1,19 @@
 import { StreamList, Update, UpdateType } from '..';
 
+type FMap<A, B> = (v: A, i: number) => B
 export function $map<A, B>(
-    $parent: StreamList<A>, 
-    f: (a: A) => B
+    $source: StreamList<A>, 
+    f: FMap<A, B>
 ) {
-    const $list = new StreamList($parent.map(f))
-    const unsub = $parent.subscribe(makeSubscribe(f, $list))
-    return { unsub, $list }
+    const $list = new StreamList($source.map(f))
+    $list.addUnsub(
+        $source.subscribe(onUpdate(f, $list))
+    )
+    return $list
 }
 
-export function makeSubscribe<A, B>(
-    map: (a: A) => B,
+export function onUpdate<A, B>(
+    fmap: FMap<A, B>,
     $children: StreamList<B>
 ) {
     return (upd: Update<A>) => {
@@ -18,13 +21,13 @@ export function makeSubscribe<A, B>(
             case UpdateType.Update:
                 $children.update(
                     upd.index,
-                    map(upd.newValue)
+                    fmap(upd.newValue, upd.index)
                 )
                 break
 
             case UpdateType.Replace:
                 $children.set(
-                    upd.newList.map(map)
+                    upd.newList.map(fmap)
                 )
                 break
 
@@ -32,7 +35,7 @@ export function makeSubscribe<A, B>(
                 $children.splice(
                     upd.index,
                     upd.removed.length,
-                    upd.added.map(map)
+                    upd.added.map((v, i) => fmap(v, i + upd.index))
                 )
                 break
         }

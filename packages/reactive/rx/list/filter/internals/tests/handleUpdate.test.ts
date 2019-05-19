@@ -1,6 +1,6 @@
-import { StreamList, UpdateItem, UpdateType } from '../../index';
+import { StreamList, UpdateItem, UpdateType } from '../../../index';
+import { Index, Predicate } from '../../types';
 import { handleUpdate } from '../handleUpdate';
-import { Index, Predicate } from '../types';
 
 const isEven: Predicate<number> = (n) => n % 2 === 0
 function update(index: number, newValue: number): UpdateItem<number> {
@@ -24,7 +24,7 @@ function run(
 ) {
     const $nl = new StreamList(state.list)
     const actual = handleUpdate(state.upd, {
-        $nl,
+        $list: $nl,
         p: isEven,
         indexMap: state.imap
     })

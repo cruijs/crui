@@ -1,10 +1,10 @@
-import { UpdateItem } from '..';
-import { Index, Payload } from './types';
-import { updateIndex } from "./updateIndex";
+import { UpdateItem } from '../..';
+import { Index, Payload } from '../types';
+import { updateIndex } from './updateIndex';
 
-export function handleUpdate<T>(upd: UpdateItem<T>, { p, $nl, indexMap }: Payload<T>): Index {
+export function handleUpdate<T>(upd: UpdateItem<T>, { p, $list: $nl, indexMap }: Payload<T>): Index {
     const i = indexMap[upd.index];
-    const matches = p(upd.newValue);
+    const matches = p(upd.newValue, upd.index);
     // no changes
     if (matches === false && i == null) {
         return indexMap;

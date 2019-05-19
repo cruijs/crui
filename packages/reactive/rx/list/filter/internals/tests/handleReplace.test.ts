@@ -1,6 +1,6 @@
-import { Replace, StreamList, UpdateType } from '../../index';
+import { Replace, StreamList, UpdateType } from '../../../index';
+import { Predicate } from '../../types';
 import { handleReplace } from '../handleReplace';
-import { Predicate } from '../types';
 
 const isEven: Predicate<number> = (n) => n % 2 === 0
 
@@ -13,7 +13,7 @@ describe(handleReplace, () => {
         }
         const $nl = new StreamList([6])
         const actual = handleReplace(upd, {
-            $nl,
+            $list: $nl,
             p: isEven,
             indexMap: [undefined, 0]
         })

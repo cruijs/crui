@@ -47,7 +47,7 @@ export const dom: DOM<Node> = {
             })
         return node
     },
-    runOnMount: (f) => {
+    runOnNextFrame: (f) => {
         const nextFrame = new Promise((resolve) => {
             window.requestAnimationFrame(resolve)
         })

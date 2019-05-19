@@ -13,7 +13,9 @@ export function AddTodo(store: TodoStore) {
     const submit = h('button', {
         props: { className: 'add-todo-submit' },
         events: {
-            click: () => {
+            click: (e) => {
+                e.preventDefault()
+
                 store.addTodo(store.input.get())
                 store.input.set('')
             }

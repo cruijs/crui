@@ -3,7 +3,7 @@ import { h } from '@crui/core/elems';
 import { hc } from '@crui/core/elems/children';
 import { text } from '@crui/core/elems/text';
 import { h$ } from '@crui/reactive/elems';
-import { h$map } from '@crui/reactive/elems/h$map';
+import { h$filter$$ } from '@crui/reactive/elems/filter/h$filter$$';
 import { cssTx } from '@crui/transitions/cssTx';
 import { Todo, TodoStore } from '../store';
 
@@ -14,10 +14,11 @@ const hcc = (tag: Tag, className: string, children?: Component[]) =>
     })
 
 export function TodoList(store: TodoStore) {
-    return h$map(
+    return h$filter$$(
         hcc('ul', 'todo-list'),
-        store.getTodos(),
-        TodoComponent
+        store.todos,
+        TodoComponent,
+        store.visibilityFilter,
     )
 }
 

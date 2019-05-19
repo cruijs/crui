@@ -1,5 +1,5 @@
-import { AsyncFn, Node, Unsubscribe } from '../type';
-import { combine, combineAsync } from '../utils/combine';
+import { AsyncFn, Node, Unsubscribe } from '../type'
+import { combine, combineAsync, asyncBind } from '../utils/combine'
 import { asyncNoop, noop } from '../utils/noop';
 import { Modify, modify } from '../utils/modify'
 
@@ -51,4 +51,11 @@ export function mergeRendered<N>(p: N, rs: Rendered<N>[]): Rendered<N> {
         onMounted: combineAsync(collected.onMounted),
         onUnmount: combineAsync(collected.onUnmount),
     }
+}
+
+export function combineMount(parent: AsyncFn, children: AsyncFn) {
+    return asyncBind(parent, children)
+}
+export function combineUnmount(parent: AsyncFn, children: AsyncFn) {
+    return asyncBind(children, parent)
 }

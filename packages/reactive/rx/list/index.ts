@@ -26,6 +26,10 @@ export type Replace<T> = {
 }
 
 export class StreamList<T> extends Stream<T[], Update<T>>{
+    item(i: number): T|undefined {
+        return this.value[i]
+    }
+
     set(newList: T[]): void {
         const oldList = this.value
         this.value = newList
@@ -63,7 +67,7 @@ export class StreamList<T> extends Stream<T[], Update<T>>{
         return this.value.filter(p)
     }
 
-    map<P>(f: (v: T) => P): P[] {
+    map<P>(f: (v: T, i: number) => P): P[] {
         return this.value.map(f)
     }
 

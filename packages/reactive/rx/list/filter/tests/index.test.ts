@@ -10,8 +10,7 @@ const isEven: Predicate<number> = (n) => n % 2 === 0
 function setup(xs: number[], p = isEven) {
     upd = undefined
     list = new StreamList(xs)
-    const res = $filter(list, p)
-    filtered = res.list
+    filtered = $filter(list, p)
     filtered.subscribe((u) => upd = u)
     return list
 }
@@ -20,7 +19,7 @@ function setup(xs: number[], p = isEven) {
 describe('filter', () => {
     it('correctly filter list', () => {
         const list = new StreamList([1, 2, 3, 4, 5, 6])
-        const { list: filtered } = $filter(list, isEven)
+        const filtered = $filter(list, isEven)
         expect(filtered.get()).toEqual([2, 4, 6])
     })
     describe('Replace source list', () => {
@@ -214,7 +213,6 @@ describe('filter', () => {
 
             describe('multiple matches', () => {
                 beforeAll(() => {
-                    debugger
                     setup([1, 4, 5])
                         .splice(2, 0, [2, 3, 4])
                 })
@@ -231,6 +229,12 @@ describe('filter', () => {
                     })
                 })
             })
+        })
+
+        fit('works with concat too', () => {
+            const list = setup([1], (n) => n % 2 != 0)
+            list.concat([2, 3])
+            expect(filtered.get()).toEqual([1, 3])
         })
     })
 })

@@ -15,13 +15,19 @@ export function combine(fs: Fn0[]): Fn0 {
     }
 }
 
+export function combine2(a: Fn0, b: Fn0): Fn0 {
+    return () => {
+        a()
+        b()
+    }
+}
+
 export function runAll(fs: Fn0[]): void {
     fs.forEach((f) => f())
 }
 
-type AsyncFn0 = () => PromiseLike<void>
 const logError = (e: Error) => console.error(e)
-export function combineAsync(fs: AsyncFn0[]): AsyncFn0 {
+export function combineAsync(fs: AsyncFn[]): AsyncFn {
     fs = fs.filter(
         (f) => f !== asyncNoop
     )

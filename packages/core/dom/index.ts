@@ -17,7 +17,7 @@ export interface DOM<N> {
     nextChild: (parent: N, ref: N) => N|null
     listen: Listen<N>,
     applyStyle: (node: N, style: Style) => N
-    runOnMount: (f: AsyncFn) => PromiseLike<void>
+    runOnNextFrame: (f: AsyncFn) => PromiseLike<void>
 }
 
 export function render<N, Ctxt extends C, C>(

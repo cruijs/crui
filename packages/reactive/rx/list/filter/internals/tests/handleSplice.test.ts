@@ -1,7 +1,7 @@
-import { StreamList } from '../..';
-import { Splice, UpdateType } from '../../index';
-import { handleSplice } from "../handleSplice";
-import { Index, Predicate } from '../types';
+import { StreamList } from '../../..';
+import { Splice, UpdateType } from '../../../index';
+import { Index, Predicate } from '../../types';
+import { handleSplice } from '../handleSplice';
 
 function splice(index: number, removed: number[], added: number[]): Splice<number> {
     return {
@@ -32,7 +32,7 @@ function run(
 ) {
     const $nl = new StreamList(state.list)
     const actual = handleSplice(state.upd, {
-        $nl,
+        $list: $nl,
         p: isEven,
         indexMap: state.imap
     })
@@ -53,6 +53,19 @@ describe(handleSplice, () => {
                     }, {
                         list,
                         imap: [undefined, 0]
+                    })
+                })
+            })
+
+            describe('single item', () => {
+                it('clear the list', () => {
+                    run({
+                        upd: remove(0, [2]),
+                        list: [0],
+                        imap: [0],
+                    }, {
+                        list: [],
+                        imap: [],
                     })
                 })
             })
@@ -292,6 +305,73 @@ describe(handleSplice, () => {
                         list: [2, 4, 8],
                         imap: [0, 1, undefined, undefined, 2],
                     })
+                })
+            })
+        })
+
+        describe('index over the end', () => {
+            it('appends at the end', () => {
+                run({
+                    list: [2],
+                    imap: [0],
+                    upd: added(1, [3, 4])
+                }, {
+                    list: [2, 4],
+                    imap: [0, undefined, 1],
+                })
+            })
+        })
+    })
+
+    describe('add & remove', () => {
+        describe('emtpy list', () => {
+            it('handles it', () => {
+                run({
+                    list: [],
+                    imap: [undefined],
+                    upd: splice(0, [1], [2, 4]),
+                }, {
+                    list: [2, 4],
+                    imap: [0, 1],
+                })
+            })
+        })
+
+        describe('head', () => {
+            it('handles it', () => {
+                run({
+                    list: [2, 4],
+                    imap: [undefined, 0, 1],
+                    upd: splice(0, [1], [0]),
+                }, {
+                    list: [0, 2, 4],
+                    imap: [0, 1, 2],
+                })
+            })
+        })
+
+        describe('middle', () => {
+            it('handles it', () => {
+                run({
+                    list: [2, 4],
+                    imap: [0, undefined, 1],
+                    upd: splice(1, [3, 4], [5, 6]),
+                }, {
+                    list: [2, 6],
+                    imap: [0, undefined, 1],
+                })
+            })
+        })
+
+        describe('tail', () => {
+            it('handles it', () => {
+                run({
+                    list: [2, 4],
+                    imap: [undefined, 0, 1],
+                    upd: splice(2, [4, 5], [0]),
+                }, {
+                    list: [2, 0],
+                    imap: [undefined, 0, 1],
                 })
             })
         })

@@ -6,25 +6,26 @@ import { StreamBox } from '@crui/reactive/rx/box';
 import { Component } from '../../../core/dom/index';
 import { TodoStore, Visibility } from '../store';
 
-export const Footer = (store: TodoStore) =>
+export const Footer = ({ visibility }: TodoStore) => (
     hc('div', [
         ht('span', 'Show: '),
-        Filter(store.visibility, Visibility.ALL, 'All'),
-        Filter(store.visibility, Visibility.TODO, 'Active'),
-        Filter(store.visibility, Visibility.DONE, 'Completed'),
+        Filter(visibility, Visibility.ALL, 'All'),
+        Filter(visibility, Visibility.TODO, 'Active'),
+        Filter(visibility, Visibility.DONE, 'Completed'),
     ])
+)
 
 const Filter = (
     $vis: StreamBox<Visibility>,
     vis: Visibility,
     label: string
 ): Component => {
-    const { stream: className, unsub } = $vis.map((v) => (
+    const className = $vis.map((v) => (
         'filter ' + (v === vis ? 'active' : '')
     ))
 
     return h$('button', {
-        unsub,
+        unsub: className.destroy,
         $props: { className },
         children: [
             text(label)

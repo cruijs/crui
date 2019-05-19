@@ -1,11 +1,6 @@
-import { runAll } from '@crui/core/utils/combine';
-import { noop } from '@crui/core/utils/noop';
 import { StreamBox } from '@crui/reactive/rx/box';
 import { StreamList } from '@crui/reactive/rx/list';
-import { $filter } from '@crui/reactive/rx/list/filter';
-import { Predicate } from '@crui/reactive/rx/list/filter/types';
-import { keepSynced } from '@crui/reactive/rx/list/keepSynced';
-import { Unsubscribe } from '@crui/reactive/rx/stream';
+import { Predicate$ } from '@crui/reactive/rx/list/filter/$filter$';
 
 export type Todo = {
     done: StreamBox<boolean>,
@@ -21,66 +16,14 @@ export enum Visibility {
 export class TodoStore {
     public readonly input: StreamBox<string>
     public readonly visibility: StreamBox<Visibility>
-
-    private readonly todos: TodoList
-    private readonly visibleTodos: TodoList
-
-    private unsubVisibleTodos: Unsubscribe
-    private unsubFilteredList: Unsubscribe
-    private unsubListByVisibility: Unsubscribe
+    public readonly visibilityFilter: StreamBox<Predicate$<Todo>>
+    public readonly todos: TodoList
 
     constructor() {
         this.input = new StreamBox('')
         this.todos = new StreamList<Todo>([])
-        this.visibleTodos = new StreamList<Todo>([])
         this.visibility = new StreamBox<Visibility>(Visibility.ALL)
-
-        this.unsubVisibleTodos = noop
-        this.unsubFilteredList = noop
-        this.unsubListByVisibility = 
-            this.visibility.subscribe(
-                this.setListByVisibility
-            )
-
-        this.setListByVisibility(Visibility.ALL)
-    }
-
-    getTodos() {
-        return this.visibleTodos
-    }
-
-    private setListByVisibility = (v: Visibility) => {
-        this.unsubVisibleTodos()
-        this.unsubVisibleTodos = keepSynced(
-            this.getTodoByVisibility(v),
-            this.visibleTodos
-        )
-    }
-
-    private getTodoByVisibility(v: Visibility) {
-        switch (v) {
-            case Visibility.ALL:
-                return this.getAll()
-            case Visibility.DONE:
-                return this.getCompleted()
-            case Visibility.TODO:
-                return this.getUncompleted()
-        }
-    }
-
-    private getAll(): TodoList {
-        this.unsubFilteredList()
-        const $list = new StreamList(this.todos.get())
-        this.unsubFilteredList = keepSynced(this.todos, $list)
-        return $list
-    }
-
-    private getCompleted(): TodoList {
-        return this.makeFiltered((todo) => todo.done.get())
-    }
-
-    private getUncompleted(): TodoList {
-        return this.makeFiltered((todo) => !todo.done.get())
+        this.visibilityFilter = this.visibility.map(vis2pred)
     }
 
     addTodo(todo: string): void {
@@ -90,20 +33,22 @@ export class TodoStore {
         })
     }
 
-    private makeFiltered(p: Predicate<Todo>) {
-        this.unsubFilteredList()
-
-        const { unsub, list } = $filter(this.todos, p)
-        this.unsubFilteredList = unsub
-
-        return list
-    }
-
     dispose() {
-        runAll([
-            this.unsubVisibleTodos,
-            this.unsubFilteredList,
-            this.unsubListByVisibility
-        ])
+        this.todos.destroy()
+        this.visibilityFilter.destroy()
+        this.visibility.destroy()
+        this.input.destroy()
+    }
+}
+
+function vis2pred(v: Visibility): Predicate$<Todo> {
+    switch (v) {
+        case Visibility.ALL:
+            const $true = new StreamBox(true)
+            return () => $true
+        case Visibility.DONE:
+            return (todo) => todo.done.clone()
+        case Visibility.TODO:
+            return (todo) => todo.done.map((b) => !b)
     }
 }

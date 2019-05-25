@@ -2,7 +2,7 @@
   "name": "@crui/core",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "description": "Foundation on which the CRUI library builds on",
   "scripts": {
     "build": "tsc",
@@ -14,7 +14,6 @@
     "ts-jest": "^24.0.2",
     "typescript": "^3.3.3"
   },
-  "dependencies": {},
   "jest": {
     "transform": {
       ".ts": "ts-jest"

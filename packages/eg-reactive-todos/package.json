@@ -1,7 +1,7 @@
 {
   "name": "crui-todos",
   "author": "Salvatore Pelligra",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "description": "CRUI - Todos example",
   "scripts": {
     "serve": "webpack-dev-server --open",
@@ -26,8 +26,8 @@
     "webpack-dev-server": "^3.1.9"
   },
   "dependencies": {
-    "@crui/core": "^0.1.0",
-    "@crui/reactive": "^0.1.0",
-    "@crui/transitions": "^0.1.0"
+    "@crui/core": "^0.1.0-alpha.1",
+    "@crui/reactive": "^0.1.0-alpha.1",
+    "@crui/transitions": "^0.1.0-alpha.1"
   }
 }

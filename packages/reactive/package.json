@@ -1,6 +1,6 @@
 {
   "name": "@crui/reactive",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "description": "Add reactivity to CRUI",
   "main": "index.ts",
   "scripts": {
@@ -19,7 +19,7 @@
     "typescript": "^3.4.5"
   },
   "dependencies": {
-    "@crui/core": "^0.1.0"
+    "@crui/core": "^0.1.0-alpha.1"
   },
   "jest": {
     "transform": {

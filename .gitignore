@@ -1,0 +1,5 @@
+docker-compose.yml
+.vscode/
+*.code-workspace
+node_modules/
+.awcache/

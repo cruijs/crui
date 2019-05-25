@@ -23,5 +23,9 @@
       "ts",
       "js"
     ]
+  },
+  "gitHead": "e6bdcfbc524d014df27ce3089b458b07635b7190",
+  "publishConfig": {
+    "access": "public"
   }
 }

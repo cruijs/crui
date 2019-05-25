@@ -1,7 +1,7 @@
 {
   "name": "crui-todos",
   "author": "Salvatore Pelligra",
-  "version": "0.1.0-alpha.1",
+  "private": true,
   "description": "CRUI - Todos example",
   "scripts": {
     "serve": "webpack-dev-server --open",

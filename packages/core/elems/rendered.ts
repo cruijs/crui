@@ -32,9 +32,6 @@ export function mergeRendered<N>(p: N, rs: Rendered<N>[]): Rendered<N> {
     if (rs.length === 0) {
         return defRendered(p)
     }
-    if (rs.length === 1) {
-        return rs[0]
-    }
 
     const collected = rs.reduce(
         (z, r) => {

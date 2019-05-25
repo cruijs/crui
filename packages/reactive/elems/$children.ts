@@ -1,34 +1,12 @@
-import { Component, DOM, Tag } from '@crui/core/dom/index';
-import { combineMount, combineUnmount, defRendered, Rendered } from '@crui/core/elems/rendered';
+import { DOM } from '@crui/core/dom/index';
+import { combineMount, combineUnmount, Rendered } from '@crui/core/elems/rendered';
 import { AsyncFn } from '@crui/core/type';
 import { last } from '@crui/core/utils/array';
 import { combine, combineAsync } from '@crui/core/utils/combine';
 import { modify } from '@crui/core/utils/modify';
 import { noop } from '@crui/core/utils/noop';
-import { cleanup } from '../rx/list/cleanup';
 import { StreamList, UpdateType } from '../rx/list/index';
-import { $map } from '../rx/list/map';
 import { Unsubscribe } from '../rx/stream';
-
-export function h$c<C>(tag: Tag, $children: StreamList<Component<C>>): Component<C> {
-    return (dom, ctxt) => {
-        const container = defRendered(dom.create(tag))
-
-        const $rendered = $map($children, (c) => c(dom, ctxt))
-        const unsub = cleanup($rendered, (r) => r.unsub())
-
-        return modify(
-            with$Children(dom, container, $rendered),
-            (m) => {
-                m.unsub = combine([
-                    m.unsub,
-                    unsub,
-                    $rendered.destroy
-                ])
-            }
-        )
-    }
-}
 
 type $Children<N> = StreamList<Rendered<N>> 
 /**

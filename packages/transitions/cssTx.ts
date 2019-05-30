@@ -43,11 +43,11 @@ const onTrans = <N>(
         if (!(e instanceof TransitionEvent))
             return
 
-        if (e.propertyName !== slowest)
+        if (e.elapsedTime == 0 || e.propertyName !== slowest)
             return
 
-        done(),
         unsub()
+        done()
     }
     const unsub = combine([
         dom.listen(node, 'transitionend', handler),

@@ -121,16 +121,19 @@ type RemoveNode<N> = (r: Rendered<N>) => void
 
 const makeReplace: MakeReplace = 
     (guard, dom, removing, removeNode) => (toRemove, toAdd, insert) => {
+        const ps = toRemove.map(removeNode)
+
         toAdd.forEach((r) => {
             const cancel = removing.get(r.node)
             cancel && cancel()
         })
 
-        return Promise.all(
-            toRemove.map(removeNode)
-        ).then(guard(() => {
+        return Promise.all(ps).then(guard(() => {
             toAdd.forEach((r) => {
-                insert(r.node)
+                if (removing.has(r.node))
+                    removing.delete(r.node)
+                else
+                    insert(r.node)
             })
             return dom.runOnNextFrame(() =>
                 Promise.all(toAdd.map(
@@ -158,10 +161,7 @@ function makeRemoveNode<N>(dom: DOM<N>, parent: N, removing: Removing<N>): Remov
     return (r: Rendered<N>) => {
         let { guard, prevent } = makeGuard()
 
-        removing.set(r.node, () => {
-            removing.delete(r.node)
-            prevent()
-        })
+        removing.set(r.node, prevent)
 
         return r.onUnmount().then(guard(() => {
             dom.remove(parent, r.node)

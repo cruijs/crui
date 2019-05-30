@@ -1,27 +1,26 @@
 import { Component, Tag } from '@crui/core/dom';
-import { Config as Base, h } from '@crui/core/elems';
-import { mergeRendered } from '@crui/core/elems/rendered';
+import { KProps } from '@crui/core/dom/props';
+import { Config as Base, withAll } from '@crui/core/elems';
+import { mergeRendered, Rendered } from '@crui/core/elems/rendered';
+import { Unsubscribe } from '@crui/core/type';
 import { combine } from '@crui/core/utils/combine';
-import { Rendered } from '../../core/elems/rendered';
-import { Unsubscribe } from '../../core/type';
-import { modify } from '../../core/utils/modify';
-import { Bind, with$Bind } from './with$Bind';
-import { Reactive, with$Props } from './with$Props';
+import { modify } from '@crui/core/utils/modify';
+import { Bind, with$Bind } from './$bind';
+import { $Props, with$Props } from './$props';
 
-export type Config<P, $P, C> = Base<P, C> & {
+export type Config<C, K extends KProps> = Base<K, C> & {
     $bind?: Bind,
-    $props?: Reactive<$P>,
+    $props?: $Props<K>
     unsub?: Unsubscribe,
 }
-export function h$<P, $P, C>(tag: Tag, config: Config<P, $P, C>): Component<C> {
-    const component = h(tag, config)
+export function h$<C, K extends KProps>(tag: Tag, config: Config<C, K>): Component<C> {
     return (dom, ctxt) => {
-        const r = component(dom, ctxt)
+        const node = dom.create(tag)
 
-        return withUnsub(config.unsub, mergeRendered(r.node, [
-            r,
-            with$Props(r.node, config.$props!),
-            with$Bind(dom, r.node, config.$bind),
+        return withUnsub(config.unsub, mergeRendered(node, [
+            withAll(dom, ctxt, node, config),
+            with$Props(dom, node, config.$props),
+            with$Bind(dom, node, config.$bind),
         ]))
     }
 }

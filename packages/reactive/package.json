@@ -2,24 +2,32 @@
   "name": "@crui/reactive",
   "version": "0.1.0-alpha.2",
   "description": "Add reactivity to CRUI",
+  "author": "Salvatore Pelligra",
+  "license": "GPL-3.0",
   "main": "index.ts",
   "scripts": {
     "test": "jest --"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cruijs/crui/tree/master/packages/reactive"
+  },
   "keywords": [
     "reactive",
+    "crui",
     "ui"
   ],
-  "author": "Salvatore Pelligra",
-  "license": "GPL-3.0",
+  "dependencies": {
+    "@crui/core": "^0.1.0-alpha.2"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.12",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
-  },
-  "dependencies": {
-    "@crui/core": "^0.1.0-alpha.2"
   },
   "jest": {
     "transform": {
@@ -31,8 +39,5 @@
       "js"
     ]
   },
-  "gitHead": "e6bdcfbc524d014df27ce3089b458b07635b7190",
-  "publishConfig": {
-    "access": "public"
-  }
+  "gitHead": "e6bdcfbc524d014df27ce3089b458b07635b7190"
 }

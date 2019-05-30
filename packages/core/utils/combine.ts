@@ -16,6 +16,12 @@ export function combine(fs: Fn0[]): Fn0 {
 }
 
 export function combine2(a: Fn0, b: Fn0): Fn0 {
+    if (a === noop) {
+        return b
+    }
+    if (b === noop) {
+        return a
+    }
     return () => {
         a()
         b()

@@ -1,6 +1,6 @@
 import { DOM, Listen, render } from '..';
 import { Component } from '../index';
-import { keys } from '../../utils/object';
+import { assign } from '../../utils/object'
 
 const listen: Listen<Node> = (elem, event, handler) => {
     elem.addEventListener(event, handler)
@@ -40,13 +40,38 @@ export const dom: DOM<Node> = {
     },
     nextChild: (_, ref) => ref.nextSibling,
     listen,
-    applyStyle: (node, style) => {
+
+    setProps: (node, props) => {
         if (node instanceof HTMLElement)
-            keys(style).forEach((k) => {
-                node.style[k] = style[k]
-            })
+            assign(node, props)
+
         return node
     },
+    setProp: (node, prop, val) => {
+        if (node instanceof HTMLElement)
+            (node as any)[prop] = val
+
+        return node
+    },
+    getProp: (node, prop) => {
+        if (node instanceof HTMLElement)
+            return (node as any)[prop]
+
+        throw new Error('Props can be retrieved only on HTMLElements')
+    },
+
+    applyStyle: (node, style) => {
+        if (node instanceof HTMLElement)
+            assign(node.style, style)
+
+        return node
+    },
+    getCss: (node) => Array.from(
+        (node instanceof HTMLElement)
+            ? node.classList.values()
+            : []
+    ),
+
     runOnNextFrame: (f) => {
         const nextFrame = new Promise((resolve) => {
             window.requestAnimationFrame(resolve)

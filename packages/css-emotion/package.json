@@ -1,7 +1,7 @@
 {
-  "name": "@crui/transitions",
+  "name": "@crui/css-emotion",
   "version": "0.1.0-alpha.2",
-  "description": "Add transitions to CRUI components",
+  "description": "Add CSS-in-JS support through emotion package",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",
   "main": "index.ts",
@@ -13,22 +13,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cruijs/crui/tree/master/packages/transitions"
+    "url": "https://github.com/cruijs/crui/tree/master/packages/css-emotion"
   },
   "keywords": [
-    "animations",
-    "transitions",
+    "css-in-js",
+    "emotion",
     "crui",
     "ui"
   ],
+  "dependencies": {
+    "@crui/core": "^0.1.0-alpha.2"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.12",
+    "emotion": "^10.0.9",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
-  },
-  "dependencies": {
-    "@crui/core": "^0.1.0-alpha.2"
   },
   "jest": {
     "transform": {
@@ -39,6 +40,5 @@
       "ts",
       "js"
     ]
-  },
-  "gitHead": "e6bdcfbc524d014df27ce3089b458b07635b7190"
+  }
 }

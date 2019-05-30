@@ -25,19 +25,19 @@ export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Rendered<N> {
     const unsubs: Unsubscribe[] = []
     const event = compatibleInputEvent(node)
     keys(bind).forEach((prop) => {
-        const $s: Stream<any> | undefined = bind[prop]
+        const $s = bind[prop]
         if ($s == null) {
             return
         }
-        (node as any)[prop] = $s.get()
+        dom.setProp(node, prop, $s.get())
 
         const atomic = makeAtomic()
         unsubs.push(
             dom.listen(node, event, atomic(() => {
-                $s.set((node as any)[prop])
+                ($s as any).set(dom.getProp(node, prop))
             })),
-            $s.subscribe(atomic((val) => {
-                (node as any)[prop] = val
+            $s.subscribe(atomic((val: boolean|string) => {
+                dom.setProp(node, prop, val)
             }))
         )
     })

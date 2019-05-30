@@ -1,20 +1,20 @@
-import { Component, Tag } from '../dom/index';
-import { keys } from '../utils/object';
+import { Component, DOM, Tag } from '../dom/index';
+import { Props } from '../dom/props'
 import { defRendered } from './rendered';
 
-export function hp<P>(tag: Tag, props: P): Component {
+type KProps = keyof Props
+type PProps<K extends KProps> = Pick<Props, K>
+export function hp<K extends KProps>(tag: Tag, props: PProps<K>): Component {
     return (dom) => {
         const node = dom.create(tag)
-        withProps(props)
+        withProps(dom, node, props)
 
         return defRendered(node)
     }
 }
 
-export function withProps<N, P extends keyof N>(node: N, props?: { [K in P]: N[P] }): void {
+export function withProps<N, K extends KProps>(dom: DOM<N>, node: N, props?: PProps<K>): void {
     if (props != null) {
-        for (const k of keys(props)) {
-            node[k] = props[k]
-        }
+        dom.setProps(node, props)
     }
 }

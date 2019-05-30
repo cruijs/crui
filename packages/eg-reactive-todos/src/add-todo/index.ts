@@ -1,32 +1,29 @@
-import { h } from '@crui/core/elems';
+import { onClick } from '@crui/core/combinators/events';
 import { hc } from '@crui/core/elems/children';
-import { h$ } from '@crui/reactive/elems';
-import { TodoStore } from '../store';
 import { text } from '@crui/core/elems/text';
+import { h, hss } from '@crui/css-emotion';
+import { $bindVal } from '@crui/reactive/combinators/$bind';
+import { TodoStore } from '../store';
 
+const input = () => hss('input', {
+    width: '13rem'
+})
+const submit = () => h('button', {
+    css: {
+        marginLeft: '0.5rem',
+    },
+    children: [
+        text('Add')
+    ],
+})
 export function AddTodo(store: TodoStore) {
-    const input = h$('input', {
-        props: { className: 'add-todo-input' },
-        $bind: { value: store.input }
-    })
-
-    const submit = h('button', {
-        props: { className: 'add-todo-submit' },
-        events: {
-            click: (e) => {
-                e.preventDefault()
-
-                store.addTodo(store.input.get())
-                store.input.set('')
-            }
-        },
-        children: [
-            text('Add')
-        ]
-    })
-
     return hc('div', [
-        input,
-        submit
+        $bindVal(input(), store.input),
+        onClick(submit(), (e) => {
+            e.preventDefault()
+
+            store.addTodo(store.input.get())
+            store.input.set('')
+        })
     ])
 }

@@ -12,3 +12,9 @@ export function we<C>(comp: Component<C>, events: Events): Component<C> {
         ])
     }
 }
+
+export function onClick<C>(comp: Component<C>, event: EventListener) {
+    return we(comp, {
+        click: event
+    })
+}

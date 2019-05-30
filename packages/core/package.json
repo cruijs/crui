@@ -1,13 +1,26 @@
 {
   "name": "@crui/core",
-  "author": "Salvatore Pelligra",
-  "license": "GPL-3.0",
   "version": "0.1.0-alpha.2",
   "description": "Foundation on which the CRUI library builds on",
+  "author": "Salvatore Pelligra",
+  "license": "GPL-3.0",
+  "main": "index.ts",
   "scripts": {
-    "build": "tsc",
     "test": "jest --"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cruijs/crui/tree/master/packages/core"
+  },
+  "keywords": [
+    "composable",
+    "declarative",
+    "crui",
+    "ui"
+  ],
   "devDependencies": {
     "@types/jest": "^24.0.12",
     "jest": "^24.7.1",
@@ -24,8 +37,5 @@
       "js"
     ]
   },
-  "gitHead": "e6bdcfbc524d014df27ce3089b458b07635b7190",
-  "publishConfig": {
-    "access": "public"
-  }
+  "gitHead": "e6bdcfbc524d014df27ce3089b458b07635b7190"
 }

@@ -1,6 +1,6 @@
 import { Unsubscribe } from '@crui/core/type';
+import { combine2 } from '@crui/core/utils/combine';
 import { StreamList, UpdateType } from './index';
-import { combine2 } from '../../../core/utils/combine'
 
 export function cleanup<T>($list: StreamList<T>, f: (v: T) => void): Unsubscribe {
     return combine2(

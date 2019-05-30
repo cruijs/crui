@@ -1,10 +1,9 @@
+import { Component } from '@crui/core/dom';
 import { Tag } from '@crui/core/dom/index';
 import { KProps } from '@crui/core/dom/props';
-import { Config as Base } from '@crui/core/elems';
+import { Config as Base, withAll } from '@crui/core/elems';
 import { Interpolation } from 'emotion';
-import { Component } from '../../core/dom/index'
-import { withAll } from '../../core/elems/index'
-import { withCSS } from './css'
+import { withCSS } from './css';
 
 type Config<K extends KProps, C, MP> = Base<K, C> & {
     css?: Interpolation<MP>

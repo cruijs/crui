@@ -1,0 +1,54 @@
+{
+  "name": "@crui/transitions-gsap",
+  "version": "0.1.0-alpha.3",
+  "description": "Add animation with GrenSock",
+  "author": "Salvatore Pelligra",
+  "license": "GPL-3.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest --"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cruijs/crui/tree/master/packages/transitions-gsap"
+  },
+  "keywords": [
+    "animations",
+    "transitions",
+    "gsap",
+    "crui",
+    "ui"
+  ],
+  "devDependencies": {
+    "@types/jest": "^24.0.12",
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.5",
+    "@crui/core": "^0.1.0-alpha.3",
+    "@crui/transitions": "^0.1.0-alpha.3",
+    "@types/gsap": "^1.20.2",
+    "gsap": "^2.1.3"
+  },
+  "peerDependencies": {
+    "@crui/core": "^0.1.0-alpha.3",
+    "@crui/transitions": "^0.1.0-alpha.3",
+    "gsap": "^2.1.3"
+  },
+  "jest": {
+    "transform": {
+      ".ts": "ts-jest"
+    },
+    "testRegex": ".test.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "gitHead": "e6bdcfbc524d014df27ce3089b458b07635b7190",
+  "dependencies": {
+    "gsap": "^2.1.3"
+  }
+}

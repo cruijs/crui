@@ -66,6 +66,11 @@ export const dom: DOM<Node> = {
 
         return node
     },
+    modStyle: (node, f) => {
+        if (node instanceof HTMLElement)
+            f(node.style as any)
+        return node
+    },
     getCss: (node) => Array.from(
         (node instanceof HTMLElement)
             ? node.classList.values()

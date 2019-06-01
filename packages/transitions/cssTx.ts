@@ -18,10 +18,14 @@ export const cssTx = <P extends keyof Style>(
     const props = keys(transitions)
 
     dom.applyStyle(node, fromStyle)
-    dom.applyStyle(node, {
-        transition: props
+    dom.modStyle(node, (s) => {
+        let trans = props
             .map((k) => `${k} ${transitions[k]}ms`)
             .join(',')
+        if (s.transition) {
+            trans = s.transition + ', ' + trans
+        }
+        s.transition = trans
     })
 
     const slowest = props.reduce(
@@ -31,34 +35,50 @@ export const cssTx = <P extends keyof Style>(
 
     return {
         intro: onTrans(dom, node, toStyle, slowest),
-        outro: onTrans(dom, node, fromStyle, slowest),
+        outro: onTrans(dom, node, fromStyle, slowest)
     }
 })
 
-const onTrans = <N>(
+export const onTrans = <N, S extends keyof Style>(
     dom: DOM<N>,
     node: N,
-    style: Style,
+    style: Pick<Style, S>,
     slowest: string,
-) => () => {
+) => {
     let done = noop
-    const handler = (e: Event) => {
-        if (!(e instanceof TransitionEvent))
-            return
-
-        if (e.elapsedTime == 0 || e.propertyName !== slowest)
-            return
-
+    let unsub = noop
+    const cancel = () => {
         unsub()
         done()
+        done = unsub = noop
     }
-    const unsub = combine([
-        dom.listen(node, 'transitionend', handler),
-        dom.listen(node, 'transitioncancel', handler),
-    ])
+    const run = () => {
+        const handler = (e: Event) => {
+            if (!(e instanceof TransitionEvent))
+                return
 
-    return new Promise<void>((resolve) => {
-        dom.applyStyle(node, style)
-        done = resolve
-    })
+            if (e.propertyName !== slowest)
+                return
+
+            cancel()
+        }
+        /**
+         * When clicking around, it's possible for long transitions to not trigger
+         * because property are already set to target value, so this hack ensures 
+         * that this edge case is handled.
+         */
+        const timeout = setTimeout(cancel, 100)
+        unsub = combine([
+            () => { if (timeout) clearTimeout(timeout) },
+            dom.listen(node, 'transitionend', handler),
+            dom.listen(node, 'transitionrun', () => {
+                if (timeout) clearTimeout(timeout)
+            })
+        ])
+        return new Promise<void>((resolve) => {
+            dom.applyStyle(node, style)
+            done = resolve
+        })
+    }
+    return { run, cancel }
 }

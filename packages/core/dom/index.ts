@@ -19,7 +19,8 @@ export interface DOM<N> {
 
     listen: Listen<N>
 
-    applyStyle(node: N, style: Style): N
+    applyStyle<S extends keyof Style>(node: N, style: Pick<Style, S>): N
+    modStyle(node: N, f: (style: Style) => void): N
     getCss(node: N): string[]
     addCss(node: N, klass: string): N
     removeCss(node: N, klass: string): N

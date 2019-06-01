@@ -7,6 +7,9 @@ import { $filter$$, $Predicate$ } from '../../rx/list/filter/$filter$$';
 import { $map } from '../../rx/list/map';
 import { cleanup } from '../../rx/list/cleanup'
 
+/**
+ * Enhance a Component with dynamic children that are also filtered
+ */
 export function h$filter$$<T, C, D>( 
     container: Component<C>,
     $list: StreamList<T>,

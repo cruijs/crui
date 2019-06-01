@@ -24,7 +24,7 @@ const TodoComponent = (todo: Todo) => (
     hc('li', [
         wrapper([
             input(todo.done),
-            ht('span', todo.text)
+            ht('span', '   ' + todo.text)
         ])
     ])
 )

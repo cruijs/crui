@@ -1,12 +1,19 @@
 import { Component, DOM, Tag } from '../dom';
 import { defRendered, mergeRendered, Rendered } from './rendered';
 
+/**
+ * An element with children
+ */
 export function hc<C>(tag: Tag, children?: Component<C>[]): Component<C> {
     return (dom, ctxt) => {
         const node = dom.create(tag)
         return withChildren(dom, ctxt, node, children)
     }
 }
+
+/**
+ * Append children to a node
+ */
 export function withChildren<N, C>(
     dom: DOM<N>,
     ctxt: C,

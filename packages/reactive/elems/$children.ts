@@ -13,7 +13,7 @@ type $Children<N> = StreamList<Rendered<N>>
  * Dynamically add and remove children from the DOM.
  * 
  * It will not own `$children` and therefore it will not perform any cleanup.
- * It's the user responsibility to destroy `$children` and perform cleanup as appropriate.
+ * It's the user responsibility to destroy `$children` Stream and perform cleanup as appropriate.
  */
 export function with$Children<N>(
     dom: DOM<N>,

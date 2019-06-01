@@ -10,6 +10,11 @@ export type Bind = {
     value?: Stream<string>,
 }
 
+/**
+ * Element with a two-way binding for either `checked` or `value` property.
+ * 
+ * The bound Stream will update based on property value and viceversa.
+ */
 export function h$b(tag: Tag, bind?: Bind): Component {
     return (dom) => {
         const node = dom.create(tag)
@@ -17,6 +22,9 @@ export function h$b(tag: Tag, bind?: Bind): Component {
     }
 }
 
+/**
+ * Setup a node with a two-way binding for either `checked` or `value` property.
+ */
 export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Rendered<N> {
     if (!bind) {
         return defRendered(node)

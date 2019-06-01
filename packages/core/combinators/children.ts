@@ -2,6 +2,9 @@ import { Component } from '../dom/index'
 import { withChildren } from '../elems/children'
 import { mergeRendered } from '../elems/rendered'
 
+/**
+ * Append children to a Component
+ */
 export function wc<C, D>(parent: Component<C>, children: Component<D>[]): Component<C & D> {
     return (dom, ctxt) => {
         const rp = parent(dom, ctxt)

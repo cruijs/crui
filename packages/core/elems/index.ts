@@ -11,6 +11,10 @@ export type Config<K extends KProps, C> = {
     children?: Component<C>[],
 }
 
+/**
+ * An element for which anything can be configured.
+ * It's a mix of all other base Components in this package, but slightly less efficient.
+ */
 export function h<K extends KProps, C>(tag: Tag, config?: Config<K, C>): Component<C> {
     return (dom, ctxt) => {
         const node = dom.create(tag)
@@ -25,6 +29,9 @@ type WithAll = <N, C, K extends KProps>(
     config?: Config<K, C>,
 ) => Rendered<N>
 
+/**
+ * Configure any aspect of a node
+ */
 export const withAll: WithAll = (dom, ctxt, node, config) => {
     if (config == null) {
         return defRendered(node)

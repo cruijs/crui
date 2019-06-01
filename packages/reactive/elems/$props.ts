@@ -9,6 +9,9 @@ import { Stream } from '../rx/stream';
 type Reactive<P extends {}> = {[K in keyof P]: Stream<P[K]>}
 export type $Props<K extends KProps> = Reactive<PProps<K>>
 
+/**
+ * Element with dynamic properties
+ */
 export function h$p<K extends KProps>(tag: Tag, props: $Props<K>): Component {
     return (dom) => {
         const node = dom.create(tag)
@@ -16,6 +19,9 @@ export function h$p<K extends KProps>(tag: Tag, props: $Props<K>): Component {
     }
 }
 
+/**
+ * Setup a node with dynamic properties
+ */
 export function with$Props<N, K extends KProps>(
     dom: DOM<N>,
     node: N,

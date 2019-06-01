@@ -9,6 +9,9 @@ export type Events = {
     click?: EventListener
 }
 
+/**
+ * An element with events
+ */
 export function he(tag: Tag, on?: Events): Component {
     return (dom) => {
         const node = dom.create(tag)
@@ -16,6 +19,9 @@ export function he(tag: Tag, on?: Events): Component {
     }
 }
 
+/**
+ * Add events to a node
+ */
 export function withEvents<N>(dom: DOM<N>, elem: N, on?: Events): Rendered<N> {
     const r = defRendered(elem)
     if (on) {

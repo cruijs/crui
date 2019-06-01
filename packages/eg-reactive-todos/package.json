@@ -29,6 +29,7 @@
     "@crui/core": "^0.1.0-alpha.1",
     "@crui/reactive": "^0.1.0-alpha.1",
     "@crui/transitions": "^0.1.0-alpha.1",
-    "@crui/css-emotion": "^0.1.0-alpha.1"
+    "@crui/css-emotion": "^0.1.0-alpha.1",
+    "emotion": "^10.0.9"
   }
 }

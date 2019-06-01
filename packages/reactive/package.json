@@ -20,7 +20,7 @@
     "crui",
     "ui"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "@crui/core": "^0.1.0-alpha.3"
   },
   "devDependencies": {

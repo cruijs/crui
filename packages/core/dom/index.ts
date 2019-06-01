@@ -21,6 +21,8 @@ export interface DOM<N> {
 
     applyStyle(node: N, style: Style): N
     getCss(node: N): string[]
+    addCss(node: N, klass: string): N
+    removeCss(node: N, klass: string): N
 
     setProps<K extends KProps>(node: N, props: PProps<K>): N
     setProp<K extends KProps>(node: N, prop: K, value: Props[K]): N

@@ -2,8 +2,7 @@ import { Component } from '@crui/core/dom/index';
 import { hc } from '@crui/core/elems/children';
 import { ht } from '@crui/core/elems/ht';
 import { text } from '@crui/core/elems/text';
-import { css } from '@crui/css-emotion';
-import { h$ } from '@crui/reactive/elems';
+import { h$ } from '@crui/css-emotion-reactive/elems';
 import { StreamBox } from '@crui/reactive/rx/box';
 import { TodoStore, Visibility } from '../store';
 
@@ -21,22 +20,7 @@ const Filter = (
     vis: Visibility,
     label: string
 ): Component => {
-    const normal = css({
-        marginLeft: '0.5rem',
-        '&:first-child': {
-            marginLeft: 0,
-        }
-    })
-    const active = css({
-        color: 'red'
-    })
-    const className = $vis.map((v) => (
-        normal + (v === vis ? ' ' + active : '')
-    ))
-
-    const button = h$('button', {
-        unsub: className.destroy,
-        $props: { className },
+    return h$('button', {
         children: [
             text(label)
         ],
@@ -45,8 +29,16 @@ const Filter = (
                 e.preventDefault()
                 $vis.set(vis)
             }
-        }
+        },
+        css: {
+            marginLeft: '0.5rem',
+            '&:first-child': {
+                marginLeft: 0,
+            }
+        },
+        $css: [{
+            cond: $vis.map((v) => v === vis),
+            style: { color: 'red' }
+        }]
     })
-
-    return button
 }

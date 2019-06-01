@@ -1,19 +1,14 @@
 import { Component } from '../dom/index';
-import { mergeRendered } from '../dom/rendered';
 import { Events, withEvents } from '../elems/events';
+import { combinator } from './combinator';
 
 /**
  * Add events to a Component
  */
 export function we<C>(comp: Component<C>, events: Events): Component<C> {
-    return (dom, ctxt) => {
-        const r = comp(dom, ctxt)
-
-        return mergeRendered(r.node, [
-            r,
-            withEvents(dom, r.node, events)
-        ])
-    }
+    return combinator(comp, (dom, node) =>
+        withEvents(dom, node, events)
+    )
 }
 
 /**

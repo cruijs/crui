@@ -1,0 +1,46 @@
+{
+  "name": "@crui/css-emotion-reactive",
+  "version": "0.1.0-alpha.4",
+  "description": "Add reactivity to css-emotion package",
+  "author": "Salvatore Pelligra",
+  "license": "GPL-3.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest --"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cruijs/crui/tree/master/packages/css-emotion-reactive"
+  },
+  "keywords": [
+    "css-in-js",
+    "emotion",
+    "reactive",
+    "crui",
+    "ui"
+  ],
+  "peerDependencies": {
+    "@crui/core": "^0.1.0-alpha",
+    "@crui/reactive": "^0.1.0-alpha",
+    "@crui/css-emotion": "^0.1.0-alpha"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.12",
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.5"
+  },
+  "jest": {
+    "transform": {
+      ".ts": "ts-jest"
+    },
+    "testRegex": ".test.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  }
+}

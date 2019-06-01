@@ -71,6 +71,16 @@ export const dom: DOM<Node> = {
             ? node.classList.values()
             : []
     ),
+    addCss: (node, klass) => {
+        if (node instanceof HTMLElement)
+            node.classList.add(klass)
+        return node
+    },
+    removeCss: (node, klass) => {
+        if (node instanceof HTMLElement)
+            node.classList.remove(klass)
+        return node
+    },
 
     runOnNextFrame: (f) => {
         const nextFrame = new Promise((resolve) => {

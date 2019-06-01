@@ -1,5 +1,5 @@
+import { combinator } from '@crui/core/combinators/combinator';
 import { Component } from '@crui/core/dom';
-import { mergeRendered } from '@crui/core/dom/rendered';
 import { Bind, with$Bind } from '../elems/$bind';
 import { Stream } from '../rx/stream';
 
@@ -7,14 +7,9 @@ import { Stream } from '../rx/stream';
  * Enhance a Component to with a two-way binding.
  */
 export function w$b<C>(comp: Component<C>, bind: Bind): Component<C> {
-    return (dom, ctxt) => {
-        const r = comp(dom, ctxt)
-
-        return mergeRendered(r.node, [
-            r,
-            with$Bind(dom, r.node, bind)
-        ])
-    }
+    return combinator(comp, (dom, node) =>
+        with$Bind(dom, node, bind)
+    )
 }
 
 /**

@@ -1,5 +1,5 @@
 import { Component } from '@crui/core/dom';
-import { modRendered } from '@crui/core/elems/rendered';
+import { modRendered } from '@crui/core/dom/rendered';
 import { Stream } from '../rx/stream';
 
 /**

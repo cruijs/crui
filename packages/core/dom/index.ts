@@ -1,4 +1,4 @@
-import { Rendered } from '../elems/rendered';
+import { Rendered } from './rendered';
 import { AsyncFn, Unsubscribe } from '../type';
 import { KProps, PProps, Props } from './props';
 import { Style } from './style';

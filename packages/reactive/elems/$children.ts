@@ -1,5 +1,5 @@
-import { DOM } from '@crui/core/dom/index';
-import { combineMount, combineUnmount, Rendered } from '@crui/core/elems/rendered';
+import { DOM } from '@crui/core/dom';
+import { combineMount, combineUnmount, Rendered } from '@crui/core/dom/rendered';
 import { AsyncFn } from '@crui/core/type';
 import { last } from '@crui/core/utils/array';
 import { combine, combineAsync } from '@crui/core/utils/combine';

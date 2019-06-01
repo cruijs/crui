@@ -1,5 +1,5 @@
-import { Component, Tag } from '../dom/index';
-import { defRendered } from './rendered';
+import { Component, Tag } from '../dom';
+import { defRendered } from '../dom/rendered';
 
 /**
  * A vanilla element

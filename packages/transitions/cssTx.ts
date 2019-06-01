@@ -1,4 +1,4 @@
-import { DOM } from '@crui/core/dom/index';
+import { DOM } from '@crui/core/dom';
 import { Style } from '@crui/core/dom/style';
 import { combine } from '@crui/core/utils/combine';
 import { noop } from '@crui/core/utils/noop';
@@ -7,6 +7,9 @@ import { tx } from './index';
 
 type Milliseconds<T> = {[K in keyof T]: number}
 
+/**
+ * Create a CSS Transition to apply to a Component
+ */
 export const cssTx = <P extends keyof Style>(
     transitions: Milliseconds<Pick<Required<Style>, P>>,
     fromStyle: Pick<Required<Style>, P>, 

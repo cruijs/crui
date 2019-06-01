@@ -1,8 +1,8 @@
 import { Component, DOM, Tag } from '../dom';
+import { defRendered, Rendered } from '../dom/rendered';
 import { combine } from '../utils/combine';
 import { Modifiable } from '../utils/modify';
 import { keys } from '../utils/object';
-import { defRendered, Rendered } from './rendered';
 
 export type Events = {
     change?: EventListener

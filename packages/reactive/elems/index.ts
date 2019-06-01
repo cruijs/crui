@@ -1,7 +1,7 @@
 import { Component, Tag } from '@crui/core/dom';
 import { KProps } from '@crui/core/dom/props';
+import { mergeRendered, Rendered } from '@crui/core/dom/rendered';
 import { Config as Base, withAll } from '@crui/core/elems';
-import { mergeRendered, Rendered } from '@crui/core/elems/rendered';
 import { Unsubscribe } from '@crui/core/type';
 import { combine } from '@crui/core/utils/combine';
 import { modify } from '@crui/core/utils/modify';

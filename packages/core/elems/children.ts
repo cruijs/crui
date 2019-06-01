@@ -1,5 +1,5 @@
 import { Component, DOM, Tag } from '../dom';
-import { defRendered, mergeRendered, Rendered } from './rendered';
+import { defRendered, mergeRendered, Rendered } from '../dom/rendered';
 
 /**
  * An element with children

@@ -1,6 +1,6 @@
-import { Component } from '../dom/index'
-import { withChildren } from '../elems/children'
-import { mergeRendered } from '../elems/rendered'
+import { Component } from '../dom';
+import { mergeRendered } from '../dom/rendered';
+import { withChildren } from '../elems/children';
 
 /**
  * Append children to a Component

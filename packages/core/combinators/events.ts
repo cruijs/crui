@@ -1,6 +1,6 @@
 import { Component } from '../dom/index';
+import { mergeRendered } from '../dom/rendered';
 import { Events, withEvents } from '../elems/events';
-import { mergeRendered } from '../elems/rendered';
 
 /**
  * Add events to a Component

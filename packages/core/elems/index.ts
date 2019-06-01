@@ -1,9 +1,9 @@
 import { Component, DOM, Tag } from '../dom';
 import { KProps, PProps } from '../dom/props';
+import { defRendered, mergeRendered, Rendered } from '../dom/rendered';
 import { withChildren } from './children';
 import { Events, withEvents } from './events';
 import { withProps } from './props';
-import { defRendered, mergeRendered, Rendered } from './rendered';
 
 export type Config<K extends KProps, C> = {
     props?: PProps<K>,

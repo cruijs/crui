@@ -9,6 +9,9 @@ export type Transition = {
 }
 
 type Animation = <C>(c: Component<C>) => Component<C>
+/**
+ * Create a generic Transition to apply to a Component
+ */
 export function tx(tm: TransitionMaker): Animation {
     return (comp) => (dom, ctxt) => {
         const r = comp(dom, ctxt)

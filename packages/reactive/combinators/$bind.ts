@@ -1,7 +1,7 @@
-import { Component } from '@crui/core/dom/index';
-import { mergeRendered } from '@crui/core/elems/rendered';
+import { Component } from '@crui/core/dom';
+import { mergeRendered } from '@crui/core/dom/rendered';
 import { Bind, with$Bind } from '../elems/$bind';
-import { Stream } from '../rx/stream'
+import { Stream } from '../rx/stream';
 
 /**
  * Enhance a Component to with a two-way binding.

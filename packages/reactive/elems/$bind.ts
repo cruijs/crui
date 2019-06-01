@@ -1,6 +1,6 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { compatibleInputEvent } from '@crui/core/dom/events';
-import { defRendered, modRendered, Rendered } from '@crui/core/elems/rendered';
+import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
 import { combine } from '@crui/core/utils/combine';
 import { keys } from '@crui/core/utils/object';
 import { Stream, Unsubscribe } from '../rx/stream';

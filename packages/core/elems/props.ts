@@ -1,6 +1,6 @@
 import { Component, DOM, Tag } from '../dom/index';
-import { Props } from '../dom/props'
-import { defRendered } from './rendered';
+import { Props } from '../dom/props';
+import { defRendered } from '../dom/rendered';
 
 type KProps = keyof Props
 type PProps<K extends KProps> = Pick<Props, K>

@@ -1,4 +1,4 @@
-import { Component } from '../dom/index';
+import { Component } from '../dom';
 import { withProps } from '../elems/props';
 
 /**

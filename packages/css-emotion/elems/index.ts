@@ -8,6 +8,9 @@ import { withCSS } from './css';
 type Config<K extends KProps, C, MP> = Base<K, C> & {
     css?: Interpolation<MP>
 }
+/**
+ * Create an element with all static aspects configurable, including CSS
+ */
 export function h<K extends KProps, C, M = undefined>(tag: Tag, cfg: Config<K, C, M>): Component<C> {
     return (dom, ctxt) => {
         const node = dom.create(tag)

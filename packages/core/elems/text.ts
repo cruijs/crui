@@ -1,5 +1,5 @@
-import { Component } from '../dom/index';
-import { defRendered } from './rendered'
+import { Component } from '../dom';
+import { defRendered } from '../dom/rendered';
 
 /**
  * A simple text node

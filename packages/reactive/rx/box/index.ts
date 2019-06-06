@@ -2,7 +2,9 @@ import { Stream, Effect } from '../stream'
 
 type FMap<A, B> = (v: A) => B
 export class StreamBox<T> extends Stream<T> {
-    set(val: T) {
+    set = (val: T) => {
+        if (val === this.value)
+            return
         this.value = val
         this.notify(val)
     }

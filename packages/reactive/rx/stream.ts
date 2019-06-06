@@ -1,3 +1,4 @@
+import { remove } from '@crui/core/utils/array';
 import { combine2 } from '@crui/core/utils/combine';
 import { noop } from '@crui/core/utils/noop';
 
@@ -24,10 +25,7 @@ export abstract class Stream<T, U = T> {
     subscribe(eff: Effect<U>): Unsubscribe {
         this.listeners.push(eff)
         return () => {
-            const index = this.listeners.indexOf(eff)
-            if (index !== -1) {
-                this.listeners.splice(index, 1)
-            }
+            remove(this.listeners, eff)
         }
     }
 
@@ -48,7 +46,7 @@ export abstract class Stream<T, U = T> {
     }
 
     protected notify(upd: U): void {
-        this.listeners.forEach((eff) => {
+        this.listeners.slice().forEach((eff) => {
             eff(upd)
         })
     }

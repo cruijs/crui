@@ -8,13 +8,13 @@ export type Props = {
     name: string,
     value: string,
     checked: boolean,
-    multiple: string,
+    multiple: boolean,
     placeholder: string,
-    step: string,
+    step: number,
 
     // textarea
-    cols: string,
-    rows: string,
+    cols: number,
+    rows: number,
     selectionStart: number,
     selectionEnd: number,
     selectionDirection: string,
@@ -32,7 +32,7 @@ export type Props = {
     target: string,
 
     // button
-    disabled: string,
+    disabled: boolean,
 
     // label
     htmlFor: string,
@@ -40,6 +40,6 @@ export type Props = {
     // form
     action: string,
     method: string,
-    autocomplete: string,
-    noValidate: string,
+    autocomplete: boolean,
+    noValidate: boolean,
 }

@@ -63,6 +63,16 @@ export class StreamList<T> extends Stream<T[], Update<T>>{
         this.concat([item])
     }
 
+    insertAt(i: number, item: T): void {
+        this.splice(i, 0, [item])
+    }
+
+    remove(val: T) {
+        const i = this.value.lastIndexOf(val)
+        if (i !== -1)
+            this.splice(i, 1, [])
+    }
+
     filter(p: Predicate<T>): T[] {
         return this.value.filter(p)
     }

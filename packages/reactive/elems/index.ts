@@ -9,21 +9,21 @@ import { Bind, with$Bind } from './$bind';
 import { $Props, with$Props } from './$props';
 import { defRendered } from '../../core/dom/rendered'
 
-export type Config<C, K extends KProps> = Base<K, C> & {
+export type Config<C, K extends KProps, $K extends KProps> = Base<K, C> & {
     $bind?: Bind,
-    $props?: $Props<K>
+    $props?: $Props<$K>
     unsub?: Unsubscribe,
 }
-export function h$<C, K extends KProps>(tag: Tag, config: Config<C, K>): Component<C> {
+export function h$<C, K extends KProps, $K extends KProps>(tag: Tag, config: Config<C, K, $K>): Component<C> {
     return (dom, ctxt) =>
         with$All(dom, ctxt, dom.create(tag), config)
 }
 
-type WithAll = <N, C, K extends KProps>(
+type WithAll = <N, C, K extends KProps, $K extends KProps>(
     dom: DOM<N>,
     context: C,
     node: N,
-    config?: Config<C, K>,
+    config?: Config<C, K, $K>,
 ) => Rendered<N>
 export const with$All: WithAll = (dom, ctxt, node, config) =>
     (config == null)

@@ -15,6 +15,7 @@ export interface DOM<N> {
     insertBefore(parent: N, ref: N|null, node: N): void
     batchInsert(parent: N, children: N[]): void
     batchInsertBefore(parent: N, ref: N|null, node: N[]): void
+    replace(old: N, rpl: N): void
     nextChild(parent: N, ref: N): N|null
 
     listen: Listen<N>

@@ -38,6 +38,10 @@ export const dom: DOM<Node> = {
     batchInsertBefore: (p, r, ns) => {
         (p).insertBefore(withFragment(ns), r)
     },
+    replace: (old, rpl) => {
+        const p = old.parentElement
+        if (p) p.replaceChild(rpl, old)
+    },
     nextChild: (_, ref) => ref.nextSibling,
     listen,
 

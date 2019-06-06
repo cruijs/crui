@@ -7,6 +7,7 @@ import { modify } from '@crui/core/utils/modify';
 import { noop } from '@crui/core/utils/noop';
 import { StreamList, UpdateType } from '../rx/list/index';
 import { Unsubscribe } from '../rx/stream';
+import { makeGuard, Cancel, Guard } from '../utils/guard'
 
 type $Children<N> = StreamList<Rendered<N>> 
 /**
@@ -20,7 +21,7 @@ export function with$Children<N>(
     p: Rendered<N>,
     $children: $Children<N>
 ): Rendered<N> {
-    const { guard, prevent } = makeGuard()
+    const { guard, cancel } = makeGuard()
     const removing: Removing<N> = new Map()
     const replace = makeReplace(
         guard,
@@ -36,7 +37,7 @@ export function with$Children<N>(
 
     return modify(p, (m) => {
         m.unsub = combine([
-            prevent,
+            cancel,
             unsub,
             m.unsub,
         ])
@@ -143,25 +144,12 @@ const makeReplace: MakeReplace =
         }))
     }
 
-type Guard = (f: () => void) => () => void
-const makeGuard = () => {
-    let canRun = true
-    const guard: Guard = (f) => () => {
-        canRun && f()
-    }
-    const prevent = () => {
-        canRun = false
-    }
-    return { guard, prevent }
-}
-
 type Removing<N> = Map<N, Cancel> 
-type Cancel = () => void
 function makeRemoveNode<N>(dom: DOM<N>, parent: N, removing: Removing<N>): RemoveNode<N> {
     return (r: Rendered<N>) => {
-        let { guard, prevent } = makeGuard()
+        let { guard, cancel } = makeGuard()
 
-        removing.set(r.node, prevent)
+        removing.set(r.node, cancel)
 
         return r.onUnmount().then(guard(() => {
             dom.remove(parent, r.node)

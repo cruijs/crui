@@ -10,9 +10,10 @@ export function t$(s: Stream<string>): Component {
         const node = dom.createText(s.get())
 
         return modRendered(node, (r) => {
-            r.unsub = s.subscribe((val) => {
+            s.subscribe((val) => {
                 node.textContent = val
             })
+            r.unsub = s.destroy
         })
     }
 }

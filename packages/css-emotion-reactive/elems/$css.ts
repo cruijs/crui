@@ -35,7 +35,7 @@ export function with$CSS<N, M>(dom: DOM<N>, node: N, style?: $CSS<M>): Rendered<
 
                 cond.apply((shouldAdd) => {
                     if (shouldAdd)
-                        addClass(dom, node, klass)
+                        dom.addCss(node, klass)
                     else
                         dom.removeCss(node, klass)
                 })

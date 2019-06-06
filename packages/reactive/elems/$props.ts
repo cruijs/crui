@@ -3,9 +3,8 @@ import { KProps, PProps } from '@crui/core/dom/props';
 import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
 import { combine } from '@crui/core/utils/combine';
 import { keys } from '@crui/core/utils/object';
-import { Stream } from '../rx/stream';
+import { Reactive } from '../utils/reactive';
 
-type Reactive<P extends {}> = {[K in keyof P]: Stream<P[K]>}
 export type $Props<K extends KProps> = Reactive<PProps<K>>
 
 /**

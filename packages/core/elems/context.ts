@@ -3,11 +3,10 @@ import { Component } from '../dom/index';
 /**
  * Extract information from Context and use them to build a Component.
  */
-export function useContext<C extends D, P, D>(
-    f: (ctxt: C) => P,
-    comp: (props: P) => Component<D>
-): Component<C> {
-    return (dom, ctxt) => comp(f(ctxt))(dom, ctxt)
+export function useContext<C, D>(
+    f: (ctxt: C) => Component<D>
+): Component<C & D> {
+    return (dom, ctxt) => f(ctxt)(dom, ctxt)
 }
 
 /**

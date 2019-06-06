@@ -1,6 +1,6 @@
 {
   "name": "@crui/reactive",
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0-alpha.5",
   "description": "Add reactivity to CRUI",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",

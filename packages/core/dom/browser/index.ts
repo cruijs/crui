@@ -25,11 +25,18 @@ export function mount<Ctxt extends C, C>(root: Node, comp: Component<C>, context
 export const dom: DOM<Node> = {
     create: (tag) => document.createElement(tag),
     createText: (s: string) => document.createTextNode(s),
+    createFragment: () => document.createDocumentFragment(),
+
+    replace: (old, rpl) => {
+        const p = old.parentElement
+        if (p) p.replaceChild(rpl, old)
+    },
     remove: (p, n) => {
         if (p === n.parentElement) {
             p.removeChild(n)
         }
     },
+
     insert: (p, n) => { p.appendChild(n) },
     insertBefore: (p, r, n) => (p).insertBefore(n, r),
     batchInsert: (p, ns) => { 
@@ -38,10 +45,7 @@ export const dom: DOM<Node> = {
     batchInsertBefore: (p, r, ns) => {
         (p).insertBefore(withFragment(ns), r)
     },
-    replace: (old, rpl) => {
-        const p = old.parentElement
-        if (p) p.replaceChild(rpl, old)
-    },
+
     nextChild: (_, ref) => ref.nextSibling,
     listen,
 

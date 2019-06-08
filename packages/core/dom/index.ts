@@ -10,12 +10,14 @@ export type Component<C = {}> = <N>(dom: DOM<N>, context: C) => Rendered<N>
 export interface DOM<N> {
     create(tag: Tag): N
     createText(s: string): N & { textContent: string|null }
+    createFragment(): N
+
+    replace(old: N, rpl: N): void
     remove(parent: N, child: N): void
     insert(parent: N, child: N): void
     insertBefore(parent: N, ref: N|null, node: N): void
     batchInsert(parent: N, children: N[]): void
     batchInsertBefore(parent: N, ref: N|null, node: N[]): void
-    replace(old: N, rpl: N): void
     nextChild(parent: N, ref: N): N|null
 
     listen: Listen<N>

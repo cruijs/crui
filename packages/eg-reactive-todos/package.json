@@ -11,26 +11,26 @@
     "test": "jest --"
   },
   "devDependencies": {
-    "@babel/core": "^7.0",
+    "@babel/core": "^7.4.5",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "acorn": "^6.1.1",
     "awesome-typescript-loader": "^5.2.1",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-plugin-macros": "^2.4.2",
+    "babel-plugin-macros": "^2.6.1",
     "clean-webpack-plugin": "^0.1.19",
     "html-webpack-plugin": "^3.2.0",
     "source-map-loader": "^0.2.4",
-    "typescript": "^3.1.1",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9"
+    "typescript": "^3.5.1",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.3",
+    "webpack-dev-server": "^3.7.1"
   },
   "dependencies": {
-    "@crui/core": "^0.1.0-alpha.1",
-    "@crui/css-emotion": "^0.1.0-alpha.1",
-    "@crui/css-emotion-reactive": "^0.1.0-alpha.1",
-    "@crui/reactive": "^0.1.0-alpha.1",
-    "@crui/transitions": "^0.1.0-alpha.1",
+    "@crui/core": "^0.1.0-alpha.6",
+    "@crui/css-emotion": "^0.1.0-alpha.6",
+    "@crui/css-emotion-reactive": "^0.1.0-alpha.6",
+    "@crui/reactive": "^0.1.0-alpha.6",
+    "@crui/transitions": "^0.1.0-alpha.5",
     "emotion": "^10.0.9"
   }
 }

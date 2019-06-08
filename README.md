@@ -102,9 +102,9 @@ To know more about `@crui/reactive`, see the dedicated [README](packages/reactiv
 - `packages/eg-reactive-todos`: the usual ToDo demo
 ## More to come
 - [x] A sane Context API
-- [ ] Transactions & Animations
+- [x] Transactions & Animations
+- [x] CSS-in-JS support
 - [ ] Easy testing 
-- [ ] CSS-in-JS support
 - [ ] Server side rendering
 - [ ] Use in JS projects while still keeping all possible imports
 - [ ] Better documentation

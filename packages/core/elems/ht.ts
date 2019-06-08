@@ -7,7 +7,7 @@ import { hc } from './children';
  * 
  * It's a combination of `hc` and `text`.
  */
-export function ht(tag: Tag, txt: string): Component {
+export function ht(tag: Tag, txt: string): Component<any> {
     return hc(tag, [
         text(txt)
     ])

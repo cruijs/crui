@@ -15,7 +15,7 @@ export type Bind = {
  * 
  * The bound Stream will update based on property value and viceversa.
  */
-export function h$b(tag: Tag, bind?: Bind): Component {
+export function h$b(tag: Tag, bind?: Bind): Component<any> {
     return (dom) => {
         const node = dom.create(tag)
         return with$Bind(dom, node, bind)

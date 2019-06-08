@@ -15,7 +15,7 @@ export type Events = {
 /**
  * An element with events
  */
-export function he(tag: Tag, on?: Events): Component {
+export function he(tag: Tag, on?: Events): Component<any> {
     return (dom) => {
         const node = dom.create(tag)
         return withEvents(dom, node, on)

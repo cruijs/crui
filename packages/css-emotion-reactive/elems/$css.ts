@@ -1,7 +1,6 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
 import { combine, combine2 } from '@crui/core/utils/combine';
-import { addClass } from '@crui/css-emotion/elems/css';
 import { StreamBox } from '@crui/reactive/rx/box';
 import { css, Interpolation } from 'emotion';
 

@@ -10,7 +10,7 @@ export type $Props<K extends KProps> = Reactive<PProps<K>>
 /**
  * Element with dynamic properties
  */
-export function h$p<K extends KProps>(tag: Tag, props: $Props<K>): Component {
+export function h$p<K extends KProps>(tag: Tag, props: $Props<K>): Component<any> {
     return (dom) => {
         const node = dom.create(tag)
         return with$Props(dom, node, props)

@@ -6,7 +6,7 @@ export type CSS<MP> = Interpolation<MP>
 /**
  * An element with CSS
  */
-export function hss<C, S>(tag: Tag, style: CSS<S>): Component<C> {
+export function hss<S>(tag: Tag, style: CSS<S>): Component<any> {
     return (dom) => {
         const r = defRendered(dom.create(tag))
         withCSS(dom, r.node, style)

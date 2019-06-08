@@ -5,7 +5,7 @@ import { Stream } from '../rx/stream';
 /**
  * Dynamic text element that will change as the Stream change
  */
-export function t$(s: Stream<string>): Component {
+export function t$(s: Stream<string>): Component<any> {
     return (dom) => {
         const node = dom.createText(s.get())
 

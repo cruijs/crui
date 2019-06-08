@@ -5,7 +5,7 @@ import { StreamBox } from '@crui/reactive/rx/box';
 import { combine } from '@crui/core/utils/combine'
 
 export type DynCSS = StreamBox<Style>[]
-export function h$dss<C>(tag: Tag, styles: DynCSS): Component<C> {
+export function h$dss(tag: Tag, styles: DynCSS): Component<any> {
     return (dom) => {
         const node = dom.create(tag)
         return with$DynCSS(dom, node, styles)
@@ -18,10 +18,10 @@ export function with$DynCSS<N>(dom: DOM<N>, node: N, styles?: DynCSS): Rendered<
             return
 
         r.unsub = combine(styles.map((s) => {
-            let prev = ''
+            let prev: string|undefined
             s.apply((style) => {
                 const cur = css(style)
-                dom.removeCss(node, prev)
+                if(prev) dom.removeCss(node, prev)
                 dom.addCss(node, cur)
                 prev = cur
             })

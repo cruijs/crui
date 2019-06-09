@@ -1,6 +1,6 @@
 {
   "name": "@crui/css-emotion-reactive",
-  "version": "0.1.0-alpha.8",
+  "version": "0.1.0-alpha.9",
   "description": "Add reactivity to css-emotion package",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",

@@ -1,5 +1,5 @@
 import { Component } from '@crui/core/dom';
-import { StreamList } from '../rx/list';
+import { StreamList } from '../rx/list/stream';
 import { $map } from '../rx/list/map';
 import { with$Children } from './$children';
 

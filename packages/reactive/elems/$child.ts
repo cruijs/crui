@@ -1,9 +1,9 @@
 import { Component } from '@crui/core/dom';
-import { StreamBox } from '../rx/box';
+import { DR$B } from '../rx/box/types';
 import { swapNode } from './utils/swapNode';
 
 export function $child<T, C>(
-    stream: StreamBox<T>,
+    stream: DR$B<T>,
     render: (item: T) => Component<C>
 ): Component<C> {
     return (dom, ctxt) => {

@@ -1,10 +1,10 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { modRendered, Rendered } from '@crui/core/dom/rendered';
+import { combine } from '@crui/core/utils/combine';
 import { css, Style } from '@crui/css-emotion';
-import { StreamBox } from '@crui/reactive/rx/box';
-import { combine } from '@crui/core/utils/combine'
+import { DR$B } from '@crui/reactive/rx/box';
 
-export type DynCSS = StreamBox<Style>[]
+export type DynCSS = DR$B<Style>[]
 export function h$dss(tag: Tag, styles: DynCSS): Component<any> {
     return (dom) => {
         const node = dom.create(tag)

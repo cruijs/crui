@@ -1,4 +1,4 @@
-import { UpdateItem } from '../..';
+import { UpdateItem } from '../../types';
 import { Index, Payload } from '../types';
 import { updateIndex } from './updateIndex';
 

@@ -1,11 +1,15 @@
-import { Unsubscribe } from '../stream';
-import { StreamList, UpdateType } from './index';
+import { Unsubscribe } from '@crui/core/type';
+import { R$L, UpdateType, W$L } from './types';
 
+/**
+ * Keep two streams in sync. 
+ * Any values contained in `$dest` will be replaced by `$source` content.
+ */
 export function keepSynced<T>(
-    $source: StreamList<T>,
-    $dest: StreamList<T>
+    $source: R$L<T>,
+    $dest: W$L<T>
 ): Unsubscribe {
-    if ($dest === $source) {
+    if (isSame($source, $dest)) {
         throw Error('Sync on same stream is not supported')
     }
     $dest.set($source.get().slice())
@@ -24,4 +28,8 @@ export function keepSynced<T>(
                 return
         }
     })
+}
+
+function isSame(a: Object, b: Object): boolean {
+    return a === b
 }

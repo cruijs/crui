@@ -2,17 +2,17 @@ import { Component } from '@crui/core/dom';
 import { combine } from '@crui/core/utils/combine';
 import { modify } from '@crui/core/utils/modify';
 import { with$Children } from '../$children';
-import { StreamList } from '../../rx/list';
+import { R$L } from '../../rx/list';
+import { cleanup } from '../../rx/list/cleanup';
 import { $filter$$, $Predicate$ } from '../../rx/list/filter/$filter$$';
 import { $map } from '../../rx/list/map';
-import { cleanup } from '../../rx/list/cleanup'
 
 /**
  * Enhance a Component with dynamic children that are also filtered
  */
 export function h$filter$$<T, C, D>( 
     container: Component<C>,
-    $list: StreamList<T>,
+    $list: R$L<T>,
     child: (item: T) => Component<D>,
     $p$: $Predicate$<T>
 ): Component<C & D> {

@@ -30,9 +30,10 @@ export function with$Props<N, K extends KProps>(
         modRendered(node, (r) => {
             r.unsub = combine(keys(props).map((k) => {
                 dom.setProp(node, k, props[k].get())
-                return props[k].subscribe((val) => {
+                props[k].subscribe((val) => {
                     dom.setProp(node, k, val)
                 })
+                return props[k].destroy
             }))
         })
 }

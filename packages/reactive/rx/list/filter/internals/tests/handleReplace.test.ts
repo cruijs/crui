@@ -1,4 +1,5 @@
-import { Replace, StreamList, UpdateType } from '../../../index';
+import { StreamList } from '../../../stream';
+import { Replace, UpdateType } from '../../../types';
 import { Predicate } from '../../types';
 import { handleReplace } from '../handleReplace';
 

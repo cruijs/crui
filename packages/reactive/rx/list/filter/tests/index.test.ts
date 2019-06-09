@@ -1,9 +1,10 @@
 import { $filter } from '..';
-import { StreamList, Update, UpdateType } from '../../index'
+import { StreamList } from '../../stream';
+import { Update, DR$L, UpdateType } from '../../types';
 import { Predicate } from '../types';
 
 let list: StreamList<number>
-let filtered: StreamList<number>
+let filtered: DR$L<number>
 let upd: Update<number>|undefined
 
 const isEven: Predicate<number> = (n) => n % 2 === 0

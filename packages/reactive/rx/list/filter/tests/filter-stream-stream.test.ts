@@ -1,43 +1,51 @@
-import { Predicate$ } from '../$filter$';
-import { $filter$$, $Predicate$ } from '../$filter$$';
-import { StreamBox } from '../../../box/index';
-import { StreamList } from '../../index';
 import { noop } from '@crui/core/utils/noop';
-import { Stream } from '../../../stream';
+import { Predicate$ } from '../$filter$';
+import { $filter$$ } from '../$filter$$';
+import { StreamBox } from '../../../box/stream';
+import { RW$B } from '../../../box/types';
+import { Destroyable, DR$, R$ } from '../../../types';
+import { StreamList } from '../../stream';
+import { DR$L, R$L } from '../../types';
+import { map } from '../../../box/map';
+
+type Pred<T> = Predicate$<StreamBox<T>>
+type Pred$<T> = RW$B<Pred<T>> & Destroyable
+type Filtered<T> = DR$L<Item<T>>
 
 const $l = <T>(list: T[]) => new StreamList(list.map($i))
 const $i = <T>(val: T) => ({ value: new StreamBox(val) })
 const $p$ = <T>(p$: Predicate$<StreamBox<T>>) => new StreamBox(p$)
 type Item<T> = { value: StreamBox<T> }
 
-function expectValues<T>(list: StreamList<Item<T>>, expected: T[]) {
+function expectValues<T>(list: R$L<Item<T>>, expected: T[]) {
     expect(list.map((v) => v.value.get())).toEqual(expected)
 }
 
-function assertCleanup(target: Stream<any>, trigger: Stream<any>): void {
+function assertCleanup(target: DR$<any>, trigger: DR$<any>): void {
     target.subscribe(noop)
     expectListeners(target).toBeGreaterThan(0)
     trigger.destroy()
     expectListeners(target).toBe(1)
 }
 
-function expectListeners(s: Stream<any>) {
+function expectListeners(s: R$<any>) {
     return expect(listeners(s))
 }
 
-function listeners(s: Stream<any>): number {
+function listeners(s: R$<any>): number {
     return (s as any).listeners.length
 }
+
 
 describe($filter$$, () => {
     describe('filter based on predicate stream', () => {
         let list: StreamList<Item<number>>
-        let pred: $Predicate$<StreamBox<number>>
-        let ftrd: StreamList<Item<number>>
+        let pred: Pred$<number>
+        let ftrd: Filtered<number>
 
         beforeEach(() => {
             list = $l([1, 10, 2])
-            pred = $p$((v) => v.map((n) => n < 10))
+            pred = $p$((v) => map(v, (n) => n < 10))
             ftrd = $filter$$(list, pred, (p) => (i) => p(i.value))
         })
 
@@ -69,7 +77,7 @@ describe($filter$$, () => {
 
         describe('change predicate', () => {
             beforeEach(() => {
-                pred.set((s) => s.map((n) => n >= 10))
+                pred.set((s) => map(s, (n) => n >= 10))
             })
 
             it('updates filtered', () => {
@@ -100,8 +108,8 @@ describe($filter$$, () => {
 
     describe('cleanup', () => {
         let list: StreamList<Item<boolean>>
-        let pred: $Predicate$<StreamBox<boolean>>
-        let ftrd: StreamList<Item<boolean>>
+        let pred: Pred$<boolean>
+        let ftrd: Filtered<boolean>
 
         beforeEach(() => {
             list = $l([true, false])

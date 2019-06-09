@@ -1,3 +1,3 @@
-import { StreamBox } from '../rx/box';
+import { DR$B } from '../rx/box/types';
 
-export type Reactive<P extends {}> = {[K in keyof P]: StreamBox<P[K]>}
+export type Reactive<P extends {}> = {[K in keyof P]: DR$B<P[K]>}

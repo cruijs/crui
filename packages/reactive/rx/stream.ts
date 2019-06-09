@@ -1,11 +1,10 @@
+import { Unsubscribe } from '@crui/core/type';
 import { remove } from '@crui/core/utils/array';
 import { combine2 } from '@crui/core/utils/combine';
 import { noop } from '@crui/core/utils/noop';
+import { Effect, Stream as IStream, Destroyable } from './types';
 
-export type Effect<U> = (upd: U) => void
-export type Unsubscribe = () => void
-
-export abstract class Stream<T, U = T> {
+export abstract class Stream<T, U = T> implements IStream<T, U>, Destroyable {
     protected value: T
     private listeners: Effect<U>[]
     private unsub: Unsubscribe

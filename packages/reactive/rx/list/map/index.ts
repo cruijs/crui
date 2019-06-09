@@ -1,10 +1,11 @@
-import { StreamList, Update, UpdateType } from '..';
+import { StreamList } from '../stream';
+import { DR$L, R$L, W$L, Update, UpdateType } from '../types';
 
 type FMap<A, B> = (v: A, i: number) => B
 export function $map<A, B>(
-    $source: StreamList<A>, 
+    $source: R$L<A>, 
     f: FMap<A, B>
-) {
+): DR$L<B> {
     const $list = new StreamList($source.map(f))
     $list.addUnsub(
         $source.subscribe(onUpdate(f, $list))
@@ -14,7 +15,7 @@ export function $map<A, B>(
 
 export function onUpdate<A, B>(
     fmap: FMap<A, B>,
-    $children: StreamList<B>
+    $children: W$L<B>
 ) {
     return (upd: Update<A>) => {
         switch (upd.type) {

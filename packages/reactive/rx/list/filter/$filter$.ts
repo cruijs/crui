@@ -1,10 +1,10 @@
-import { StreamList } from '..';
-import { Stream } from '../../stream';
+import { Cond$ } from '../../types';
 import { cleanup } from '../cleanup';
 import { $map } from '../map';
+import { DR$L, R$L } from '../types';
 import { setupFilter } from './internals/setupFilter';
 
-export type Predicate$<T> = (v: T) => Stream<boolean>
+export type Predicate$<T> = (v: T) => Cond$
 /**
  * Filter `$source` based on another stream derived from each value.
  * 
@@ -15,7 +15,7 @@ export type Predicate$<T> = (v: T) => Stream<boolean>
  * removed from `$source` OR when the resulting StreamList is destroyed.
  * It's usually less error prone to have `p$` generate new streams.
  */
-export function $filter$<T>($source: StreamList<T>, p$: Predicate$<T>): StreamList<T> {
+export function $filter$<T>($source: R$L<T>, p$: Predicate$<T>): DR$L<T> {
     const $predicates = $map($source, (v, i) => {
         const $s = p$(v)
         $s.subscribe(() => {

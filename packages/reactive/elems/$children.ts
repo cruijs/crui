@@ -1,15 +1,14 @@
 import { DOM } from '@crui/core/dom';
 import { combineMount, combineUnmount, Rendered } from '@crui/core/dom/rendered';
-import { AsyncFn } from '@crui/core/type';
+import { AsyncFn, Unsubscribe } from '@crui/core/type';
 import { last } from '@crui/core/utils/array';
 import { combine, combineAsync } from '@crui/core/utils/combine';
 import { modify } from '@crui/core/utils/modify';
 import { noop } from '@crui/core/utils/noop';
-import { StreamList, UpdateType } from '../rx/list/index';
-import { Unsubscribe } from '../rx/stream';
-import { makeGuard, Cancel, Guard } from '../utils/guard'
+import { R$L, UpdateType } from '../rx/list/types';
+import { Cancel, Guard, makeGuard } from '../utils/guard';
 
-type $Children<N> = StreamList<Rendered<N>> 
+type $Children<N> = R$L<Rendered<N>> 
 /**
  * Dynamically add and remove children from the DOM.
  * 
@@ -98,7 +97,7 @@ function setupUpdate<N>(
 }
 
 type ToAsync = <T>(
-    list: StreamList<T>,
+    list: R$L<T>,
     f: (v: T) => AsyncFn
 ) => AsyncFn
 const toAsync: ToAsync = ($list, f) => () => (

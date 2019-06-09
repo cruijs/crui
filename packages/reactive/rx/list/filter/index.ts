@@ -1,7 +1,7 @@
-import { StreamList } from '..';
+import { R$L } from '../types';
 import { setupFilter } from './internals/setupFilter';
 import { Predicate } from './types';
 
-export function $filter<T>($source: StreamList<T>, p: Predicate<T>): StreamList<T> {
+export function $filter<T>($source: R$L<T>, p: Predicate<T>) {
     return setupFilter($source, p).$list
 }

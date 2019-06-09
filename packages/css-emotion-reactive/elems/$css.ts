@@ -1,11 +1,11 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
 import { combine, combine2 } from '@crui/core/utils/combine';
-import { StreamBox } from '@crui/reactive/rx/box';
+import { Cond$B, StreamBox } from '@crui/reactive/rx/box';
 import { css, Interpolation } from 'emotion';
 
 export type $CSS<MP> = ReadonlyArray<{
-    cond: StreamBox<boolean>
+    cond: Cond$B
     style: Interpolation<MP>
 }>
 

@@ -1,5 +1,5 @@
-import { Splice } from '../..';
 import { Index } from '../types';
+import { Splice } from '../../types';
 
 export function calcIndex<T>(upd: Splice<T>, indexMap: Index): number {
     if (indexMap.length === 0) {

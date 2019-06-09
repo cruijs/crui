@@ -1,36 +1,37 @@
-import { StreamBox } from '@crui/reactive/rx/box';
-import { StreamList } from '@crui/reactive/rx/list';
+import { map, R$B, RW$B, StreamBox } from '@crui/reactive/rx/box';
+import { DRW$B } from '@crui/reactive/rx/box/types';
+import { RW$L, StreamList } from '@crui/reactive/rx/list';
 import { Predicate$ } from '@crui/reactive/rx/list/filter/$filter$';
+import { Destroyable } from '@crui/reactive/rx/types';
+import { cloneRO } from '../../reactive/rx/box/clone';
 
 export type Todo = {
-    done: StreamBox<boolean>,
+    done: DRW$B<boolean>,
     text: string,
 }
 
-export type TodoList = StreamList<Todo>
 export enum Visibility {
     ALL,
     DONE,
     TODO,
 }
+
+export type $TodoList = RW$L<Todo>
+type $Input = RW$B<string>
+type $Visibilty = RW$B<Visibility>
+type $VisFilter = R$B<Predicate$<Todo>>
+
 export class TodoStore {
-    public readonly input: StreamBox<string>
-    public readonly visibility: StreamBox<Visibility>
-    public readonly visibilityFilter: StreamBox<Predicate$<Todo>>
-    public readonly todos: TodoList
+    private readonly input: $Input & Destroyable
+    private readonly visibility: $Visibilty & Destroyable 
+    private readonly visibilityFilter: $VisFilter & Destroyable
+    private readonly todos: $TodoList & Destroyable
 
     constructor() {
         this.input = new StreamBox('')
         this.todos = new StreamList<Todo>([])
         this.visibility = new StreamBox<Visibility>(Visibility.ALL)
-        this.visibilityFilter = this.visibility.map(vis2pred)
-    }
-
-    addTodo(todo: string): void {
-        this.todos.push({
-            text: todo,
-            done: new StreamBox<boolean>(false)
-        })
+        this.visibilityFilter = map(this.visibility, vis2pred)
     }
 
     dispose() {
@@ -38,6 +39,28 @@ export class TodoStore {
         this.visibilityFilter.destroy()
         this.visibility.destroy()
         this.input.destroy()
+    }
+
+    getTodos(): $TodoList {
+        return this.todos
+    }
+    addTodo(todo: string): void {
+        this.todos.push({
+            text: todo,
+            done: new StreamBox<boolean>(false)
+        })
+    }
+
+    getInput(): $Input {
+        return this.input
+    }
+
+    getVisibility(): $Visibilty {
+        return this.visibility
+    }
+
+    getVisibilityFilter(): $VisFilter {
+        return this.visibilityFilter
     }
 }
 
@@ -47,8 +70,8 @@ function vis2pred(v: Visibility): Predicate$<Todo> {
             const $true = new StreamBox(true)
             return () => $true
         case Visibility.DONE:
-            return (todo) => todo.done.clone()
+            return (todo) => cloneRO(todo.done)
         case Visibility.TODO:
-            return (todo) => todo.done.map((b) => !b)
+            return (todo) => map(todo.done, (b) => !b)
     }
 }

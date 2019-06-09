@@ -1,8 +1,11 @@
 import { Unsubscribe } from '@crui/core/type';
 import { combine2 } from '@crui/core/utils/combine';
-import { StreamList, UpdateType } from './index';
+import { R$L, UpdateType } from './types';
 
-export function cleanup<T>($list: StreamList<T>, f: (v: T) => void): Unsubscribe {
+/**
+ * Perform some cleanup action everytime an element is removed from the StreamList
+ */
+export function cleanup<T>($list: R$L<T>, f: (v: T) => void): Unsubscribe {
     return combine2(
         () => {
             $list.forEach(f)

@@ -1,7 +1,6 @@
-import { calcIndex } from '../calcIndex'
-import { Index } from '../../types'
-import { Splice } from '../../..';
-import { UpdateType } from '../../../index'
+import { Splice, UpdateType } from '../../../types';
+import { Index } from '../../types';
+import { calcIndex } from '../calcIndex';
 
 function run(index: number, imap: Index, expected: number) {
     const splice: Splice<number> = {

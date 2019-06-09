@@ -1,4 +1,4 @@
-import { StreamList } from '..';
+import { StreamList } from '../stream';
 
 export type Predicate<T> = (v: T, i: number) => boolean
 export type Index = (number|undefined)[]

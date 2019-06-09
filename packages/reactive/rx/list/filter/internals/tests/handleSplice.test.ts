@@ -1,5 +1,5 @@
-import { StreamList } from '../../..';
-import { Splice, UpdateType } from '../../../index';
+import { StreamList } from '../../../stream';
+import { Splice, UpdateType } from '../../../types';
 import { Index, Predicate } from '../../types';
 import { handleSplice } from '../handleSplice';
 

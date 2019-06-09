@@ -1,7 +1,8 @@
 import { combine } from '@crui/core/utils/combine';
-import { StreamBox } from './index';
+import { StreamBox } from './stream';
+import { Cond$B } from './types';
 
-export function every(list: StreamBox<boolean>[]): StreamBox<boolean> {
+export function every(list: Cond$B[]): Cond$B {
     let count = 0
     const z = new StreamBox<boolean>(false)
     const eff = (val: boolean) => {
@@ -15,7 +16,10 @@ export function every(list: StreamBox<boolean>[]): StreamBox<boolean> {
         }
     }
     z.addUnsub(combine(
-        list.map((box) => box.apply(eff))
+        list.map((box) => {
+            box.apply(eff)
+            return box.destroy
+        })
     ))
     return z
 }

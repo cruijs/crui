@@ -1,4 +1,4 @@
-import { Splice } from '../..';
+import { Splice } from '../../types';
 import { Index, Payload } from '../types';
 import { calcIndex } from './calcIndex';
 import { filteredList } from './filteredList';

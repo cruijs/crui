@@ -3,20 +3,21 @@ import { hc } from '@crui/core/elems/children';
 import { ht } from '@crui/core/elems/ht';
 import { text } from '@crui/core/elems/text';
 import { h$ } from '@crui/css-emotion-reactive/elems';
-import { StreamBox } from '@crui/reactive/rx/box';
+import { map, RW$B } from '@crui/reactive/rx/box';
 import { TodoStore, Visibility } from '../store';
 
-export const Footer = ({ visibility }: TodoStore) => (
-    hc('div', [
+export const Footer = (s: TodoStore) => {
+    const vis = s.getVisibility()
+    return hc('div', [
         ht('span', 'Show: '),
-        Filter(visibility, Visibility.ALL, 'All'),
-        Filter(visibility, Visibility.TODO, 'Active'),
-        Filter(visibility, Visibility.DONE, 'Completed'),
+        Filter(vis, Visibility.ALL, 'All'),
+        Filter(vis, Visibility.TODO, 'Active'),
+        Filter(vis, Visibility.DONE, 'Completed'),
     ])
-)
+}
 
 const Filter = (
-    $vis: StreamBox<Visibility>,
+    $vis: RW$B<Visibility>,
     vis: Visibility,
     label: string
 ): Component => {
@@ -37,7 +38,7 @@ const Filter = (
             }
         },
         $css: [{
-            cond: $vis.map((v) => v === vis),
+            cond: map($vis, (v) => v === vis),
             style: { color: 'red' }
         }]
     })

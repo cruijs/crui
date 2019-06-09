@@ -1,11 +1,16 @@
-import { StreamList, UpdateItem, UpdateType } from '../..';
+import { StreamList } from '../../stream';
+import { DR$L, R$L, UpdateItem, UpdateType } from '../../types';
 import { Payload, Predicate } from '../types';
 import { filteredList } from './filteredList';
 import { handleReplace } from './handleReplace';
 import { handleSplice } from './handleSplice';
 import { handleUpdate } from './handleUpdate';
 
-export function setupFilter<T>($source: StreamList<T>, p: Predicate<T>) {
+type Result<T> = {
+    $list: DR$L<T>
+    refreshItem: (index: number) => void
+}
+export function setupFilter<T>($source: R$L<T>, p: Predicate<T>): Result<T> {
     const state = filteredList($source.get(), 0, p)
     const $list = new StreamList(state.filtered)
     let indexMap = state.indexMap

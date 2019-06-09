@@ -1,4 +1,5 @@
-import { StreamList, UpdateItem, UpdateType } from '../../../index';
+import { StreamList } from '../../../stream';
+import { UpdateItem, UpdateType } from '../../../types';
 import { Index, Predicate } from '../../types';
 import { handleUpdate } from '../handleUpdate';
 

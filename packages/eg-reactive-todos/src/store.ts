@@ -1,9 +1,9 @@
 import { map, R$B, RW$B, StreamBox } from '@crui/reactive/rx/box';
+import { clone } from '@crui/reactive/rx/box/clone';
 import { DRW$B } from '@crui/reactive/rx/box/types';
 import { RW$L, StreamList } from '@crui/reactive/rx/list';
 import { Predicate$ } from '@crui/reactive/rx/list/filter/$filter$';
 import { Destroyable } from '@crui/reactive/rx/types';
-import { cloneRO } from '../../reactive/rx/box/clone';
 
 export type Todo = {
     done: DRW$B<boolean>,
@@ -70,7 +70,7 @@ function vis2pred(v: Visibility): Predicate$<Todo> {
             const $true = new StreamBox(true)
             return () => $true
         case Visibility.DONE:
-            return (todo) => cloneRO(todo.done)
+            return (todo) => clone(todo.done)
         case Visibility.TODO:
             return (todo) => map(todo.done, (b) => !b)
     }

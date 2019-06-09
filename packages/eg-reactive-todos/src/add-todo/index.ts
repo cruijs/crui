@@ -3,7 +3,7 @@ import { hc } from '@crui/core/elems/children';
 import { text } from '@crui/core/elems/text';
 import { h, hss } from '@crui/css-emotion';
 import { $bindVal } from '@crui/reactive/combinators/$bind';
-import { clone } from '@crui/reactive/rx/box/clone';
+import { cloneRW } from '@crui/reactive/rx/box/clone';
 import { TodoStore } from '../store';
 
 const input = hss('input', {
@@ -20,7 +20,7 @@ const submit = h('button', {
 export function AddTodo(store: TodoStore) {
     const inp = store.getInput()
     return hc('div', [
-        $bindVal(input, clone(inp)),
+        $bindVal(input, cloneRW(inp)),
         onClick(submit, (e) => {
             e.preventDefault()
 

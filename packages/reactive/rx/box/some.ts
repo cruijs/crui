@@ -1,8 +1,9 @@
 import { combine } from '@crui/core/utils/combine';
 import { Cond$, ReadStream } from '../types';
 import { StreamBox } from './stream';
+import { Cond$B } from './types';
 
-export function some(list: Cond$[]): Cond$ {
+export function some(list: Cond$[]): Cond$B {
     let cur: number|null = findIndex(list)
     const z = new StreamBox(cur !== null)
 

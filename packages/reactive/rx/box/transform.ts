@@ -1,13 +1,14 @@
 import { makeAtomic } from '../../utils/atomic';
+import { RW$ } from '../types';
 import { StreamBox } from './stream';
-import { DRW$B, RW$B } from './types';
+import { DRW$B } from './types';
 
 /**
  * Transform a stream and setup a two-way binding between the two.
  * Useful to be used with `$bind`
  */
 export function transform<T, P>(
-    source: RW$B<T>,
+    source: RW$<T>,
     g: (val: T) => P,
     s: (val: P) => T,
 ): DRW$B<P> {

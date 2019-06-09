@@ -2,11 +2,11 @@ import { Component } from '@crui/core/dom';
 import { combine } from '@crui/core/utils/combine';
 import { modify } from '@crui/core/utils/modify';
 import { noop } from '@crui/core/utils/noop';
-import { Cond$B } from '../rx/box/types';
+import { Cond$ } from '../rx/types';
 import { swapNode } from './utils/swapNode';
 
 export function $ite<A, B>(
-    $cond: Cond$B,
+    $cond: Cond$,
     cThen: Component<A>,
     cElse: Component<B>
 ): Component<A & B> { 

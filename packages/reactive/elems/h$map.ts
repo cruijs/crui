@@ -1,11 +1,11 @@
 import { Component } from '@crui/core/dom';
-import { StreamList } from '../rx/list/stream';
+import { R$L } from '../rx';
 import { $map } from '../rx/list/map';
 import { with$Children } from './$children';
 
 export function h$map<T, C, D>(
     container: Component<C>,
-    $list: StreamList<T>,
+    $list: R$L<T>,
     item: (i: T) => Component<D>
 ): Component<C & D> {
     return (dom, ctxt) => with$Children(

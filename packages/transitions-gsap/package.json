@@ -1,6 +1,6 @@
 {
   "name": "@crui/transitions-gsap",
-  "version": "0.1.0-alpha.9",
+  "version": "0.1.0-alpha.10",
   "description": "Add animation with GrenSock",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",
@@ -23,8 +23,8 @@
     "ui"
   ],
   "devDependencies": {
-    "@crui/core": "^0.1.0-alpha.9",
-    "@crui/transitions": "^0.1.0-alpha.9",
+    "@crui/core": "^0.1.0-alpha.10",
+    "@crui/transitions": "^0.1.0-alpha.10",
     "@types/gsap": "^1.20.2",
     "@types/jest": "^24.0.12",
     "gsap": "^2.1.3",

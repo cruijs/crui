@@ -1,14 +1,14 @@
 import { Component } from '@crui/core/dom/index';
-import { hc } from '@crui/core/elems/children';
 import { ht } from '@crui/core/elems/ht';
 import { text } from '@crui/core/elems/text';
 import { h$ } from '@crui/css-emotion-reactive/elems';
+import { hcs } from '@crui/css-emotion/elems/hcs';
 import { map, RW$B } from '@crui/reactive/rx/box';
 import { TodoStore, Visibility } from '../store';
 
 export const Footer = (s: TodoStore) => {
     const vis = s.getVisibility()
-    return hc('div', [
+    return hcs('div', { marginTop: '1rem' }, [
         ht('span', 'Show: '),
         Filter(vis, Visibility.ALL, 'All'),
         Filter(vis, Visibility.TODO, 'Active'),

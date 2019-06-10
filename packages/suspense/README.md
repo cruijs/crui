@@ -38,7 +38,7 @@ Let's make a component to wrap this logic:
 ```typescript
 // image.ts
 import { h, useContext } from '@crui/core'
-import { noop } from '@crui/core/noop'
+import { noop } from '@crui/core/utils/noop'
 import { WithSuspend } from '@crui/suspense'
 
 export const img = (src: string) => useContext(({ waitFor }: WithSuspense) => {
@@ -60,13 +60,13 @@ CRUI Suspense API is based on Context API and Promises. This element in particul
 ```typescript
 function waitFor(p: PromiseLike<any>): void
 ```
-It gets a promise and do some side effect with it, which is to signal a Suspender up in the Components tree that we are not yet ready to render.
+It gets a promise and inform a Suspender up in the Components tree that we are not yet ready to render.
 
-Now comes the ugly bit: binding the Promise `p` to the event handlers that will tell us if an image loaded or not. Once done, we pass it to `waitFor` and then return the Component as usual.
+The ugly bit is binding the Promise `p` to the event handlers that will tell us if an image loaded or not. Once done, we pass it to `waitFor` and then return the Component as usual.
 
 The type for our new `img` will therefore be:
 ```typescript
-Component<WithSuspose>
+Component<WithSuspense>
 ```
 In case you are not yet familiar with the Context API, this is telling us (and the compiler) that we need to provide a context that satisfy `WithSuspense` constraint when mounting it.
 
@@ -104,7 +104,11 @@ mount(document.getElementById('root')!, comp, {})
 
 This time it compiles! Let's have a look at the type signature:
 ```typescript
-function suspend<E, C>(loading: Component<C>, success: Component<C & WithSuspense>, error: (err: E) => Component<C>): Component<C>
+function suspend<E, C>(
+    loading: Component<C>,
+    success: Component<C & WithSuspense>,
+    error: (err: E) => Component<C>
+): Component<C>
 ```
 It expects 3 components:
 * loading: displayed on first render and while the main component is not ready
@@ -112,7 +116,7 @@ It expects 3 components:
 * error: displayed if an error occurred
 
 The first interesting bit is that `success` must require a `WithSuspense` context, but this constraint is lifted from the returned Component. **This allow us to have multiple, independent suspend point** in the Component tree.  
-Another detail worth mentioning is that `error` receives the error thrown by the faulty Promise, so this allow us to display useful information to our users about what exactly went wrong.
+Another detail worth mentioning is that `error` receives the error thrown by the faulty Promise, so this will allow us to display useful information to our users about what exactly went wrong.
 
 All three components are required, so you can't accidentally forget about handling errors :)
 
@@ -123,6 +127,7 @@ There are many design choices that made Suspense quite easy to implement in CRUI
 * Components cannot arbitrarily insert themselves in the DOM, but a parent Component can freely manipulate their direct children and itself
 * Reactivity is pluggable
 
-All of this allows `suspend` do materialize the `success` sub-tree which in turn trigger all the `waitFor` call that it needs to understand when it is the right moment to render. In the meantime it presents itself to its parent as the `loading` component and once all collected promises are done, it will swap `loading` with the, now ready, `success` sub-tree (or the `error` one if something went wrong).
+All of this allows `suspend` do materialize the `success` sub-tree which in turn trigger all the `waitFor` calls that it needs to handle before mounting it.  
+In the meantime it presents itself to its parent as the `loading` component and once all collected promises are done, it will swap `loading` with the, now ready, `success` sub-tree (or the `error` one if something went wrong).
 
-As a side node, there is a little optimization that will just display the `success` sub-tree in case none of its descendant calls `waitFor`.
+As a side node, there is a little optimization that will just display the `success` sub-tree in case none of its descendants call `waitFor`.

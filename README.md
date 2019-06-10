@@ -96,18 +96,18 @@ So, every time we enter something in the input, only the text node inside `p` ch
 
 Long story short: we have surgical updates in par with a VDOM, but without all the calculation, diffs and patching required by it and therefore achieve a better performance.
 
-To know more about `@crui/reactive`, see the dedicated [README](packages/reactive/README.md).
+To know more about `@crui/reactive`, see the dedicated [README](packages/reactive).
 
 ## Examples
-- [Todo App](packages/eg-reactive-todos/README.md)
+- [Todo App](packages/eg-reactive-todos)
 
 ## Available Packages
-- [Reactive](packages/reactive/README.md): add Reactivity to CRUI through the use of Streams
-- [CSS-in-JS](packages/css-emotion/README.md): bindings for [Emotion](https://emotion.sh/)
-- [Reactive CSS-in-JS](packages/css-emotion-reactive/README.md): elements to model reactive css
-- [Suspense](packages/suspense/README.md): React-inspired Suspense API
-- [Transitions](packages/transitions/README.md): base package to build elements with intro & outro animations
-- [GSAP Transitions](packages/transitions-gsap/README.md): build complex intro & outro animation using [GSAP](https://greensock.com/)
+- [Reactive](packages/reactive): add Reactivity to CRUI through the use of Streams
+- [CSS-in-JS](packages/css-emotion): bindings for [Emotion](https://emotion.sh/)
+- [Reactive CSS-in-JS](packages/css-emotion-reactive): elements to model reactive css
+- [Suspense](packages/suspense): React-inspired Suspense API
+- [Transitions](packages/transitions): base package to build elements with intro & outro animations
+- [GSAP Transitions](packages/transitions-gsap): build complex intro & outro animation using [GSAP](https://greensock.com/)
 
 ## More to come
 - [x] A sane Context API

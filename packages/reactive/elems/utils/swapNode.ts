@@ -1,6 +1,5 @@
 import { DOM } from '@crui/core/dom';
 import { Rendered } from '@crui/core/dom/rendered';
-import { modify } from '@crui/core/utils/modify';
 import { noop } from '@crui/core/utils/noop';
 import { DR$ } from '../../rx/types';
 import { makeGuard } from '../../utils/guard';
@@ -15,7 +14,7 @@ export function swapNode<T, N>(
     let cancel = noop
 
     const z: Rendered<N> = {
-        node: cur.node,
+        get node() { return cur.node },
         unsub: () => {
             stream.destroy()
             cur.unsub()
@@ -35,7 +34,6 @@ export function swapNode<T, N>(
             dom.replace(prev.node, cur.node)
             cleanup(prev)
 
-            modify(z, (m) => { m.node = cur.node })
             return cur.onMounted()
         }))
     })

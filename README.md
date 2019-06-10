@@ -99,12 +99,21 @@ Long story short: we have surgical updates in par with a VDOM, but without all t
 To know more about `@crui/reactive`, see the dedicated [README](packages/reactive/README.md).
 
 ## Examples
-- `packages/eg-reactive-todos`: the usual ToDo demo
+- [Todo App](packages/eg-reactive-todos/README.md)
+
+## Available Packages
+- [Reactive](packages/reactive/README.md): add Reactivity to CRUI through the use of Streams
+- [CSS-in-JS](packages/css-emotion/README.md): bindings for [Emotion](https://emotion.sh/)
+- [Reactive CSS-in-JS](packages/css-emotion-reactive/README.md): elements to model reactive css
+- [Suspense](packages/suspense/README.md): React-inspired Suspense API
+- [Transitions](packages/transitions/README.md): base package to build elements with intro & outro animations
+- [GSAP Transitions](packages/transitions-gsap/README.md): build complex intro & outro animation using [GSAP](https://greensock.com/)
 
 ## More to come
 - [x] A sane Context API
 - [x] Transactions & Animations
 - [x] CSS-in-JS support
+- [x] Suspense API
 - [ ] Easy testing 
 - [ ] Server side rendering
 - [ ] Use in JS projects while still keeping all possible imports

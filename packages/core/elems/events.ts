@@ -8,8 +8,9 @@ import { noop } from '../utils/noop';
 export type Events = {
     change?: EventListener
     click?: EventListener
-    load?: EventListener
     submit?: EventListener
+    load?: EventListener
+    error?: EventListener
 }
 
 /**

@@ -2,7 +2,7 @@ import { Component, DOM, Tag } from '@crui/core/dom';
 import { modRendered, Rendered } from '@crui/core/dom/rendered';
 import { combine } from '@crui/core/utils/combine';
 import { css, Style } from '@crui/css-emotion';
-import { DR$B } from '@crui/reactive/rx/box';
+import { apply, DR$B } from '@crui/reactive/rx/box';
 
 export type DynCSS = DR$B<Style>[]
 export function h$dss(tag: Tag, styles: DynCSS): Component<any> {
@@ -19,7 +19,7 @@ export function with$DynCSS<N>(dom: DOM<N>, node: N, styles?: DynCSS): Rendered<
 
         r.unsub = combine(styles.map((s) => {
             let prev: string|undefined
-            s.apply((style) => {
+            apply(s, (style) => {
                 const cur = css(style)
                 if(prev) dom.removeCss(node, prev)
                 dom.addCss(node, cur)

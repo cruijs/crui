@@ -1,10 +1,11 @@
 import { Unsubscribe } from '@crui/core/type';
 import { noop } from '@crui/core/utils/noop';
+import { apply } from './apply';
 import { R$B } from './types';
 
 export function when(cond: R$B<boolean>, then: () => Unsubscribe): Unsubscribe {
     let unsub = noop
-    return cond.apply((val) => {
+    return apply(cond, (val) => {
         if (val)
             unsub = then()
         else

@@ -1,12 +1,11 @@
 import { noop } from '@crui/core/utils/noop';
 import { Predicate$ } from '../$filter$';
 import { $filter$$ } from '../$filter$$';
+import { map } from '../../../box/map';
 import { StreamBox } from '../../../box/stream';
-import { RW$B } from '../../../box/types';
-import { Destroyable, DR$, R$ } from '../../../types';
+import { Destroyable, DR$B, R$B, RW$B } from '../../../box/types';
 import { StreamList } from '../../stream';
 import { DR$L, R$L } from '../../types';
-import { map } from '../../../box/map';
 
 type Pred<T> = Predicate$<StreamBox<T>>
 type Pred$<T> = RW$B<Pred<T>> & Destroyable
@@ -21,18 +20,18 @@ function expectValues<T>(list: R$L<Item<T>>, expected: T[]) {
     expect(list.map((v) => v.value.get())).toEqual(expected)
 }
 
-function assertCleanup(target: DR$<any>, trigger: DR$<any>): void {
+function assertCleanup(target: DR$B<any>, trigger: DR$B<any>): void {
     target.subscribe(noop)
     expectListeners(target).toBeGreaterThan(0)
     trigger.destroy()
     expectListeners(target).toBe(1)
 }
 
-function expectListeners(s: R$<any>) {
+function expectListeners(s: R$B<any>) {
     return expect(listeners(s))
 }
 
-function listeners(s: R$<any>): number {
+function listeners(s: R$B<any>): number {
     return (s as any).listeners.length
 }
 

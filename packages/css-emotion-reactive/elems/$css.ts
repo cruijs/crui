@@ -1,7 +1,7 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
 import { combine, combine2 } from '@crui/core/utils/combine';
-import { Cond$B, StreamBox } from '@crui/reactive/rx/box';
+import { apply, Cond$B } from '@crui/reactive/rx/box';
 import { css, Interpolation } from 'emotion';
 
 export type $CSS<MP> = ReadonlyArray<{
@@ -22,7 +22,7 @@ export function h$ss<M>(tag: Tag, style: $CSS<M>): Component<any> {
     }
 }
 
-export const style = <M>(cond: StreamBox<boolean>, style: Interpolation<M>) => ({
+export const style = <M>(cond: Cond$B, style: Interpolation<M>) => ({
     cond, style
 })
 
@@ -32,7 +32,7 @@ export function with$CSS<N, M>(dom: DOM<N>, node: N, style?: $CSS<M>): Rendered<
             style.map(({ style, cond }) => {
                 const klass = css(style as Interpolation<undefined>)
 
-                cond.apply((shouldAdd) => {
+                apply(cond, (shouldAdd) => {
                     if (shouldAdd)
                         dom.addCss(node, klass)
                     else

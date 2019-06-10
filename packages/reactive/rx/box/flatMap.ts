@@ -1,8 +1,8 @@
-import { R$ } from '../types';
+import { apply } from './apply';
 import { StreamBox } from './stream';
-import { DR$B } from './types';
+import { DR$B, R$B } from './types';
 
-export function flatMap<T, P>(box: R$<T>, f: (b: T) => DR$B<P>): DR$B<P> {
+export function flatMap<T, P>(box: R$B<T>, f: (b: T) => DR$B<P>): DR$B<P> {
     let br = f(box.get())
     const z = new StreamBox(br.get())
     br.subscribe(z.set)
@@ -12,7 +12,7 @@ export function flatMap<T, P>(box: R$<T>, f: (b: T) => DR$B<P>): DR$B<P> {
         box.subscribe((val) => {
             br.destroy()
             br = f(val)
-            br.apply(z.set)
+            apply(br, z.set)
         })
     )
 

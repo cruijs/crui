@@ -1,10 +1,10 @@
-import { Cond$ } from '../../types';
+import { Cond$B } from '../../box/types';
 import { cleanup } from '../cleanup';
 import { $map } from '../map';
 import { DR$L, R$L } from '../types';
 import { setupFilter } from './internals/setupFilter';
 
-export type Predicate$<T> = (v: T) => Cond$
+export type Predicate$<T> = (v: T) => Cond$B
 /**
  * Filter `$source` based on another stream derived from each value.
  * 

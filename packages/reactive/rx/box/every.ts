@@ -1,4 +1,5 @@
 import { combine } from '@crui/core/utils/combine';
+import { apply } from './apply';
 import { StreamBox } from './stream';
 import { Cond$B } from './types';
 
@@ -17,7 +18,7 @@ export function every(list: Cond$B[]): Cond$B {
     }
     z.addUnsub(combine(
         list.map((box) => {
-            box.apply(eff)
+            apply(box, eff)
             return box.destroy
         })
     ))

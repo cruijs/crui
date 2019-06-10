@@ -1,12 +1,12 @@
 import { DOM } from '@crui/core/dom';
 import { Rendered } from '@crui/core/dom/rendered';
 import { noop } from '@crui/core/utils/noop';
-import { DR$ } from '../../rx/types';
+import { DR$B } from '../../rx/box/types';
 import { makeGuard } from '../../utils/guard';
 
 export function swapNode<T, N>(
     dom: DOM<N>,
-    stream: DR$<T>,
+    stream: DR$B<T>,
     f: (item: T) => Rendered<N>,
     cleanup: (prev: Rendered<N>) => void,
 ): Rendered<N> {

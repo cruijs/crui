@@ -1,6 +1,7 @@
 export * from './types';
 
 export { StreamBox } from './stream';
+export { apply } from './apply';
 export * from './clone';
 export { every } from './every';
 export { flatMap } from './flatMap';

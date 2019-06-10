@@ -1,5 +1,7 @@
-import { ReadStream, WriteStream, Destroyable } from '../types'
+import { Destroyable, ReadStream, WriteStream } from '../types';
 import { Predicate } from './filter/types';
+
+export { Destroyable, Effect } from '../types';
 
 export enum UpdateType {
     Update,

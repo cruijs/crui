@@ -3,6 +3,7 @@ import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
 import { Style } from '@crui/core/dom/style';
 import { combine } from '@crui/core/utils/combine';
 import { keys } from '@crui/core/utils/object';
+import { apply } from '../rx/box/apply';
 import { Reactive } from '../utils/reactive';
 
 export type $Style = Reactive<Style>
@@ -21,7 +22,7 @@ export function with$Style<N, K extends K$S>(dom: DOM<N>, node: N, style?: P$S<K
     }
 
     const unsubs = keys(style).map((k) => {
-        style[k].apply((val) => {
+        apply(style[k], (val) => {
             dom.applyStyle(node, { [k]: val } as {[K in typeof k]: Style[K]})
         })
         return style[k].destroy

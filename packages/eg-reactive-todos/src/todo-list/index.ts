@@ -4,9 +4,9 @@ import { ht } from '@crui/core/elems/ht';
 import { h, hss } from '@crui/css-emotion';
 import { $bindCheck } from '@crui/reactive/combinators/$bind';
 import { h$filter$$ } from '@crui/reactive/elems/filter/h$filter$$';
+import { DRW$B } from '@crui/reactive/rx/box/types';
 import { cssTx } from '@crui/transitions/cssTx';
 import { Todo, TodoStore } from '../store';
-import { DRW$ } from '@crui/reactive/rx/types';
 
 export function TodoList(store: TodoStore) {
     return h$filter$$(
@@ -56,7 +56,7 @@ const Slide = cssTx(
     { transform: 'translateX(0)', opacity: 1 },
 )
 
-const input = (check: DRW$<boolean>) => (
+const input = (check: DRW$B<boolean>) => (
     $bindCheck(
         h('input', {
             props: { type: 'checkbox' },

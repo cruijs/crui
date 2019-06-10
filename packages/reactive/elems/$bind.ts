@@ -1,16 +1,16 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { compatibleInputEvent } from '@crui/core/dom/events';
+import { Props } from '@crui/core/dom/props';
 import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
 import { Unsubscribe } from '@crui/core/type';
 import { combine } from '@crui/core/utils/combine';
 import { keys } from '@crui/core/utils/object';
-import { Props } from '../../core/dom/props';
-import { DRW$ } from '../rx/types';
+import { DRW$B } from '../rx/box/types';
 import { makeAtomic } from '../utils/atomic';
 
 export type Bind = {
-    checked?: DRW$<boolean>,
-    value?: DRW$<string>,
+    checked?: DRW$B<boolean>,
+    value?: DRW$B<string>,
 }
 
 /**
@@ -36,7 +36,7 @@ export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Rendered<N> {
     const unsubs: Unsubscribe[] = []
     const event = compatibleInputEvent(node)
     keys(bind).forEach((prop) => {
-        const $s: DRW$<Props[typeof prop]> | undefined = bind[prop]
+        const $s: DRW$B<Props[typeof prop]> | undefined = bind[prop]
         if ($s == null) {
             return
         }

@@ -1,9 +1,8 @@
 import { combine } from '@crui/core/utils/combine';
-import { Cond$, ReadStream } from '../types';
 import { StreamBox } from './stream';
-import { Cond$B } from './types';
+import { Cond$B, R$B } from './types';
 
-export function some(list: Cond$[]): Cond$B {
+export function some(list: Cond$B[]): Cond$B {
     let cur: number|null = findIndex(list)
     const z = new StreamBox(cur !== null)
 
@@ -25,7 +24,7 @@ export function some(list: Cond$[]): Cond$B {
     return z
 }
 
-function findIndex(list: ReadStream<boolean>[]): number|null {
+function findIndex(list: R$B<boolean>[]): number|null {
     for (let i = 0; i < list.length; ++i)
         if (list[i].get() === true)
             return i

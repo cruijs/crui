@@ -52,7 +52,7 @@ export const img = (src: string) => useContext(({ waitFor }: WithSuspense) => {
 
     return h('img', {
         props: { src },
-        events: { load: resolve, error: reject }
+        events: { load, error }
     })
 })
 ```

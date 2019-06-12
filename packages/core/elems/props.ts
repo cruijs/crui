@@ -7,7 +7,7 @@ type PProps<K extends KProps> = Pick<Props, K>
 /**
  * An element with properties
  */
-export function hp<K extends KProps>(tag: Tag, props: PProps<K>): Component<any> {
+export function hp<K extends KProps>(tag: Tag, props: PProps<K>): Component {
     return (dom) => {
         const node = dom.create(tag)
         withProps(dom, node, props)

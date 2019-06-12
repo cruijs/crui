@@ -15,7 +15,7 @@ export type $CSS<MP> = ReadonlyArray<{
  * - styles in later classes have an higher priority
  * - all `cond` streams will be destroyed once Component is removed
  */
-export function h$ss<M>(tag: Tag, style: $CSS<M>): Component<any> {
+export function h$ss<M>(tag: Tag, style: $CSS<M>): Component {
     return (dom) => {
         const node = dom.create(tag)
         return with$CSS(dom, node, style)

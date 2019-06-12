@@ -7,7 +7,7 @@ export function flatMap<T, P>(box: R$B<T>, f: (b: T) => DR$B<P>): DR$B<P> {
     const z = new StreamBox(br.get())
     br.subscribe(z.set)
 
-    z.addUnsub(br.destroy)
+    z.addUnsub(() => br.destroy())
     z.addUnsub(
         box.subscribe((val) => {
             br.destroy()

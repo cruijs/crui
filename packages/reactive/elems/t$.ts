@@ -5,7 +5,7 @@ import { DR$B } from '../rx/box/types';
 /**
  * Dynamic text element that will change as the Stream change
  */
-export function t$(s: DR$B<string>): Component<any> {
+export function t$(s: DR$B<string>): Component {
     return (dom) => {
         const node = dom.createText(s.get())
 

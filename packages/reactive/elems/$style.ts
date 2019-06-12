@@ -9,7 +9,7 @@ import { Reactive } from '../utils/reactive';
 export type $Style = Reactive<Style>
 export type K$S = keyof $Style
 export type P$S<K extends K$S> = Pick<$Style, K>
-export function h$style(tag: Tag, style: $Style): Component<any> {
+export function h$style(tag: Tag, style: $Style): Component {
     return (dom) => {
         const node = dom.create(tag)
         return with$Style(dom, node, style)

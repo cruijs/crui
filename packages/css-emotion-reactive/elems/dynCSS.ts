@@ -5,7 +5,7 @@ import { css, Style } from '@crui/css-emotion';
 import { apply, DR$B } from '@crui/reactive/rx/box';
 
 export type DynCSS = DR$B<Style>[]
-export function h$dss(tag: Tag, styles: DynCSS): Component<any> {
+export function h$dss(tag: Tag, styles: DynCSS): Component {
     return (dom) => {
         const node = dom.create(tag)
         return with$DynCSS(dom, node, styles)

@@ -2,16 +2,26 @@ import { Component, DOM, Tag } from '@crui/core/dom';
 import { KProps } from '@crui/core/dom/props';
 import { defRendered, mergeRendered, Rendered } from '@crui/core/dom/rendered';
 import { withCSS } from '@crui/css-emotion/elems/css';
-import { Config as Base, with$All as withBase } from '@crui/reactive/elems';
+import { BCTag, BVTag, Config as Base, with$All as withBase, WithBindCheck, WithBindVal } from '@crui/reactive/elems';
 import { Interpolation } from 'emotion';
 import { $CSS, with$CSS } from './$css';
 import { DynCSS, with$DynCSS } from './dynCSS';
 
-type Config<C, K extends KProps, $K extends KProps, M> = Base<C, K, $K> & {
+export type Config<C, K extends KProps, $K extends KProps, M> = Base<C, K, $K> & {
     css?: Interpolation<M>
     $css?: $CSS<M>
     dynCss?: DynCSS
 }
+
+export function h$<C, K extends KProps, $K extends KProps, M>(
+    tag: BVTag, config: Config<C, K, $K, M> & WithBindVal
+): Component<C>
+export function h$<C, K extends KProps, $K extends KProps, M>(
+    tag: BCTag, config: Config<C, K, $K, M> & WithBindCheck
+): Component<C>
+export function h$<C, K extends KProps, $K extends KProps, M>(
+    tag: Tag, config: Config<C, K, $K, M>
+): Component<C>
 export function h$<C, K extends KProps, $K extends KProps, M>(
     tag: Tag, config: Config<C, K, $K, M>
 ): Component<C> {

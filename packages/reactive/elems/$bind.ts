@@ -1,58 +1,64 @@
-import { Component, DOM, Tag } from '@crui/core/dom';
+import { Component, DOM } from '@crui/core/dom';
 import { compatibleInputEvent } from '@crui/core/dom/events';
-import { Props } from '@crui/core/dom/props';
-import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
+import { KProps, Props } from '@crui/core/dom/props';
+import { modRendered, Rendered, defRendered } from '@crui/core/dom/rendered';
 import { Unsubscribe } from '@crui/core/type';
 import { combine } from '@crui/core/utils/combine';
-import { keys } from '@crui/core/utils/object';
 import { DRW$B } from '../rx/box/types';
 import { makeAtomic } from '../utils/atomic';
 
-export type Bind = {
-    checked?: DRW$B<boolean>,
-    value?: DRW$B<string>,
-}
+export type BVTag = 'input'|'select'|'textarea'
+export type BCTag = 'input'
+
+export type $Value = DRW$B<string>
+export type $Checked = DRW$B<boolean>
 
 /**
- * Element with a two-way binding for either `checked` or `value` property.
- * 
- * The bound Stream will update based on property value and viceversa.
+ * Create an element and set a two-way binding on `value` property
  */
-export function h$b(tag: Tag, bind?: Bind): Component {
+export function h$bv(tag: BVTag, stream: $Value): Component {
     return (dom) => {
         const node = dom.create(tag)
-        return with$Bind(dom, node, bind)
+        return with$BindVal(stream)(dom, node)
     }
 }
 
 /**
- * Setup a node with a two-way binding for either `checked` or `value` property.
+ * Create a checkbox element and set a two-way binding on `checked` property
  */
-export function with$Bind<N>(dom: DOM<N>, node: N, bind?: Bind): Rendered<N> {
-    if (!bind) {
+export function h$bc(stream: $Checked): Component {
+    return (dom) => {
+        const node = dom.create('input')
+        dom.setProp(node, 'type', 'checkbox')
+        return with$BindCheck(stream)(dom, node)
+    }
+}
+
+export const with$BindVal = (stream?: $Value) => bind('value', stream)
+export const with$BindCheck = (stream?: $Checked) => bind('checked', stream)
+
+type Enhance = <N>(dom: DOM<N>, node: N) => Rendered<N>
+const bind = <P extends KProps>(
+   prop: P, stream?: DRW$B<Props[P]>
+): Enhance => (dom, node) => {
+    if (stream == null) {
         return defRendered(node)
     }
 
     const unsubs: Unsubscribe[] = []
     const event = compatibleInputEvent(node)
-    keys(bind).forEach((prop) => {
-        const $s: DRW$B<Props[typeof prop]> | undefined = bind[prop]
-        if ($s == null) {
-            return
-        }
-        dom.setProp(node, prop, $s.get())
+        dom.setProp(node, prop, stream.get())
 
         const atomic = makeAtomic()
         unsubs.push(
-            $s.destroy,
+            stream.destroy,
             dom.listen(node, event, atomic(() => {
-                $s.set(dom.getProp(node, prop))
+                stream.set(dom.getProp(node, prop))
             })),
         )
-        $s.subscribe(atomic((val: boolean | string) => {
+        stream.subscribe(atomic((val: Props[P]) => {
             dom.setProp(node, prop, val)
         }))
-    })
 
     return modRendered(node, (r) => {
         r.unsub = combine(unsubs)

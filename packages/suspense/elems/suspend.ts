@@ -1,9 +1,9 @@
-import { Component, DOM } from '@crui/core/dom';
-import { Rendered } from '@crui/core/dom/rendered';
+import { Component } from '@crui/core/dom';
 import { WithSuspense } from '../context';
-import { Suspender } from '../suspender'
+import { Suspender } from '../suspender';
+import { proxy, replace } from '../utils';
 
-export function suspend<C, E>(
+export function suspend<C, E = void>(
     loader: Component<C>,
     comp: Component<C & WithSuspense>,
     error: (err: E) => Component<C>
@@ -33,23 +33,4 @@ export const withSuspender = <C, E>(
     )
     return proxy(rz)
 
-}
-
-function replace<N>( dom: DOM<N>, rold: Rendered<N>, rnew: Rendered<N>): PromiseLike<void> {
-    return rold.onUnmount().then(() => {
-        dom.replace(rold.node, rnew.node)
-        rold.unsub()
-        Object.assign(rold, rnew)
-
-        return rnew.onMounted()
-    })
-}
-
-function proxy<N>(r: Rendered<N>): Rendered<N> {
-    return {
-        get node() { return r.node },
-        onMounted: () => r.onMounted(),
-        onUnmount: () => r.onUnmount(),
-        unsub: () => r.unsub()
-    }
 }

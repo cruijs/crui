@@ -1,3 +1,2 @@
-export { h$ } from './elems'
-export { h$ss, style } from './elems/$css'
-export { w$ss } from './combinators/$css'
+export * from './elems/$css'
+export * from './elems/dynCss'

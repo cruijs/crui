@@ -1,5 +1,5 @@
-import { DOM } from '@crui/core/dom';
-import { Style } from '@crui/core/dom/style';
+import { DOM, Tag, Node } from '@crui/core/dom';
+import { KS, PS } from '@crui/core/dom/style';
 import { combine } from '@crui/core/utils/combine';
 import { noop } from '@crui/core/utils/noop';
 import { keys } from '@crui/core/utils/object';
@@ -10,10 +10,10 @@ type Milliseconds<T> = {[K in keyof T]: number}
 /**
  * Create a CSS Transition to apply to a Component
  */
-export const cssTx = <P extends keyof Style>(
-    transitions: Milliseconds<Pick<Required<Style>, P>>,
-    fromStyle: Pick<Required<Style>, P>, 
-    toStyle: Pick<Required<Style>, P>
+export const cssTx = <K extends KS>(
+    transitions: Milliseconds<PS<K>>,
+    fromStyle: PS<K>, 
+    toStyle: PS<K>,
 ) => tx((node, dom) => {
     const props = keys(transitions)
 
@@ -39,10 +39,10 @@ export const cssTx = <P extends keyof Style>(
     }
 })
 
-export const onTrans = <N, S extends keyof Style>(
+export const onTrans = <N extends Node<Tag>, K extends KS>(
     dom: DOM<N>,
     node: N,
-    style: Pick<Style, S>,
+    style: PS<K>,
     slowest: string,
 ) => {
     let done = noop

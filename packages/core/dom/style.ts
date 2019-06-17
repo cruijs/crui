@@ -1,3 +1,5 @@
+export type KS = keyof Style
+export type PS<K extends KS> = Pick<Style, K>
 export type Style = {
     alignContent: string|null,
     alignItems: string|null,

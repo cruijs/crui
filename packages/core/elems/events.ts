@@ -11,6 +11,7 @@ export type Events = {
     submit?: EventListener
     load?: EventListener
     error?: EventListener
+    abort?: EventListener
 }
 
 /**

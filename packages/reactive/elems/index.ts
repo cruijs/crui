@@ -6,13 +6,15 @@ import { Unsubscribe } from '@crui/core/type';
 import { combine } from '@crui/core/utils/combine';
 import { modify } from '@crui/core/utils/modify';
 import { defRendered } from '../../core/dom/rendered';
-import { $Checked, $Value, BCTag, BVTag, with$BindCheck, with$BindVal } from './$bind'
+import { $Checked, $Value, BCTag, BVTag, with$BindCheck, with$BindVal } from './$bind';
 import { $Props, with$Props } from './$props';
+import { K$S, P$S } from './$style';
 
-export { BCTag, BVTag } from './$bind'
+export { BCTag, BVTag } from './$bind';
 
-export type Config<C, P extends KProps, $P extends KProps> = Base<P, C> & {
+export type Config<C, P extends KProps, $P extends KProps, $S extends K$S> = Base<P, C> & {
     $props?: $Props<$P>
+    $style?: P$S<$S>
     unsub?: Unsubscribe,
 }
 export type WithBindVal = {
@@ -21,32 +23,32 @@ export type WithBindVal = {
 export type WithBindCheck = {
     $bindCheck?: $Checked,
 }
-export type ConfigF<C, P extends KProps, $P extends KProps> = 
-    Config<C, P, $P>
+export type ConfigF<C, P extends KProps, $P extends KProps, $S extends K$S> = 
+    Config<C, P, $P, $S>
     & WithBindVal
     & WithBindCheck
 
-export function h$<C, K extends KProps, $K extends KProps>(
-    tag: BVTag, config: Config<C, K, $K> & WithBindVal
+export function h$<C, K extends KProps, $K extends KProps, $S extends K$S>(
+    tag: BVTag, config: Config<C, K, $K, $S> & WithBindVal
 ): Component<C>
-export function h$<C, K extends KProps, $K extends KProps>(
-    tag: BCTag, config: Config<C, K, $K> & WithBindCheck
+export function h$<C, K extends KProps, $K extends KProps, $S extends K$S>(
+    tag: BCTag, config: Config<C, K, $K, $S> & WithBindCheck
 ): Component<C>
-export function h$<C, K extends KProps, $K extends KProps>(
-    tag: Tag, config: Config<C, K, $K>
+export function h$<C, K extends KProps, $K extends KProps, $S extends K$S>(
+    tag: Tag, config: Config<C, K, $K, $S>
 ): Component<C>
-export function h$<C, K extends KProps, $K extends KProps>(
-    tag: Tag, config: ConfigF<C, K, $K>
+export function h$<C, K extends KProps, $K extends KProps, $S extends K$S>(
+    tag: Tag, config: ConfigF<C, K, $K, $S>
 ): Component<C> {
     return (dom, ctxt) =>
         with$All(dom, ctxt, dom.create(tag), config)
 }
 
-type WithAll = <N, C, K extends KProps, $K extends KProps>(
+type WithAll = <N, C, K extends KProps, $K extends KProps, $S extends K$S>(
     dom: DOM<N>,
     context: C,
     node: N,
-    config?: ConfigF<C, K, $K>,
+    config?: ConfigF<C, K, $K, $S>,
 ) => Rendered<N>
 export const with$All: WithAll = (dom, ctxt, node, config) =>
     (config == null)

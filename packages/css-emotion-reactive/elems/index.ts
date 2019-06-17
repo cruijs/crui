@@ -6,34 +6,35 @@ import { BCTag, BVTag, Config as Base, with$All as withBase, WithBindCheck, With
 import { Interpolation } from 'emotion';
 import { $CSS, with$CSS } from './$css';
 import { DynCSS, with$DynCSS } from './dynCSS';
+import { K$S } from '@crui/reactive/elems/$style';
 
-export type Config<C, K extends KProps, $K extends KProps, M> = Base<C, K, $K> & {
+export type Config<C, K extends KProps, $K extends KProps, $S extends K$S, M> = Base<C, K, $K, $S> & {
     css?: Interpolation<M>
     $css?: $CSS<M>
     dynCss?: DynCSS
 }
 
-export function h$<C, K extends KProps, $K extends KProps, M>(
-    tag: BVTag, config: Config<C, K, $K, M> & WithBindVal
+export function h$<C, K extends KProps, $K extends KProps, $S extends K$S, M>(
+    tag: BVTag, config: Config<C, K, $K, $S, M> & WithBindVal
 ): Component<C>
-export function h$<C, K extends KProps, $K extends KProps, M>(
-    tag: BCTag, config: Config<C, K, $K, M> & WithBindCheck
+export function h$<C, K extends KProps, $K extends KProps, $S extends K$S, M>(
+    tag: BCTag, config: Config<C, K, $K, $S, M> & WithBindCheck
 ): Component<C>
-export function h$<C, K extends KProps, $K extends KProps, M>(
-    tag: Tag, config: Config<C, K, $K, M>
+export function h$<C, K extends KProps, $K extends KProps, $S extends K$S, M>(
+    tag: Tag, config: Config<C, K, $K, $S, M>
 ): Component<C>
-export function h$<C, K extends KProps, $K extends KProps, M>(
-    tag: Tag, config: Config<C, K, $K, M>
+export function h$<C, K extends KProps, $K extends KProps, $S extends K$S, M>(
+    tag: Tag, config: Config<C, K, $K, $S, M>
 ): Component<C> {
     return (dom, ctxt) =>
         with$All(dom, ctxt, dom.create(tag), config)
 }
 
-type WithAll = <N, C, K extends KProps, $K extends KProps, M>(
+type WithAll = <N, C, K extends KProps, $K extends KProps, $S extends K$S, M>(
     dom: DOM<N>,
     context: C,
     node: N,
-    config?: Config<C, K, $K, M>,
+    config?: Config<C, K, $K, $S, M>,
 ) => Rendered<N>
 export const with$All: WithAll = (dom, ctxt, node, config) => {
     if (config == null) {

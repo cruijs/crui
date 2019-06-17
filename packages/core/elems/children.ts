@@ -1,5 +1,5 @@
 import { h } from './h';
-import { Component, Setup, Tag } from '../dom';
+import { Component, Setup, Tag, AnyTag } from '../dom';
 import { defLifecycle, mergeLifecycles } from '../dom/rendered';
 
 /**
@@ -8,7 +8,7 @@ import { defLifecycle, mergeLifecycles } from '../dom/rendered';
 export function hc<T extends Tag, C>(
     tag: T,
     setup: Setup<T, C>[],
-    cs: Component<Tag, C>[]
+    cs: Component<AnyTag, C>[]
 ): Component<T, C> {
     return h(tag, [...setup, children(cs)])
 }
@@ -17,8 +17,8 @@ export function hc<T extends Tag, C>(
  * Append children to a node
  */
 export function children<C>(
-    cs: Component<Tag, C>[]
-): Setup<Tag, C> {
+    cs: Component<AnyTag, C>[]
+): Setup<AnyTag, C> {
     return (dom, parent, ctxt) => {
         if (cs.length === 0) {
             return defLifecycle()

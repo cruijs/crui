@@ -1,8 +1,8 @@
-import { Component, Tag } from '../dom'
-import { rendered } from '../dom/rendered'
-import { children } from './children'
+import { AnyTag, Component } from '../dom';
+import { rendered } from '../dom/rendered';
+import { children } from './children';
 
-export function fragment<C>(cs: Component<Tag, C>[]): Component<'#fragment', C> {
+export function fragment<C>(cs: Component<AnyTag, C>[]): Component<'#fragment', C> {
     return (dom, ctxt) => {
         const node = dom.createFragment()
         return rendered(node, children(cs)(dom, node, ctxt))

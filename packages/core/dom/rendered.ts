@@ -1,9 +1,9 @@
-import { AsyncFn, AnyNode, Node, Unsubscribe, Tag } from '../types'
+import { AsyncFn, AnyNode, Node, Unsubscribe, Tag, AnyTag } from '../types'
 import { combine, combineAsync, asyncBind } from '../utils/combine'
 import { asyncNoop, noop } from '../utils/noop';
 import { Modify, modify } from '../utils/modify'
 
-export type Rendered<N extends Node<Tag> = Node<Tag>> = {
+export type Rendered<N extends Node<AnyTag> = Node<Tag>> = {
     readonly node: N
     readonly lfc: Lifecycle 
 }
@@ -14,11 +14,11 @@ export type Lifecycle = {
     readonly onUnmount: AsyncFn
 }
 
-export function rendered<T extends Tag, N extends Node<T>>(node: N, lfc: Lifecycle): Rendered<N> {
+export function rendered<T extends AnyTag, N extends Node<T>>(node: N, lfc: Lifecycle): Rendered<N> {
     return { node, lfc }
 }
 
-export function defRendered<T extends Tag, N extends Node<T>>(node: N): Rendered<N> {
+export function defRendered<T extends AnyTag, N extends Node<T>>(node: N): Rendered<N> {
     return { node, lfc: defLifecycle() }
 }
 

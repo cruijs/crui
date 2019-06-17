@@ -5,14 +5,14 @@ import { Style } from './style';
 
 export * from '../types';
 
-export type Component<T extends Tag, C = {}> = <N extends Node<T>>(dom: DOM<N>, context: C) => Rendered<N>
+export type Component<T extends AnyTag, C = {}> = <N extends Node<T>>(dom: DOM<N>, context: C) => Rendered<N>
 
-export type Setup<T extends Tag = Tag, C = {}> = <N extends Node<T>>(
+export type Setup<T extends AnyTag = Tag, C = {}> = <N extends Node<T>>(
     dom: DOM<N>, node: N, ctxt: C
 ) => Lifecycle
 
 export interface DOM<N extends Node<AnyTag>> {
-    create(tag: Tag): N
+    create(tag: AnyTag): N
     createText(s: string): N & { textContent: string|null }
     createFragment(): N
 
@@ -39,7 +39,7 @@ export interface DOM<N extends Node<AnyTag>> {
     runOnNextFrame(f: AsyncFn): PromiseLike<void>
 }
 
-export function render<T extends Tag, N extends Node<T>, Ctxt extends C, C>(
+export function render<T extends AnyTag, N extends Node<T>, Ctxt extends C, C>(
     dom: DOM<N>,
     root: N,
     comp: Component<T, C>,

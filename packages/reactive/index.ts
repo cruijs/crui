@@ -1,7 +1,6 @@
-export { h$ } from './elems';
-export { h$bv, h$bc } from './elems/$bind';
-export { h$p } from './elems/$props';
-export { h$map } from './elems/h$map';
-export { $ite } from './elems/ifThenElse';
-export { t$ } from './elems/t$';
-export { $when } from './elems/when';
+export * from './elems/$bind';
+export * from './elems/$map';
+export * from './elems/$props';
+export * from './elems/ifThenElse';
+export * from './elems/t$';
+export * from './elems/when';

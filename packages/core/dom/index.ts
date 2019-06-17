@@ -1,17 +1,33 @@
-import { Rendered } from './rendered';
-import { AsyncFn, Unsubscribe } from '../type';
-import { KProps, PProps, Props } from './props';
+import { AsyncFn, Unsubscribe, Tag } from '../types';
+import { Rendered, SetupR, Meta } from './rendered'
 import { Style } from './style';
+import { Fn0 } from '../utils/combine'
 
-export type Tag = string
-export type DOMNode = { style: Style } 
-export type Component<C = {}> = <N>(dom: DOM<N>, context: C) => Rendered<N>
+export * from '../types';
+
+export type Component<C = {}, M = Meta<Tag>> = <N>(dom: DOM<N>, context: C) => Rendered<N, M>
+
+export type Setup<C = {}, M = any> = <N>(
+    meta: M, dom: DOM<N>, node: N, ctxt: C
+) => SetupR<M>
+
+export type Props = { [key: string]: PropVal } 
+export type PropVal = string|number|boolean|null
+
+export type BoundingRect = {
+    top: number,
+    bottom: number,
+    left: number,
+    right: number,
+    width: number,
+    height: number,
+}
 
 export interface DOM<N> {
-    create(tag: Tag): N
-    createText(s: string): N & { textContent: string|null }
-    createFragment(): N
+    createText(s: string): N
+    setText(node: N, s: string): N
 
+    create(tag: string): N
     replace(old: N, rpl: N): void
     remove(parent: N, child: N): void
     insert(parent: N, child: N): void
@@ -28,19 +44,22 @@ export interface DOM<N> {
     addCss(node: N, klass: string): N
     removeCss(node: N, klass: string): N
 
-    setProps<K extends KProps>(node: N, props: PProps<K>): N
-    setProp<K extends KProps>(node: N, prop: K, value: Props[K]): N
-    getProp<K extends KProps>(node: N, prop: K): Props[K]
+    setProps(node: N, props: Props): N
+    setProp(node: N, prop: string, value: PropVal): N
+    getProp(node: N, prop: string): PropVal
 
-    runOnNextFrame(f: AsyncFn): PromiseLike<void>
+    runOnNextFrame(f: AsyncFn|Fn0): PromiseLike<void>
+
+    onWindowResize(f: Fn0): Unsubscribe
+    measure(node: N): BoundingRect
 }
 
-export function render<N, Ctxt extends C, C>(
+export function render<N, Ctxt extends C, C, M>(
     dom: DOM<N>,
     root: N,
-    comp: Component<C>,
+    comp: Component<C, M>,
     context: Ctxt
-): Rendered<N> {
+): Rendered<N, M> {
     const r = comp(dom, context)
     dom.insert(root, r.node)
     return r

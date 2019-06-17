@@ -1,4 +1,4 @@
-import { Unsubscribe } from '@crui/core/type';
+import { Unsubscribe } from '../../../core/types';
 import { R$L, UpdateType, W$L } from './types';
 
 /**

@@ -1,28 +1,33 @@
 import { Component } from '@crui/core/dom';
 import { hc } from '@crui/core/elems/children';
+import { h } from '@crui/core/elems/h';
 import { ht } from '@crui/core/elems/ht';
-import { h, hss } from '@crui/css-emotion';
-import { $bindCheck } from '@crui/reactive/combinators/$bind';
-import { h$filter$$ } from '@crui/reactive/elems/filter/h$filter$$';
+import { children } from '@crui/core/setups/children';
+import { sc2 } from '@crui/core/setups/combine/two';
+import { css } from '@crui/css-emotion/setups/css';
 import { DRW$B } from '@crui/reactive/rx/box/types';
-import { cssTx } from '@crui/transitions/cssTx';
+import { bindChecked } from '@crui/reactive/setups/bind';
+import { c$filter$$ } from '@crui/reactive/setups/filter';
+import { cssTx } from '@crui/transitions/elems/cssTx';
 import { Todo, TodoStore } from '../store';
 
 export function TodoList(store: TodoStore) {
-    return h$filter$$(
-        hss('ul', {
+    return h('ul', sc2(
+        c$filter$$(
+            store.getTodos(),
+            TodoComponent,
+            store.getVisibilityFilter(),
+        ),
+        css({
             listStyle: 'none',
             padding: 0,
             margin: 0,
             paddingTop: '0.5rem',
-        }),
-        store.getTodos(),
-        TodoComponent,
-        store.getVisibilityFilter(),
-    )
+        })
+    ))
 }
 
-const TodoComponent = (todo: Todo) => (
+const TodoComponent = (todo: Todo): Component<{}> => (
     hc('li', [
         wrapper([
             input(todo.done),
@@ -31,18 +36,18 @@ const TodoComponent = (todo: Todo) => (
     ])
 )
 
-const wrapper = <C>(children: Component<C>[]) => 
+const wrapper = <C>(cs: Component<C>[]) => 
     Remove(Slide(
-        h('label', {
-            children,
-            css: {
+        h('label', sc2( 
+            children(cs),
+            css({
                 display: 'block',
                 backgroundColor: 'aliceblue',
                 padding: '0.25rem 0.5rem',
                 marginBottom: '0.5rem',
                 cursor: 'pointer',
-            }
-        })
+            }),
+        ))
     ))
 
 const Remove = cssTx(
@@ -57,14 +62,11 @@ const Slide = cssTx(
 )
 
 const input = (check: DRW$B<boolean>) => (
-    $bindCheck(
-        h('input', {
-            props: { type: 'checkbox' },
-            css: {
-                verticalAlign: 'middle',
-                marginRight: '0.5rem',
-            }
+    h('input', sc2(
+        bindChecked(check),
+        css({
+            verticalAlign: 'middle',
+            marginRight: '0.5rem',
         }),
-        check
-    )
+    ))
 )

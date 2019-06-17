@@ -1,4 +1,3 @@
-import { noop } from '@crui/core/utils/noop';
 import { WithSuspense } from './context';
 
 export class Suspender implements WithSuspense {
@@ -13,7 +12,14 @@ export class Suspender implements WithSuspense {
     }
 
     waitAll(): PromiseLike<void> {
-        return Promise.all(this.promises).then(noop)
+        const promises = this.promises
+        this.promises = []
+        return Promise.all(promises).then(() => {
+            if (this.promises.length !== 0) {
+                return this.waitAll()
+            }
+            return
+        })
     }
 
     nothingToWaitFor() {

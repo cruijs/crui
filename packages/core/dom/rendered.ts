@@ -1,26 +1,62 @@
-import { AsyncFn, Node, Unsubscribe } from '../type'
-import { combine, combineAsync, asyncBind } from '../utils/combine'
+import { AsyncFn, Unsubscribe } from '../types';
+import { asyncBind, combine, combineAsync } from '../utils/combine';
+import { Modify, modify } from '../utils/modify';
 import { asyncNoop, noop } from '../utils/noop';
-import { Modify, modify } from '../utils/modify'
 
-export type Rendered<N extends Node = Node> = {
-    readonly node: N,
-    readonly unsub: Unsubscribe,
-    readonly onMounted: AsyncFn,
-    readonly onUnmount: AsyncFn,
+export type Rendered<N, M = {}> = {
+    readonly node: N
+    readonly meta: M
+    readonly lfc: Lifecycle 
 }
 
-export function defRendered<N>(node: N): Rendered<N> {
+export type Meta<T> = { tag: T }
+
+export type SetupR<M> = {
+    lfc: Lifecycle,
+    meta: M
+}
+
+export type Lifecycle = {
+    readonly unsub: Unsubscribe
+    readonly onMounted: AsyncFn
+    readonly onUnmount: AsyncFn
+}
+
+export function rendered<N, M>(node: N, lfc: Lifecycle, meta: M): Rendered<N, M> {
+    return { node, lfc, meta }
+}
+
+export function defRendered<N, M>(node: N, meta: M): Rendered<N, M> {
+    return { node, lfc: defLifecycle(), meta }
+}
+
+export function defResult<M>(meta: M): SetupR<M> {
     return {
-        node,
+        meta,
+        lfc: defLifecycle()
+    }
+}
+
+export function result<M>(meta: M, lfc: Lifecycle): SetupR<M> {
+    return { meta, lfc }
+}
+
+export function defLifecycle(): Lifecycle {
+    return {
         unsub: noop,
         onMounted: asyncNoop,
         onUnmount: asyncNoop
     }
 }
 
-export function modRendered<N>(node: N, f: Modify<Rendered<N>>): Rendered<N> {
-    return modify(defRendered(node), f)
+export function modLifecycle(f: Modify<Lifecycle>): Lifecycle {
+    return modify(defLifecycle(), f)
+}
+
+export function modifyLfc<N, M>(r: Rendered<N, M>, f: Modify<Lifecycle>): Rendered<N, M> {
+    return modify(r, (m) => {
+        m.lfc = modify(m.lfc, f)
+    })
 }
 
 type Collected = {
@@ -28,22 +64,24 @@ type Collected = {
     onMounted: AsyncFn[],
     onUnmount: AsyncFn[],
 }
-export function mergeRendered<N>(p: N, rs: Rendered<N>[]): Rendered<N> {
-    if (rs.length === 0) {
-        return defRendered(p)
+export function mergeLifecycles(ls: Lifecycle[]): Lifecycle {
+    if (ls.length === 0) {
+        return defLifecycle()
+    }
+    if (ls.length === 1) {
+        return ls[0]
     }
 
-    const collected = rs.reduce(
-        (z, r) => {
-            z.unsub.push(r.unsub)
-            z.onMounted.push(r.onMounted)
-            z.onUnmount.push(r.onUnmount)
+    const collected = ls.reduce(
+        (z, l) => {
+            z.unsub.push(l.unsub)
+            z.onMounted.push(l.onMounted)
+            z.onUnmount.push(l.onUnmount)
             return z
         },
         { unsub: [], onMounted: [], onUnmount: [] } as Collected
     )
     return {
-        node: p,
         unsub: combine(collected.unsub),
         onMounted: combineAsync(collected.onMounted),
         onUnmount: combineAsync(collected.onUnmount),

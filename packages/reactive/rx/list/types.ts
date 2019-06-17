@@ -101,3 +101,5 @@ export interface WriteStreamList<T> extends WriteStream<T[]> {
 
 export type RW$L<T> = R$L<T> & W$L<T>
 export type ReadWriteStreamList<T> = RW$L<T>
+
+export type DRW$L<T> = RW$L<T> & Destroyable

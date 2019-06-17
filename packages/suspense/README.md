@@ -6,15 +6,15 @@ This package implements the same idea behind React Suspense, while providing a m
 
 CRUI philosophy is to push data outside Components, usually in Stores, but sometimes we have Components that need to fetch some information before being able to correctly render. The most simple and classic example is an image:
 ```typescript
-import { hc, hp, ht } from '@crui/core'
+import { hc, ht, props } from '@crui/core'
 import { mount } from '@crui/core/dom/browser'
 
 mount(
     document.getElementById('root')!,
     hc('div', [
-        hp('img', {
+        h('img', props({
             src: '/some/image.png'
-        }),
+        })),
         ht('span', 'Hello')
     ]),
     {}
@@ -37,7 +37,7 @@ That's exactly what we need to avoid reflows: ensure that image is loaded and re
 Let's make a component to wrap this logic:
 ```typescript
 // image.ts
-import { h, useContext } from '@crui/core'
+import { h, props, error, useContext } from '@crui/core'
 import { noop } from '@crui/core/utils/noop'
 import { WithSuspend } from '@crui/suspense'
 
@@ -50,10 +50,11 @@ export const img = (src: string) => useContext(({ waitFor }: WithSuspense) => {
     })
     waitFor(p)
 
-    return h('img', {
-        props: { src },
-        events: { load, error }
-    })
+    return h('img', sc([
+        props({ src }),
+        on('load', load),
+        on('error', error),
+    ]))
 })
 ```
 CRUI Suspense API is based on Context API and Promises. This element in particular expects to find a `waitFor` function in context. The signature for this function is:

@@ -1,8 +1,12 @@
 import { Component } from '@crui/core/dom/index';
+import { h } from '@crui/core/elems/h';
 import { ht } from '@crui/core/elems/ht';
 import { text } from '@crui/core/elems/text';
-import { h$ } from '@crui/css-emotion-reactive/elems';
+import { children, onClick } from '@crui/core/setups';
+import { sc } from '@crui/core/setups/combine/multi';
+import { $css } from '@crui/css-emotion-reactive/setups/css';
 import { hcs } from '@crui/css-emotion/elems/hcs';
+import { css } from '@crui/css-emotion/setups/css';
 import { map, RW$B } from '@crui/reactive/rx/box';
 import { TodoStore, Visibility } from '../store';
 
@@ -21,25 +25,23 @@ const Filter = (
     vis: Visibility,
     label: string
 ): Component => {
-    return h$('button', {
-        children: [
+    return h('button', sc([
+        children([
             text(label)
-        ],
-        events: {
-            click: (e) => {
-                e.preventDefault()
-                $vis.set(vis)
-            }
-        },
-        css: {
+        ]),
+        onClick((e) => {
+            e.preventDefault()
+            $vis.set(vis)
+        }),
+        css({
             marginLeft: '0.5rem',
             '&:first-child': {
                 marginLeft: 0,
             }
-        },
-        $css: [{
+        }),
+        $css([{
             cond: map($vis, (v) => v === vis),
             style: { color: 'red' }
-        }]
-    })
+        }])
+    ]))
 }

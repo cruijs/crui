@@ -11,7 +11,7 @@ CRUI also focus on _performance_ and to be as _declarative_ as possible.
 `@crui/core` is a small, flexible and powerful abstraction over the DOM:
 
 ```typescript
-import { h, hc, Component } from '@crui/core'
+import { hc, ht } from '@crui/core'
 import { mount } from '@crui/core/dom/browser'
 
 const Component = hc('dl', [
@@ -45,19 +45,19 @@ This package is quite small and for some use cases could be too simple, however 
 
 This package implements Reactivity through Streams and **does not** rely on any Virtual DOM. Here is an example of a reactive component:
 ```typescript
-import { hc, ht, Component } from '@crui/core'
+import { h, hc, ht, props } from '@crui/core'
 import { mount } from '@crui/core/dom/browser'
-import { StreamBox, h$, t$ } from '@crui/reactive'
+import { StreamBox, bindValue, text$ } from '@crui/reactive'
 
 const Component = (input: StreamBox<string>) => (
     hc('section', [
         ht('h1', 'Echo'),
-        h$('input', {
-            props: { type: 'text' },
-            $bind: { value: input }
+        h('input', {
+            props({ type: 'text' }),
+            bindValue(input)
         }),
         hc('p', [
-            t$(input)
+            text$(input)
         ])
     ])
 )
@@ -79,7 +79,7 @@ The rendered equivalent would be:
 </section>
 ```
 
-All functions that have a `$` work with Streams rather than simple values. Through `$bind` we bind the input `value` property to `echo`, which is a StreamBox, ie a stream containing a single value at a time. Now, every time we alter the input value, the message will change too!  
+Through `bindValue` we bind the input `value` property to `echo`, which is a StreamBox, ie a stream containing a single value at a time. Now, every time we alter the input value, the message will change too!  
 But there is more to it: binding is a two way matter and therefore any change to `echo` will change input value too.
 
 So, if we add this:
@@ -92,7 +92,7 @@ After 3 seconds the input content will be set to `Hello, world!`.
 
 As we said before, we do not rely on any Virtual DOM, but don't worry, we don't use `.innerHTML` or similar either ;)  
 All nodes are rendered as soon as the component is mounted, but the reactive ones are also updated as soon as a new value is available on the Stream.  
-So, every time we enter something in the input, only the text node inside `p` changes; when the value of `echo` is changed programmatically, given that we know this stream is bound to the `value` prop, we **do not** render the whole input element again, but rather update the `value` property itself.
+Every time we enter something in the input, only the text node inside `p` changes; when the value of `echo` is changed programmatically, given that we know this stream is bound to the `value` prop, we **do not** render the whole input element again, but rather update the `value` property itself.
 
 Long story short: we have surgical updates in par with a VDOM, but without all the calculation, diffs and patching required by it and therefore achieve a better performance.
 
@@ -108,6 +108,7 @@ To know more about `@crui/reactive`, see the dedicated [README](packages/reactiv
 - [Suspense](packages/suspense): React-inspired Suspense API
 - [Transitions](packages/transitions): base package to build elements with intro & outro animations
 - [GSAP Transitions](packages/transitions-gsap): build complex intro & outro animation using [GSAP](https://greensock.com/)
+- [Measure](packages/measure): expose component dimensions in a reactive way.
 
 ## More to come
 - [x] A sane Context API
@@ -119,8 +120,9 @@ To know more about `@crui/reactive`, see the dedicated [README](packages/reactiv
 - [ ] Use in JS projects while still keeping all possible imports
 - [ ] Better documentation
 
-## A big thank you
+## Credits
 This library has been heavily inspired by the awesome work done by:
+- [Evan Czaplicki](https://github.com/evancz/) on [ELM](https://elm-lang.org/)
+- Facebook and all the community behind [React](https://github.com/facebook/react)
 - Michel Weststrate (@mweststrate) on [mobx](https://github.com/mobxjs/mobx)
 - Rich Harris (@Rich_Harris) on [Svelte](https://github.com/sveltejs/svelte)
-- Facebook and all the community behind [React](https://github.com/facebook/react)

@@ -1,11 +1,9 @@
-import { Component, Tag } from '../dom';
-import { defRendered } from '../dom/rendered';
+import { Component } from '../dom';
+import { defRendered, Meta } from '../dom/rendered';
 
 /**
  * A vanilla element
  */
-export function e(tag: Tag): Component {
-    return (dom) => defRendered(
-        dom.create(tag)
-    )
+export function e<T extends string>(tag: T): Component<{}, Meta<T>> {
+    return (dom) => defRendered(dom.create(tag), { tag })
 }

@@ -1,4 +1,4 @@
-import { Unsubscribe } from '@crui/core/type'
+import { Unsubscribe } from '../../core/types'
 export type Effect<U> = (upd: U) => void
 
 /**

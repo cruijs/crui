@@ -1,6 +1,6 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { KProps, PProps } from '@crui/core/dom/props';
-import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
+import { defRendered, modLifecycle, Rendered } from '@crui/core/dom/rendered';
 import { combine } from '@crui/core/utils/combine';
 import { keys } from '@crui/core/utils/object';
 import { Reactive } from '../utils/reactive';
@@ -27,7 +27,7 @@ export function with$Props<N, K extends KProps>(
 ): Rendered<N> {
     return !props ?
         defRendered(node) :
-        modRendered(node, (r) => {
+        modLifecycle(node, (r) => {
             r.unsub = combine(keys(props).map((k) => {
                 dom.setProp(node, k, props[k].get())
                 props[k].subscribe((val) => {

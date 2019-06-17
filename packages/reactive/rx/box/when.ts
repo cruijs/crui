@@ -1,4 +1,4 @@
-import { Unsubscribe } from '@crui/core/type';
+import { Unsubscribe } from '../../../core/types';
 import { noop } from '@crui/core/utils/noop';
 import { apply } from './apply';
 import { R$B } from './types';

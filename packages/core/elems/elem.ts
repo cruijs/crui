@@ -4,8 +4,12 @@ import { defRendered } from '../dom/rendered';
 /**
  * A vanilla element
  */
-export function e(tag: Tag): Component {
+export function e<T extends Tag>(tag: T): Component<T> {
     return (dom) => defRendered(
         dom.create(tag)
     )
+}
+
+export function empty(): Component<'script'> {
+    return e('script')
 }

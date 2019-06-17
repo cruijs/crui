@@ -1,5 +1,5 @@
 import { Component } from '@crui/core/dom';
-import { modRendered } from '@crui/core/dom/rendered';
+import { modLifecycle } from '@crui/core/dom/rendered';
 import { combine, Fn0 } from '@crui/core/utils/combine';
 import { WithSuspense } from '../context';
 
@@ -15,7 +15,7 @@ export function image(src: string): Component<WithSuspense> {
         })
         waitFor(p)
 
-        return modRendered(node, (r) => {
+        return modLifecycle(node, (r) => {
             r.unsub = combine([
                 dom.listen(node, 'load', resolve),
                 dom.listen(node, 'error', reject),

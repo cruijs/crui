@@ -1,35 +1,35 @@
-import { Component, DOM, Tag } from '../dom';
-import { defRendered, mergeRendered, Rendered } from '../dom/rendered';
+import { h } from './h';
+import { Component, Setup, Tag } from '../dom';
+import { defLifecycle, mergeLifecycles } from '../dom/rendered';
 
 /**
  * An element with children
  */
-export function hc<C>(tag: Tag, children?: Component<C>[]): Component<C> {
-    return (dom, ctxt) => {
-        const node = dom.create(tag)
-        return withChildren(dom, ctxt, node, children)
-    }
+export function hc<T extends Tag, C>(
+    tag: T,
+    setup: Setup<T, C>[],
+    cs: Component<Tag, C>[]
+): Component<T, C> {
+    return h(tag, [...setup, children(cs)])
 }
 
 /**
  * Append children to a node
  */
-export function withChildren<N, C>(
-    dom: DOM<N>,
-    ctxt: C,
-    parent: N,
-    children?: Component<C>[]
-): Rendered<N> {
-    if (!children || children.length === 0) {
-        return defRendered(parent)
-    }
+export function children<C>(
+    cs: Component<Tag, C>[]
+): Setup<Tag, C> {
+    return (dom, parent, ctxt) => {
+        if (cs.length === 0) {
+            return defLifecycle()
+        }
 
-    return mergeRendered(
-        parent,
-        children.map((render) => {
-            const r = render(dom, ctxt)
-            dom.insert(parent, r.node)
-            return r
-        })
-    )
+        return mergeLifecycles(
+            cs.map((render) => {
+                const r = render(dom, ctxt)
+                dom.insert(parent, r.node)
+                return r.lfc
+            })
+        )
+    }
 }

@@ -1,6 +1,6 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { KProps } from '@crui/core/dom/props';
-import { defRendered, mergeRendered, Rendered } from '@crui/core/dom/rendered';
+import { defRendered, mergeLifecycles, Rendered } from '@crui/core/dom/rendered';
 import { withCSS } from '@crui/css-emotion/elems/css';
 import { BCTag, BVTag, Config as Base, with$All as withBase, WithBindCheck, WithBindVal } from '@crui/reactive/elems';
 import { Interpolation } from 'emotion';
@@ -41,7 +41,7 @@ export const with$All: WithAll = (dom, ctxt, node, config) => {
         return defRendered(node)
     }
     withCSS(dom, node, config.css)
-    return mergeRendered(node, [
+    return mergeLifecycles(node, [
         withBase(dom, ctxt, node, config),
         with$CSS(dom, node, config.$css),
         with$DynCSS(dom, node, config.dynCss),

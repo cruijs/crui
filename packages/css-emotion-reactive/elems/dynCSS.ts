@@ -1,5 +1,5 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
-import { modRendered, Rendered } from '@crui/core/dom/rendered';
+import { modLifecycle, Rendered } from '@crui/core/dom/rendered';
 import { combine } from '@crui/core/utils/combine';
 import { css, Style } from '@crui/css-emotion';
 import { apply, DR$B } from '@crui/reactive/rx/box';
@@ -13,7 +13,7 @@ export function h$dss(tag: Tag, styles: DynCSS): Component {
 }
 
 export function with$DynCSS<N>(dom: DOM<N>, node: N, styles?: DynCSS): Rendered<N> {
-    return modRendered(node, (r) => {
+    return modLifecycle(node, (r) => {
         if (styles == null)
             return
 

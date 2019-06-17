@@ -1,6 +1,6 @@
 import { DOM } from '@crui/core/dom';
 import { combineMount, combineUnmount, Rendered } from '@crui/core/dom/rendered';
-import { AsyncFn, Unsubscribe } from '@crui/core/type';
+import { AsyncFn, Unsubscribe } from '../../core/types';
 import { last } from '@crui/core/utils/array';
 import { combine, combineAsync } from '@crui/core/utils/combine';
 import { modify } from '@crui/core/utils/modify';

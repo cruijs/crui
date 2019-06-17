@@ -1,5 +1,5 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
-import { defRendered, modRendered, Rendered } from '@crui/core/dom/rendered';
+import { defRendered, modLifecycle, Rendered } from '@crui/core/dom/rendered';
 import { combine, combine2 } from '@crui/core/utils/combine';
 import { apply, Cond$B } from '@crui/reactive/rx/box';
 import { css, Interpolation } from 'emotion';
@@ -27,7 +27,7 @@ export const style = <M>(cond: Cond$B, style: Interpolation<M>) => ({
 })
 
 export function with$CSS<N, M>(dom: DOM<N>, node: N, style?: $CSS<M>): Rendered<N> {
-    return style == null ? defRendered(node) : modRendered(node, (m) => {
+    return style == null ? defRendered(node) : modLifecycle(node, (m) => {
         const unsub = combine(
             style.map(({ style, cond }) => {
                 const klass = css(style as Interpolation<undefined>)

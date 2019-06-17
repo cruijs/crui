@@ -1,8 +1,8 @@
 import { Component, DOM } from '@crui/core/dom';
 import { compatibleInputEvent } from '@crui/core/dom/events';
 import { KProps, Props } from '@crui/core/dom/props';
-import { modRendered, Rendered, defRendered } from '@crui/core/dom/rendered';
-import { Unsubscribe } from '@crui/core/type';
+import { modLifecycle, Rendered, defRendered } from '@crui/core/dom/rendered';
+import { Unsubscribe } from '../../core/types';
 import { combine } from '@crui/core/utils/combine';
 import { DRW$B } from '../rx/box/types';
 import { makeAtomic } from '../utils/atomic';
@@ -60,7 +60,7 @@ const bind = <P extends KProps>(
             dom.setProp(node, prop, val)
         }))
 
-    return modRendered(node, (r) => {
+    return modLifecycle(node, (r) => {
         r.unsub = combine(unsubs)
     })
 }

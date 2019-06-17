@@ -1,11 +1,15 @@
-import { Rendered } from './rendered';
-import { AsyncFn, Unsubscribe } from '../type';
+import { Rendered, Lifecycle } from './rendered';
+import { AsyncFn, Unsubscribe, Tag, Node } from '../types';
 import { KProps, PProps, Props } from './props';
 import { Style } from './style';
 
-export type Tag = string
-export type DOMNode = { style: Style } 
-export type Component<C = {}> = <N>(dom: DOM<N>, context: C) => Rendered<N>
+export { Tag } from '../types'
+
+export type Component<T extends Tag, C = {}> = <N extends Node<T>>(dom: DOM<N>, context: C) => Rendered<N>
+
+export type Setup<T extends Tag = Tag, C = {}> = <N extends Node<T>>(
+    dom: DOM<N>, node: N, ctxt: C
+) => Lifecycle
 
 export interface DOM<N> {
     create(tag: Tag): N
@@ -35,10 +39,10 @@ export interface DOM<N> {
     runOnNextFrame(f: AsyncFn): PromiseLike<void>
 }
 
-export function render<N, Ctxt extends C, C>(
+export function render<T extends Tag, N extends Node<T>, Ctxt extends C, C>(
     dom: DOM<N>,
     root: N,
-    comp: Component<C>,
+    comp: Component<T, C>,
     context: Ctxt
 ): Rendered<N> {
     const r = comp(dom, context)

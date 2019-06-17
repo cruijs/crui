@@ -1,41 +1,32 @@
-import { Component, DOM, Tag } from '../dom';
-import { defRendered, Rendered } from '../dom/rendered';
-import { combine } from '../utils/combine';
-import { Modifiable } from '../utils/modify';
-import { keys } from '../utils/object';
-import { noop } from '../utils/noop';
+import { Setup } from '../dom';
+import { modLifecycle } from '../dom/rendered';
 
-export type Events = {
-    change?: EventListener
-    click?: EventListener
-    submit?: EventListener
-    load?: EventListener
-    error?: EventListener
-    abort?: EventListener
-}
+export type EventHandler = EventListener
+export type MouseHandler = (ev: MouseEvent) => void
 
-/**
- * An element with events
- */
-export function he(tag: Tag, on?: Events): Component {
-    return (dom) => {
-        const node = dom.create(tag)
-        return withEvents(dom, node, on)
-    }
-}
+export type InputType = 'input' | 'change' | 'select' | 'focus' | 'blur'
+export type FormType = 'submit'
+export type LoadType = 'load' | 'error' | 'abort'
+export type MouseType = 'click' | 'mousemove' | 'mousedown' | 'mouseup' | 'mouseenter' | 'mouseleave' | 'mouseout' | 'mouseover'
+export type EventType = InputType | FormType | LoadType | MouseType
+
+export type InputTag = 'textarea' | 'input' | 'select'
+export type LoadTag = 'img' | 'script'
 
 /**
- * Add events to a node
+ * Setup an event handler
  */
-export function withEvents<N>(dom: DOM<N>, elem: N, on?: Events): Rendered<N> {
-    const r = defRendered(elem)
-    if (on) {
-        (r as Modifiable<Rendered<N>>).unsub = combine(
-            keys(on).map((event) => {
-                const handler = on[event]
-                return handler ? dom.listen(elem, event, handler) : noop
-            })
-        )
-    }
-    return r
+export function on<T extends InputTag>(ev: InputType, handler: EventListener): Setup<T>
+export function on<T extends LoadTag>(ev: LoadType, handler: EventListener): Setup<T>
+export function on(ev: FormType, handler: EventListener): Setup<'form'>
+export function on(ev: MouseType, handler: MouseHandler): Setup
+export function on<E extends EventType>(ev: E, handler: (ev: any) => void): Setup {
+    return (dom, node) =>
+        modLifecycle((m) => {
+            m.unsub = dom.listen(node, ev, handler)
+        })
+}
+
+export function onClick(handler: MouseHandler) {
+    return on('click', handler)
 }

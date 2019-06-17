@@ -1,8 +1,8 @@
 import { Component, DOM, Tag } from '@crui/core/dom';
 import { KProps } from '@crui/core/dom/props';
-import { mergeRendered, Rendered } from '@crui/core/dom/rendered';
+import { mergeLifecycles, Rendered } from '@crui/core/dom/rendered';
 import { Config as Base, withAll } from '@crui/core/elems';
-import { Unsubscribe } from '@crui/core/type';
+import { Unsubscribe } from '../../core/types';
 import { combine } from '@crui/core/utils/combine';
 import { modify } from '@crui/core/utils/modify';
 import { defRendered } from '../../core/dom/rendered';
@@ -53,7 +53,7 @@ type WithAll = <N, C, K extends KProps, $K extends KProps, $S extends K$S>(
 export const with$All: WithAll = (dom, ctxt, node, config) =>
     (config == null)
         ? defRendered(node)
-        : withUnsub(config.unsub, mergeRendered(node, [
+        : withUnsub(config.unsub, mergeLifecycles(node, [
             withAll(dom, ctxt, node, config),
             with$Props(dom, node, config.$props),
             with$BindVal(config.$bindVal)(dom, node),

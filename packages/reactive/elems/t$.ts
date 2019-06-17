@@ -1,5 +1,5 @@
 import { Component } from '@crui/core/dom';
-import { modRendered } from '@crui/core/dom/rendered';
+import { modLifecycle } from '@crui/core/dom/rendered';
 import { DR$B } from '../rx/box/types';
 
 /**
@@ -9,7 +9,7 @@ export function t$(s: DR$B<string>): Component {
     return (dom) => {
         const node = dom.createText(s.get())
 
-        return modRendered(node, (r) => {
+        return modLifecycle(node, (r) => {
             s.subscribe((val) => {
                 node.textContent = val
             })

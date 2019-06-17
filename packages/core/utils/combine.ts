@@ -1,5 +1,5 @@
 import { noop, asyncNoop } from './noop'
-import { AsyncFn } from '../type'
+import { AsyncFn } from '../types'
 
 export type Fn0 = () => void 
 export function combine(fs: Fn0[]): Fn0 {

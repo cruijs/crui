@@ -1,29 +1,30 @@
-import { Component } from '@crui/core/dom';
+import { AnyTag, Component } from '@crui/core/dom';
+import { modifyLfc } from '@crui/core/dom/rendered';
 import { combine } from '@crui/core/utils/combine';
-import { modify } from '@crui/core/utils/modify';
 import { noop } from '@crui/core/utils/noop';
 import { Cond$B } from '../rx/box/types';
 import { swapNode } from './utils/swapNode';
 
 export function $ite<A, B>(
     $cond: Cond$B,
-    cThen: Component<A>,
-    cElse: Component<B>
-): Component<A & B> { 
+    cThen: Component<AnyTag, A>,
+    cElse: Component<AnyTag, B>
+): Component<'#swap', A & B> { 
     return (dom, ctxt) => {
         const ar = cThen(dom, ctxt)
         const br = cElse(dom, ctxt)
 
-        const r = swapNode(dom, $cond,
+        const r = swapNode(
+            dom, $cond,
             (state) => state ? ar : br,
             noop
         )
-        return modify(r, (m) => {
+        return modifyLfc(r, (m) => {
             m.unsub = combine([
                 m.unsub,
-                ar.unsub,
-                br.unsub,
+                ar.lfc.unsub,
+                br.lfc.unsub,
             ])
-        })
+        }) as any
     }
 }

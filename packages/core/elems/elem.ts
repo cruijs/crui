@@ -10,6 +10,4 @@ export function e<T extends Tag>(tag: T): Component<T> {
     )
 }
 
-export function empty(): Component<'script'> {
-    return e('script')
-}
+export const empty = e('script')

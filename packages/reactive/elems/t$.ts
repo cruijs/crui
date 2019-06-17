@@ -5,15 +5,18 @@ import { DR$B } from '../rx/box/types';
 /**
  * Dynamic text element that will change as the Stream change
  */
-export function t$(s: DR$B<string>): Component {
+export function t$(s: DR$B<string>): Component<'#text'> {
     return (dom) => {
         const node = dom.createText(s.get())
 
-        return modLifecycle(node, (r) => {
-            s.subscribe((val) => {
-                node.textContent = val
+        return {
+            node,
+            lfc: modLifecycle((r) => {
+                s.subscribe((val) => {
+                    node.textContent = val
+                })
+                r.unsub = s.destroy
             })
-            r.unsub = s.destroy
-        })
+        }
     }
 }

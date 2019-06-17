@@ -1,66 +1,44 @@
-import { Component, DOM } from '@crui/core/dom';
+import { Setup } from '@crui/core/dom';
 import { compatibleInputEvent } from '@crui/core/dom/events';
 import { KProps, Props } from '@crui/core/dom/props';
-import { modLifecycle, Rendered, defRendered } from '@crui/core/dom/rendered';
-import { Unsubscribe } from '../../core/types';
+import { modLifecycle } from '@crui/core/dom/rendered';
+import { Unsubscribe } from '@crui/core/types';
 import { combine } from '@crui/core/utils/combine';
 import { DRW$B } from '../rx/box/types';
 import { makeAtomic } from '../utils/atomic';
 
-export type BVTag = 'input'|'select'|'textarea'
+export type BVTag = 'input' | 'select' | 'textarea'
 export type BCTag = 'input'
+type Tag = BVTag | BCTag
 
 export type $Value = DRW$B<string>
 export type $Checked = DRW$B<boolean>
 
-/**
- * Create an element and set a two-way binding on `value` property
- */
-export function h$bv(tag: BVTag, stream: $Value): Component {
-    return (dom) => {
-        const node = dom.create(tag)
-        return with$BindVal(stream)(dom, node)
-    }
+export const bindVal = <T extends BVTag>(stream: $Value): Setup<T> => bind('value', stream)
+export const bindCheck = (stream: $Checked): Setup<BCTag> => (dom, node, ctxt) => {
+    dom.setProp(node, 'type', 'checkbox')
+    return bind('checked', stream)(dom, node, ctxt)
 }
 
-/**
- * Create a checkbox element and set a two-way binding on `checked` property
- */
-export function h$bc(stream: $Checked): Component {
-    return (dom) => {
-        const node = dom.create('input')
-        dom.setProp(node, 'type', 'checkbox')
-        return with$BindCheck(stream)(dom, node)
-    }
-}
+const bind = <T extends Tag, P extends KProps>(
+   prop: P, stream: DRW$B<Props[P]>
+): Setup<T> => (dom, node) => {
+    dom.setProp(node, prop, stream.get())
 
-export const with$BindVal = (stream?: $Value) => bind('value', stream)
-export const with$BindCheck = (stream?: $Checked) => bind('checked', stream)
-
-type Enhance = <N>(dom: DOM<N>, node: N) => Rendered<N>
-const bind = <P extends KProps>(
-   prop: P, stream?: DRW$B<Props[P]>
-): Enhance => (dom, node) => {
-    if (stream == null) {
-        return defRendered(node)
-    }
-
+    const atomic = makeAtomic()
     const unsubs: Unsubscribe[] = []
     const event = compatibleInputEvent(node)
-        dom.setProp(node, prop, stream.get())
+    unsubs.push(
+        stream.destroy,
+        dom.listen(node, event, atomic(() => {
+            stream.set(dom.getProp(node, prop))
+        })),
+    )
+    stream.subscribe(atomic((val: Props[P]) => {
+        dom.setProp(node, prop, val)
+    }))
 
-        const atomic = makeAtomic()
-        unsubs.push(
-            stream.destroy,
-            dom.listen(node, event, atomic(() => {
-                stream.set(dom.getProp(node, prop))
-            })),
-        )
-        stream.subscribe(atomic((val: Props[P]) => {
-            dom.setProp(node, prop, val)
-        }))
-
-    return modLifecycle(node, (r) => {
+    return modLifecycle((r) => {
         r.unsub = combine(unsubs)
     })
 }

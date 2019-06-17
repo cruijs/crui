@@ -1,19 +1,22 @@
-import { Component } from '@crui/core/dom';
+import { AnyTag, Component, Tag } from '@crui/core/dom';
+import { Setup } from '../../core/dom/index';
 import { R$L } from '../rx';
 import { $map } from '../rx/list/map';
 import { with$Children } from './$children';
 
-export function h$map<T, C, D>(
-    container: Component<C>,
-    $list: R$L<T>,
-    item: (i: T) => Component<D>
-): Component<C & D> {
-    return (dom, ctxt) => with$Children(
+/**
+ * Map a stream of items I into children and setup them in an element
+ */
+export function c$map<T extends Tag, I, C, D>(
+    $list: R$L<I>,
+    item: (i: I) => Component<AnyTag, D>
+): Setup<T, C & D> {
+    return (dom, node, ctxt) => with$Children(
         dom,
-        container(dom, ctxt),
+        node,
         $map(
             $list,
-            (todo: T) => item(todo)(dom, ctxt)
+            (todo: I) => item(todo)(dom, ctxt)
         )
     )
 }

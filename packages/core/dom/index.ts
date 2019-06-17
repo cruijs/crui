@@ -1,9 +1,9 @@
-import { Rendered, Lifecycle } from './rendered';
-import { AsyncFn, Unsubscribe, Tag, Node } from '../types';
+import { AsyncFn, Node, Tag, Unsubscribe, AnyTag } from '../types';
 import { KProps, PProps, Props } from './props';
+import { Lifecycle, Rendered } from './rendered';
 import { Style } from './style';
 
-export { Tag } from '../types'
+export * from '../types';
 
 export type Component<T extends Tag, C = {}> = <N extends Node<T>>(dom: DOM<N>, context: C) => Rendered<N>
 
@@ -11,7 +11,7 @@ export type Setup<T extends Tag = Tag, C = {}> = <N extends Node<T>>(
     dom: DOM<N>, node: N, ctxt: C
 ) => Lifecycle
 
-export interface DOM<N> {
+export interface DOM<N extends Node<AnyTag>> {
     create(tag: Tag): N
     createText(s: string): N & { textContent: string|null }
     createFragment(): N

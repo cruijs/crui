@@ -1,4 +1,4 @@
-import { AsyncFn, Node, Unsubscribe, Tag } from '../types'
+import { AsyncFn, AnyNode, Node, Unsubscribe, Tag } from '../types'
 import { combine, combineAsync, asyncBind } from '../utils/combine'
 import { asyncNoop, noop } from '../utils/noop';
 import { Modify, modify } from '../utils/modify'
@@ -32,6 +32,12 @@ export function defLifecycle(): Lifecycle {
 
 export function modLifecycle(f: Modify<Lifecycle>): Lifecycle {
     return modify(defLifecycle(), f)
+}
+
+export function modifyLfc<N extends AnyNode>(r: Rendered<N>, f: Modify<Lifecycle>): Rendered<N> {
+    return modify(r, (m) => {
+        m.lfc = modify(m.lfc, f)
+    })
 }
 
 type Collected = {

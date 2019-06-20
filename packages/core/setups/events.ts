@@ -1,5 +1,5 @@
 import { Setup } from '../dom';
-import { modLifecycle } from '../dom/rendered';
+import { modLifecycle, result, Meta } from '../dom/rendered'
 
 export type EventHandler = EventListener
 export type MouseHandler = (ev: MouseEvent) => void
@@ -13,18 +13,18 @@ export type EventType = InputType | FormType | LoadType | MouseType
 export type InputTag = 'textarea' | 'input' | 'select'
 export type LoadTag = 'img' | 'script'
 
+
 /**
  * Setup an event handler
  */
-export function on<T extends InputTag>(ev: InputType, handler: EventListener): Setup<T>
-export function on<T extends LoadTag>(ev: LoadType, handler: EventListener): Setup<T>
-export function on(ev: FormType, handler: EventListener): Setup<'form'>
-export function on(ev: MouseType, handler: MouseHandler): Setup
-export function on<E extends EventType>(ev: E, handler: (ev: any) => void): Setup {
-    return (dom, node) =>
-        modLifecycle((m) => {
-            m.unsub = dom.listen(node, ev, handler)
-        })
+export function on(ev: InputType, handler: EventListener): Setup<{}, Meta<InputTag>>
+export function on(ev: LoadType, handler: EventListener): Setup<{}, Meta<LoadTag>>
+export function on(ev: FormType, handler: EventListener): Setup<{}, Meta<'form'>>
+export function on(ev: MouseType, handler: MouseHandler): Setup<{}, Meta<string>>
+export function on<E extends EventType>(ev: E, handler: (ev: any) => void): Setup<{}, Meta<any>> {
+    return (meta, dom, node) => result(meta, modLifecycle((m) => {
+        m.unsub = dom.listen(node, ev, handler)
+    }))
 }
 
 export function onClick(handler: MouseHandler) {

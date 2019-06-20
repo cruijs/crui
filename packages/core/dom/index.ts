@@ -1,18 +1,20 @@
-import { AsyncFn, Node, Tag, Unsubscribe, AnyTag } from '../types';
-import { KProps, PProps, Props } from './props';
-import { Lifecycle, Rendered } from './rendered';
+import { AsyncFn, Unsubscribe } from '../types';
+import { Rendered, SetupR } from './rendered';
 import { Style } from './style';
 
 export * from '../types';
 
-export type Component<T extends AnyTag, C = {}> = <N extends Node<T>>(dom: DOM<N>, context: C) => Rendered<N>
+export type Component<C = {}, M = {}> = <N>(dom: DOM<N>, context: C) => Rendered<N, M>
 
-export type Setup<T extends AnyTag = Tag, C = {}> = <N extends Node<T>>(
-    dom: DOM<N>, node: N, ctxt: C
-) => Lifecycle
+export type Setup<C = {}, M0 = {}, M1 = M0> = <N>(
+    meta: M0, dom: DOM<N>, node: N, ctxt: C
+) => SetupR<M1>
 
-export interface DOM<N extends Node<AnyTag>> {
-    create(tag: AnyTag): N
+type Props = { [key: string]: PropVal } 
+type PropVal = string|number|boolean|null
+
+export interface DOM<N> {
+    create(tag: string): N
     createText(s: string): N & { textContent: string|null }
     createFragment(): N
 
@@ -32,19 +34,19 @@ export interface DOM<N extends Node<AnyTag>> {
     addCss(node: N, klass: string): N
     removeCss(node: N, klass: string): N
 
-    setProps<K extends KProps>(node: N, props: PProps<K>): N
-    setProp<K extends KProps>(node: N, prop: K, value: Props[K]): N
-    getProp<K extends KProps>(node: N, prop: K): Props[K]
+    setProps(node: N, props: Props): N
+    setProp(node: N, prop: string, value: PropVal): N
+    getProp(node: N, prop: string): PropVal
 
     runOnNextFrame(f: AsyncFn): PromiseLike<void>
 }
 
-export function render<T extends AnyTag, N extends Node<T>, Ctxt extends C, C>(
+export function render<N, Ctxt extends C, C, M>(
     dom: DOM<N>,
     root: N,
-    comp: Component<T, C>,
+    comp: Component<C, M>,
     context: Ctxt
-): Rendered<N> {
+): Rendered<N, M> {
     const r = comp(dom, context)
     dom.insert(root, r.node)
     return r

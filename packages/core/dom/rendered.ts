@@ -1,11 +1,19 @@
-import { AsyncFn, AnyNode, Node, Unsubscribe, Tag, AnyTag } from '../types'
-import { combine, combineAsync, asyncBind } from '../utils/combine'
+import { AsyncFn, Unsubscribe } from '../types';
+import { asyncBind, combine, combineAsync } from '../utils/combine';
+import { Modify, modify } from '../utils/modify';
 import { asyncNoop, noop } from '../utils/noop';
-import { Modify, modify } from '../utils/modify'
 
-export type Rendered<N extends Node<AnyTag> = Node<Tag>> = {
+export type Rendered<N, M> = {
     readonly node: N
+    readonly meta: M
     readonly lfc: Lifecycle 
+}
+
+export type Meta<T> = { tag: T }
+
+export type SetupR<M> = {
+    lfc: Lifecycle,
+    meta: M
 }
 
 export type Lifecycle = {
@@ -14,12 +22,23 @@ export type Lifecycle = {
     readonly onUnmount: AsyncFn
 }
 
-export function rendered<T extends AnyTag, N extends Node<T>>(node: N, lfc: Lifecycle): Rendered<N> {
-    return { node, lfc }
+export function rendered<N, M>(node: N, lfc: Lifecycle, meta: M): Rendered<N, M> {
+    return { node, lfc, meta }
 }
 
-export function defRendered<T extends AnyTag, N extends Node<T>>(node: N): Rendered<N> {
-    return { node, lfc: defLifecycle() }
+export function defRendered<N, M>(node: N, meta: M): Rendered<N, M> {
+    return { node, lfc: defLifecycle(), meta }
+}
+
+export function defResult<M>(meta: M): SetupR<M> {
+    return {
+        meta,
+        lfc: defLifecycle()
+    }
+}
+
+export function result<M>(meta: M, lfc: Lifecycle): SetupR<M> {
+    return { meta, lfc }
 }
 
 export function defLifecycle(): Lifecycle {
@@ -34,7 +53,7 @@ export function modLifecycle(f: Modify<Lifecycle>): Lifecycle {
     return modify(defLifecycle(), f)
 }
 
-export function modifyLfc<N extends AnyNode>(r: Rendered<N>, f: Modify<Lifecycle>): Rendered<N> {
+export function modifyLfc<N, M>(r: Rendered<N, M>, f: Modify<Lifecycle>): Rendered<N, M> {
     return modify(r, (m) => {
         m.lfc = modify(m.lfc, f)
     })

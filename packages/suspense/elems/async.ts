@@ -1,12 +1,12 @@
-import { Component } from '@crui/core/dom'
-import { empty } from '@crui/core/elems/empty';
+import { Component, AnyTag } from '@crui/core/dom';
+import { empty } from '@crui/core/elems/elem';
 import { WithSuspense } from '../context';
 import { proxy, replace } from '../utils';
 
-export function wAsync<T, C>(
-    p: PromiseLike<T>,
-    comp: (s: T) => Component<C>
-): Component<C & WithSuspense> {
+export function wAsync<T extends AnyTag, V, C>(
+    p: PromiseLike<V>,
+    comp: (s: V) => Component<T, C>
+): Component<T, C & WithSuspense> {
     return (dom, ctxt) => {
         const rn = empty(dom, ctxt)
         

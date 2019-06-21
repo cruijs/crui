@@ -2,7 +2,7 @@ import { Component, Setup } from '@crui/core/dom';
 import { result } from '@crui/core/dom/rendered';
 import { R$L } from '../rx';
 import { $map as l$map } from '../rx/list/map';
-import { with$Children } from './internals/$children';
+import { with$Children } from './internals/children';
 
 /**
  * Map a stream of items I into children and setup them in an element

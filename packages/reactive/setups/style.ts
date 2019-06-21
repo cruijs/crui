@@ -1,5 +1,5 @@
 import { Setup, Tag } from '@crui/core/dom';
-import { modLifecycle } from '@crui/core/dom/rendered';
+import { modLifecycle, result } from '@crui/core/dom/rendered';
 import { Style } from '@crui/core/dom/style';
 import { combine } from '@crui/core/utils/combine';
 import { keys } from '@crui/core/utils/object';
@@ -9,8 +9,9 @@ import { Reactive } from '../utils/reactive';
 export type $Style = Reactive<Style>
 export type K$S = keyof $Style
 export type P$S<K extends K$S> = Pick<$Style, K>
-export function $style<T extends Tag, K extends K$S>(style: P$S<K>): Setup<T> {
-    return (dom, node) =>
+export function $style<K extends K$S, M>(style: P$S<K>): Setup<{}, M> {
+    return (meta, dom, node) => result(
+        meta,
         modLifecycle((m) => {
             const unsubs = keys(style).map((k) => {
                 apply(style[k], (val) => {
@@ -21,4 +22,5 @@ export function $style<T extends Tag, K extends K$S>(style: P$S<K>): Setup<T> {
 
             m.unsub = combine(unsubs)
         })
+    )
 }

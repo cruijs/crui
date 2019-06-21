@@ -1,4 +1,4 @@
-export * from './elems/$bind';
+export * from './setups/$bind';
 export * from './elems/$map';
 export * from './elems/$props';
 export * from './elems/ifThenElse';

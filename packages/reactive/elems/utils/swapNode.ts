@@ -1,29 +1,19 @@
-import { DOM, Node } from '@crui/core/dom';
+import { DOM } from '@crui/core/dom';
 import { Rendered } from '@crui/core/dom/rendered';
 import { noop } from '@crui/core/utils/noop';
+import { Lifecycle } from '../../../core/dom/rendered';
 import { DR$B } from '../../rx/box/types';
 import { makeGuard } from '../../utils/guard';
 
-export function swapNode<I, M extends Node<string>, N extends Node<'#swap'>>(
-    dom: DOM<M>,
-    stream: DR$B<I>,
-    f: (item: I) => Rendered<M>,
-    cleanup: (prev: Rendered<M>) => void,
-): Rendered<N> {
+export function swapNode<T, N, M>(
+    stream: DR$B<T>,
+    f: (item: T) => Rendered<N, any>,
+    cleanup: (prev: Rendered<N, any>) => void,
+    dom: DOM<N>,
+    parent: N,
+): Lifecycle {
     let cur = f(stream.get())
     let cancel = noop
-
-    const z: Rendered<N> = {
-        get node() { return cur.node as any },
-        lfc: {
-            unsub: () => {
-                stream.destroy()
-                cur.lfc.unsub()
-            },
-            onMounted: () => cur.lfc.onMounted(),
-            onUnmount: () => cur.lfc.onUnmount(),
-        }
-    }
 
     stream.subscribe((item) => {
         cancel()
@@ -40,5 +30,14 @@ export function swapNode<I, M extends Node<string>, N extends Node<'#swap'>>(
         }))
     })
 
-    return z
+    dom.insert(parent, cur.node)
+
+    return {
+        unsub: () => {
+            stream.destroy()
+            cur.lfc.unsub()
+        },
+        onMounted: () => cur.lfc.onMounted(),
+        onUnmount: () => cur.lfc.onUnmount(),
+    }
 }

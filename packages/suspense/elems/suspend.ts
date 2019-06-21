@@ -1,7 +1,7 @@
 import { Component } from '@crui/core/dom';
 import { WithSuspense } from '../context';
 import { Suspender } from '../suspender';
-import { proxy, replace } from '../utils';
+import { proxyNode, replace } from '../utils';
 
 export function suspend<C, E = void>(
     loader: Component<C>,
@@ -31,6 +31,6 @@ export const withSuspender = <C, E>(
         () => replace(dom, rz, rc),
         (err) => replace(dom, rz, error(err)(dom, ctxt))
     )
-    return proxy(rz)
+    return proxyNode(rz)
 
 }

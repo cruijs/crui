@@ -1,3 +1,3 @@
 export { WithSuspense } from './context';
-export { suspend } from './elems/suspend';
-export { Suspender } from './suspender';
+export * from './elems';
+export * from './setups/async';

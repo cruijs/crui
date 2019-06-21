@@ -1,9 +1,9 @@
-import { DOM, Tag, Node } from '@crui/core/dom';
+import { DOM } from '@crui/core/dom';
 import { KS, PS } from '@crui/core/dom/style';
 import { combine } from '@crui/core/utils/combine';
 import { noop } from '@crui/core/utils/noop';
 import { keys } from '@crui/core/utils/object';
-import { tx } from './index';
+import { tx } from './tx';
 
 type Milliseconds<T> = {[K in keyof T]: number}
 
@@ -13,7 +13,7 @@ type Milliseconds<T> = {[K in keyof T]: number}
 export const cssTx = <K extends KS>(
     transitions: Milliseconds<PS<K>>,
     fromStyle: PS<K>, 
-    toStyle: PS<K>,
+    toStyle: PS<K>
 ) => tx((node, dom) => {
     const props = keys(transitions)
 
@@ -39,7 +39,7 @@ export const cssTx = <K extends KS>(
     }
 })
 
-export const onTrans = <N extends Node<Tag>, K extends KS>(
+export const onTrans = <N, K extends KS>(
     dom: DOM<N>,
     node: N,
     style: PS<K>,

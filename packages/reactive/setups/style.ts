@@ -1,4 +1,4 @@
-import { Setup, Tag } from '@crui/core/dom';
+import { Setup } from '@crui/core/dom';
 import { modLifecycle, result } from '@crui/core/dom/rendered';
 import { Style } from '@crui/core/dom/style';
 import { combine } from '@crui/core/utils/combine';

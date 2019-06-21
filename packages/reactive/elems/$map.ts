@@ -2,7 +2,7 @@ import { AnyTag, Component, Tag } from '@crui/core/dom';
 import { Setup } from '@crui/core/dom';
 import { R$L } from '../rx';
 import { $map } from '../rx/list/map';
-import { with$Children } from './$children';
+import { with$Children } from '../setups/internals/$children';
 
 /**
  * Map a stream of items I into children and setup them in an element

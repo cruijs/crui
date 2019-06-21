@@ -3,7 +3,7 @@ import { asyncBind, combine, combineAsync } from '../utils/combine';
 import { Modify, modify } from '../utils/modify';
 import { asyncNoop, noop } from '../utils/noop';
 
-export type Rendered<N, M> = {
+export type Rendered<N, M = {}> = {
     readonly node: N
     readonly meta: M
     readonly lfc: Lifecycle 

@@ -1,7 +1,7 @@
 import { Component, Setup } from '@crui/core/dom';
 import { result } from '@crui/core/dom/rendered';
 import { DR$B } from '../rx/box/types';
-import { swapNode } from '../elems/utils/swapNode';
+import { swapNode } from './internals/swapNode';
 
 export function $child<T, C, M>(
     stream: DR$B<T>,

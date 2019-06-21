@@ -1,7 +1,7 @@
 import { AnyTag, Component, Tag } from '@crui/core/dom';
 import { modifyLfc } from '@crui/core/dom/rendered';
 import { combine } from '@crui/core/utils/combine';
-import { with$Children } from '../$children';
+import { with$Children } from '../../setups/internals/$children';
 import { R$L } from '../../rx/list';
 import { cleanup } from '../../rx/list/cleanup';
 import { $filter$$, $Predicate$ } from '../../rx/list/filter/$filter$$';

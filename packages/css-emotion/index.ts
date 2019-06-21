@@ -1,4 +1,4 @@
 export { CSSObject } from '@emotion/serialize';
-export { css, cx, keyframes, injectGlobal, Interpolation as Style } from 'emotion';
-export { style } from './elems/css';
-export { hcs } from './elems/hcs';
+export { cx, injectGlobal, Interpolation as Style, keyframes } from 'emotion';
+export * from './elems/hcs';
+export * from './setups/css';

@@ -1,5 +1,5 @@
 import { assign } from '../../utils/object';
-import { Component, DOM, Listen, render, AnyTag } from '../index';
+import { Component, DOM, Listen, render } from '../index';
 
 const listen: Listen<Node> = (elem, event, handler) => {
     elem.addEventListener(event, handler)
@@ -15,7 +15,7 @@ const withFragment = (ns: Node[]) => {
     return fragment
 }
 
-export function mount<Ctxt extends C, C>(root: Node, comp: Component<AnyTag, C>, context: Ctxt) {
+export function mount<Ctxt extends C, C>(root: Node, comp: Component<C>, context: Ctxt) {
     const r = render(dom, root, comp, context)
     window.requestAnimationFrame(r.lfc.onMounted)
     return r

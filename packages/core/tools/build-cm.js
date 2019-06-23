@@ -1,7 +1,7 @@
 function setup(n) {
     const r = Array(n+1)
     for (let i = 0; i <= n; ++i) {
-        r[i] = 'Setup<C, M' + i + ', M' + (i+1) + '>'
+        r[i] = 'Setup<C' + i + ', M>'
     }
     return r.join(', ')
 }
@@ -14,6 +14,10 @@ function t(l, n) {
     return r.join(', ')
 }
 
+function tc(n) {
+    return t('C', n)
+}
+
 function c(n) {
     const r = Array(n+1)
     for (let i = 0; i <= n; ++i)
@@ -22,7 +26,7 @@ function c(n) {
 }
 
 function sig(n) {
-    return 'export function cm<C' + ', ' + t('M', n) + '>(comp: Component<C, M0>, setups: [' + setup(n) + ']): Component<C' + ', M' + (n + 1) + '>'
+    return 'export function cm<T extends Tag, C, '+ tc(n) + ', M extends Meta<T>>(comp: Component<C, M>, setups: [' + setup(n) + ']): Component<C & ' + c(n) + ', M>'
 }
 
 for (let i = 0; i < 10; ++i) {

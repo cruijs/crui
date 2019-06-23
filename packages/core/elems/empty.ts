@@ -1,3 +1,4 @@
-import { e } from './elem'
+import { Component } from '../dom';
+import { e } from './elem';
 
-export const empty = e('script')
+export const empty = e('script') as Component<{}, {}>

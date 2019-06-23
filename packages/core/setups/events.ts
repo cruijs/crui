@@ -1,5 +1,5 @@
-import { Setup } from '../dom';
-import { modLifecycle, result, Meta } from '../dom/rendered'
+import { Setup, Tag } from '../dom';
+import { Meta, modLifecycle, result } from '../dom/rendered';
 
 export type EventHandler = EventListener
 export type MouseHandler = (ev: MouseEvent) => void
@@ -20,7 +20,7 @@ export type LoadTag = 'img' | 'script'
 export function on(ev: InputType, handler: EventListener): Setup<{}, Meta<InputTag>>
 export function on(ev: LoadType, handler: EventListener): Setup<{}, Meta<LoadTag>>
 export function on(ev: FormType, handler: EventListener): Setup<{}, Meta<'form'>>
-export function on(ev: MouseType, handler: MouseHandler): Setup<{}, Meta<string>>
+export function on(ev: MouseType, handler: MouseHandler): Setup<{}, Meta<Tag>>
 export function on<E extends EventType>(ev: E, handler: (ev: any) => void): Setup<{}, Meta<any>> {
     return (meta, dom, node) => result(meta, modLifecycle((m) => {
         m.unsub = dom.listen(node, ev, handler)

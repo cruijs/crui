@@ -1,10 +1,10 @@
-import { Component, Setup } from '../dom';
-import { mergeLifecycles, rendered } from '../dom/rendered';
+import { Component, Setup, Tag } from '../dom';
+import { mergeLifecycles, rendered, Meta } from '../dom/rendered';
 import { configure } from './internals/configure';
 
-type SCombinator = <C, M0, M1>(
-    comp: Component<C, M0>, setup: Setup<C, M0, M1>
-) => Component<C, M1>
+type SCombinator = <T extends Tag, C, D, M extends Meta<T>>(
+    comp: Component<C, M>, setup: Setup<D, M>
+) => Component<C & D, M>
 
 /**
  * Combine Single
@@ -21,16 +21,18 @@ export const cs: SCombinator = (comp, setup) =>
  * Combine Multi
  * Apply multiple Setups to a Component
  */
-export function cm<C, M0, M1, M2>(comp: Component<C, M0>, setups: [Setup<C, M0, M1>, Setup<C, M1, M2>]): Component<C, M2>
-export function cm<C, M0, M1, M2, M3>(comp: Component<C, M0>, setups: [Setup<C, M0, M1>, Setup<C, M1, M2>, Setup<C, M2, M3>]): Component<C, M3>
-export function cm<C, M0, M1, M2, M3, M4>(comp: Component<C, M0>, setups: [Setup<C, M0, M1>, Setup<C, M1, M2>, Setup<C, M2, M3>, Setup<C, M3, M4>]): Component<C, M4>
-export function cm<C, M0, M1, M2, M3, M4, M5>(comp: Component<C, M0>, setups: [Setup<C, M0, M1>, Setup<C, M1, M2>, Setup<C, M2, M3>, Setup<C, M3, M4>, Setup<C, M4, M5>]): Component<C, M5>
-export function cm<C, M0, M1, M2, M3, M4, M5, M6>(comp: Component<C, M0>, setups: [Setup<C, M0, M1>, Setup<C, M1, M2>, Setup<C, M2, M3>, Setup<C, M3, M4>, Setup<C, M4, M5>, Setup<C, M5, M6>]): Component<C, M6>
-export function cm<C, M0, M1, M2, M3, M4, M5, M6, M7>(comp: Component<C, M0>, setups: [Setup<C, M0, M1>, Setup<C, M1, M2>, Setup<C, M2, M3>, Setup<C, M3, M4>, Setup<C, M4, M5>, Setup<C, M5, M6>, Setup<C, M6, M7>]): Component<C, M7>
-export function cm<C, M0, M1, M2, M3, M4, M5, M6, M7, M8>(comp: Component<C, M0>, setups: [Setup<C, M0, M1>, Setup<C, M1, M2>, Setup<C, M2, M3>, Setup<C, M3, M4>, Setup<C, M4, M5>, Setup<C, M5, M6>, Setup<C, M6, M7>, Setup<C, M7, M8>]): Component<C, M8>
-export function cm<C, M0, M1, M2, M3, M4, M5, M6, M7, M8, M9>(comp: Component<C, M0>, setups: [Setup<C, M0, M1>, Setup<C, M1, M2>, Setup<C, M2, M3>, Setup<C, M3, M4>, Setup<C, M4, M5>, Setup<C, M5, M6>, Setup<C, M6, M7>, Setup<C, M7, M8>, Setup<C, M8, M9>]): Component<C, M9>
-export function cm<C, M0, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10>(comp: Component<C, M0>, setups: [Setup<C, M0, M1>, Setup<C, M1, M2>, Setup<C, M2, M3>, Setup<C, M3, M4>, Setup<C, M4, M5>, Setup<C, M5, M6>, Setup<C, M6, M7>, Setup<C, M7, M8>, Setup<C, M8, M9>, Setup<C, M9, M10>]): Component<C, M10>
-export function cm<C, M0, M1>(comp: Component<C, M0>, setups: Setup<C, M0, M1>[]): Component<C, M1> {
+export function cm<T extends Tag, C, C0, C1, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>]): Component<C & C0, M>
+export function cm<T extends Tag, C, C0, C1, C2, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>, Setup<C1, M>]): Component<C & C0 & C1, M>
+export function cm<T extends Tag, C, C0, C1, C2, C3, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>, Setup<C1, M>, Setup<C2, M>]): Component<C & C0 & C1 & C2, M>
+export function cm<T extends Tag, C, C0, C1, C2, C3, C4, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>, Setup<C1, M>, Setup<C2, M>, Setup<C3, M>]): Component<C & C0 & C1 & C2 & C3, M>
+export function cm<T extends Tag, C, C0, C1, C2, C3, C4, C5, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>, Setup<C1, M>, Setup<C2, M>, Setup<C3, M>, Setup<C4, M>]): Component<C & C0 & C1 & C2& C3 & C4, M>
+export function cm<T extends Tag, C, C0, C1, C2, C3, C4, C5, C6, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>, Setup<C1, M>, Setup<C2, M>, Setup<C3, M>, Setup<C4, M>, Setup<C5, M>]): Component<C & C0 & C1 & C2 & C3 & C4 & C5, M>
+export function cm<T extends Tag, C, C0, C1, C2, C3, C4, C5, C6, C7, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>, Setup<C1, M>, Setup<C2, M>, Setup<C3, M>, Setup<C4, M>, Setup<C5, M>, Setup<C6, M>]): Component<C & C0 & C1 & C2 & C3 & C4 & C5 & C6, M>
+export function cm<T extends Tag, C, C0, C1, C2, C3, C4, C5, C6, C7, C8, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>, Setup<C1, M>, Setup<C2, M>, Setup<C3, M>, Setup<C4, M>, Setup<C5, M>, Setup<C6, M>, Setup<C7, M>]): Component<C & C0 & C1 & C2 & C3 & C4 & C5 & C6 & C7, M>
+export function cm<T extends Tag, C, C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>, Setup<C1, M>, Setup<C2, M>, Setup<C3, M>, Setup<C4, M>, Setup<C5, M>, Setup<C6, M>, Setup<C7, M>, Setup<C8, M>]): Component<C & C0 & C1 & C2 & C3 & C4 & C5 & C6 & C7 & C8, M>
+export function cm<T extends Tag, C, C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, M extends Meta<T>>(comp: Component<C, M>, setups: [Setup<C0, M>, Setup<C1, M>, Setup<C2, M>, Setup<C3, M>, Setup<C4, M>, Setup<C5, M>, Setup<C6, M>, Setup<C7, M>, Setup<C8, M>, Setup<C9, M>]): Component<C & C0 & C1 & C2 & C3 & C4 & C5 & C6 & C7 & C8 & C9, M>
+export function cm<T extends Tag, C, D, M extends Meta<T>>(comp: Component<C, M>, setups: Setup<D, M>[]): Component<C & D, M>
+export function cm<T extends Tag, C, D, M extends Meta<T>>(comp: Component<C, M>, setups: Setup<D, M>[]): Component<C & D, M> {
     return (dom, ctxt) => {
         const c = comp(dom, ctxt)
         return configure(dom, ctxt, setups, c.node, c.meta)

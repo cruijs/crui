@@ -1,7 +1,7 @@
 import { DOM, Setup } from '../../dom';
 import { Lifecycle, mergeLifecycles, rendered, Rendered } from '../../dom/rendered';
 
-export function configure<N, C, M0, M1>(dom: DOM<N>, ctxt: C, setups: Setup<C, M0, M1>[], node: N, meta: M0): Rendered<N, M1> {
+export function configure<N, C, M>(dom: DOM<N>, ctxt: C, setups: Setup<C, M>[], node: N, meta: M): Rendered<N, M> {
     const lfcs = Array(setups.length) as Lifecycle[]
     const result = setups.reduce(
         (z, setup) => {
@@ -10,7 +10,7 @@ export function configure<N, C, M0, M1>(dom: DOM<N>, ctxt: C, setups: Setup<C, M
             z.meta = r.meta
             return z
         },
-        { lfcs, meta: (meta as any) }
+        { lfcs, meta }
     )
-    return rendered(node, mergeLifecycles(result.lfcs), result.meta as M1)
+    return rendered(node, mergeLifecycles(result.lfcs), result.meta)
 }

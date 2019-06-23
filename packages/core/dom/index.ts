@@ -6,9 +6,9 @@ export * from '../types';
 
 export type Component<C = {}, M = {}> = <N>(dom: DOM<N>, context: C) => Rendered<N, M>
 
-export type Setup<C = {}, M0 = {}, M1 = M0> = <N>(
-    meta: M0, dom: DOM<N>, node: N, ctxt: C
-) => SetupR<M1>
+export type Setup<C = {}, M = {}> = <N>(
+    meta: M, dom: DOM<N>, node: N, ctxt: C
+) => SetupR<M>
 
 type Props = { [key: string]: PropVal } 
 type PropVal = string|number|boolean|null

@@ -6,7 +6,7 @@ export type CSS<MP> = Interpolation<MP>
 /**
  * Setup CSS on an element
  */
-export function css<M, S>(s: CSS<S>): Setup<{}, M> {
+export function css<C, M, S>(s: CSS<S>): Setup<C, M> {
     return (meta, dom, node) => {
         const cs = dom.getCss(node)
         cs.push(renderCss(s as CSS<undefined>))

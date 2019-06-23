@@ -9,7 +9,7 @@ import { Reactive } from '../utils/reactive';
 export type $Style = Reactive<Style>
 export type K$S = keyof $Style
 export type P$S<K extends K$S> = Pick<$Style, K>
-export function $style<K extends K$S, M>(style: P$S<K>): Setup<{}, M> {
+export function $style<K extends K$S, C, M>(style: P$S<K>): Setup<C, M> {
     return (meta, dom, node) => result(
         meta,
         modLifecycle((m) => {

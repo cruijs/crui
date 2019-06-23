@@ -14,7 +14,7 @@ function c(n, sep) {
 }
 
 function sig(n) {
-    return 'export function children<'+ c(n, ', ') +'>(cs: [' + children(n) + ']): Setup<'+ c(n, ' & ') +'>'
+    return 'export function fragment<'+ c(n, ', ') +'>(cs: [' + children(n) + ']): Component<'+ c(n, ' & ') +', {}>'
 }
 
 for (let i = 0; i < 10; ++i) {

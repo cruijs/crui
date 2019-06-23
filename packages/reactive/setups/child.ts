@@ -3,10 +3,10 @@ import { result } from '@crui/core/dom/rendered';
 import { DR$B } from '../rx/box/types';
 import { swapNode } from './internals/swapNode';
 
-export function $child<T, C, M>(
+export function $child<T, C>(
     stream: DR$B<T>,
-    render: (item: T) => Component<C, M>
-): Setup<C, M> {
+    render: (item: T) => Component<C>
+): Setup<C> {
     return (meta, dom, node, ctxt) => result(
         meta, 
         swapNode(

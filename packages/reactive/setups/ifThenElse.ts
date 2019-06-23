@@ -6,11 +6,11 @@ import { noop } from '@crui/core/utils/noop';
 import { Cond$B } from '../rx/box/types';
 import { swapNode } from './internals/swapNode';
 
-export function $ite<A, B, M>(
+export function $ite<A, B>(
     $cond: Cond$B,
     cThen: Component<A>,
     cElse: Component<B>
-): Setup<A & B, M> { 
+): Setup<A & B> { 
     return (meta, dom, parent, ctxt) => {
         const ar = cThen(dom, ctxt)
         const br = cElse(dom, ctxt)

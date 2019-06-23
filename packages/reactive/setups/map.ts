@@ -7,10 +7,10 @@ import { with$Children } from './internals/children';
 /**
  * Map a stream of items I into children and setup them in an element
  */
-export function s$map<T, C, M>(
+export function s$map<T, C>(
     $list: R$L<T>,
     item: (i: T) => Component<C>
-): Setup<C, M> {
+): Setup<C> {
     return (meta, dom, node, ctxt) => result(meta, with$Children(
         dom,
         node,

@@ -11,11 +11,11 @@ import { with$Children } from './internals/children';
 /**
  * Setup a dynamic list of children that are also filtered
  */
-export function s$filter$$<T, C, M>(
+export function s$filter$$<T, C>(
     $list: R$L<T>,
     child: (item: T) => Component<C>,
     $p$: $Predicate$<T>
-): Setup<C, M> {
+): Setup<C> {
     return (meta, dom, parent, ctxt) => {
         const $mapped = $map($list, (item) => ({
             item,

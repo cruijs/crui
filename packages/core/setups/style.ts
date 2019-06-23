@@ -5,7 +5,7 @@ import { Style } from '../dom/style';
 type KS = keyof Style
 type PS<K extends KS> = Pick<Style, K>
 
-export const style = <M, K extends KS>(style: PS<K>): Setup<{}, M> =>
+export const style = <K extends KS>(style: PS<K>): Setup =>
     (meta, dom, node) => {
         dom.applyStyle(node, style)
         return defResult(meta)

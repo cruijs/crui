@@ -6,7 +6,7 @@ export * from '../types';
 
 export type Component<C = {}, M = {}> = <N>(dom: DOM<N>, context: C) => Rendered<N, M>
 
-export type Setup<C = {}, M = {}> = <N>(
+export type Setup<C = {}, M = any> = <N>(
     meta: M, dom: DOM<N>, node: N, ctxt: C
 ) => SetupR<M>
 

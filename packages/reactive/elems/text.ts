@@ -1,11 +1,11 @@
 import { Component } from '@crui/core/dom';
-import { Meta, modLifecycle, rendered } from '@crui/core/dom/rendered';
+import { modLifecycle, rendered } from '@crui/core/dom/rendered';
 import { DR$B } from '../rx/box/types';
 
 /**
  * Dynamic text element that will change as the Stream change
  */
-export function text$(s: DR$B<string>): Component<{}, Meta<'#text'>> {
+export function text$(s: DR$B<string>): Component<{}, {}> {
     return (dom) => {
         const node = dom.createText(s.get())
 
@@ -16,6 +16,6 @@ export function text$(s: DR$B<string>): Component<{}, Meta<'#text'>> {
             r.unsub = s.destroy
         })
 
-        return rendered(node, lifecycle, { tag: '#text' })
+        return rendered(node, lifecycle, {})
     }
 }

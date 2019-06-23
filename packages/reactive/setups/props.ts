@@ -10,7 +10,7 @@ export type $Props<K extends KProps> = Reactive<PProps<K>>
 /**
  * Setup an element with dynamic properties
  */
-export function $props<K extends KProps, M>(props: $Props<K>): Setup<{}, M> {
+export function $props<K extends KProps>(props: $Props<K>): Setup {
     return (meta, dom, node) => result(
         meta, 
         modLifecycle((r) => {

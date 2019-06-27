@@ -4,8 +4,8 @@ import { swapNode } from './internals/swapNode';
 
 export function $child<T, C>(
     stream: DR$B<T>,
-    render: (item: T) => Component<C>
-): Component<C> {
+    render: (item: T) => Component<C, any>
+): Component<C, {}> {
     return (dom, ctxt) => {
         return swapNode(dom, stream,
             (item) => render(item)(dom, ctxt),

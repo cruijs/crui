@@ -30,3 +30,7 @@ export function children<C>(cs: Component<C, any>[]): Setup<C> {
         ))
     }
 }
+
+export function child<C>(c: Component<C, any>): Setup<C> {
+    return children([c])
+}

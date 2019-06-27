@@ -3,12 +3,12 @@ import { WithSuspense } from '../context'
 import { Suspender } from '../suspender';
 import { proxyNode, replace } from '../utils';
 
-type ReadyComponent<C> = C extends WithSuspense ? never : Component<C>
+type ReadyComponent<C> = C extends WithSuspense ? never : Component<C, any>
 export function suspend<A, B, C, E = void>(
     loader: ReadyComponent<A>,
-    comp: Component<B & WithSuspense>,
+    comp: Component<B & WithSuspense, any>,
     error: (err: E) => ReadyComponent<C>
-): Component<A & B & C> {
+): Component<A & B & C, {}> {
     return withSuspender(new Suspender(), loader, comp, error)
 }
 
@@ -17,7 +17,7 @@ export const withSuspender = <A, B, C, E>(
     loader: ReadyComponent<A>,
     comp: Component<B & WithSuspense>,
     error: (err: E) => ReadyComponent<C>
-): Component<A & B & C> => (dom, ctxt) => {
+): Component<A & B & C, {}> => (dom, ctxt) => {
     const rc = comp(dom, {
         ...ctxt,
         waitFor: suspender.waitFor

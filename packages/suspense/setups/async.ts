@@ -4,10 +4,10 @@ import { WithSuspense } from '../context';
 import { proxy, replace } from '../utils';
 import { result } from '@crui/core/dom/rendered';
 
-export function wAsync<T, C, M>(
+export function wAsync<T, C>(
     p: PromiseLike<T>,
     comp: (s: T) => Component<C, any>
-): Setup<C & WithSuspense, M> {
+): Setup<C & WithSuspense, {}> {
     return (meta, dom, node, ctxt) => {
         const r = empty(dom, ctxt)
         

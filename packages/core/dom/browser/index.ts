@@ -15,7 +15,7 @@ const withFragment = (ns: Node[]) => {
     return fragment
 }
 
-export function mount<Ctxt extends C, C>(root: Node, comp: Component<C>, context: Ctxt) {
+export function mount<Ctxt extends C, C>(root: Node, comp: Component<C, any>, context: Ctxt) {
     const r = render(dom, root, comp, context)
     window.requestAnimationFrame(r.lfc.onMounted)
     return r

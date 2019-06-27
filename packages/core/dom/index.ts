@@ -1,10 +1,10 @@
-import { AsyncFn, Unsubscribe } from '../types';
-import { Rendered, SetupR } from './rendered';
+import { AsyncFn, Unsubscribe, Tag } from '../types';
+import { Rendered, SetupR, Meta } from './rendered'
 import { Style } from './style';
 
 export * from '../types';
 
-export type Component<C = {}, M = {}> = <N>(dom: DOM<N>, context: C) => Rendered<N, M>
+export type Component<C = {}, M = Meta<Tag>> = <N>(dom: DOM<N>, context: C) => Rendered<N, M>
 
 export type Setup<C = {}, M = any> = <N>(
     meta: M, dom: DOM<N>, node: N, ctxt: C

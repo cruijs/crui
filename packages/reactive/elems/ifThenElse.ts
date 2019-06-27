@@ -7,9 +7,9 @@ import { swapNode } from './internals/swapNode';
 
 export function $ite<A, B>(
     $cond: Cond$B,
-    cThen: Component<A>,
-    cElse: Component<B>
-): Component<A & B> { 
+    cThen: Component<A, any>,
+    cElse: Component<B, any>
+): Component<A & B, {}> { 
     return (dom, ctxt) => {
         const ar = cThen(dom, ctxt)
         const br = cElse(dom, ctxt)

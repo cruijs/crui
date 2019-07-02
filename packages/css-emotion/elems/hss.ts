@@ -7,5 +7,5 @@ import { css } from '../setups/css';
  * An element with CSS
  */
 export function hss<T extends Tag, S>(tag: T, style: Interpolation<S>) {
-    return h(tag, [css(style)])
+    return h(tag, css(style))
 }

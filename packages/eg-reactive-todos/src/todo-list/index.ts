@@ -3,6 +3,7 @@ import { hc } from '@crui/core/elems/children';
 import { h } from '@crui/core/elems/h';
 import { ht } from '@crui/core/elems/ht';
 import { children } from '@crui/core/setups/children';
+import { sc2 } from '@crui/core/setups/combine/two';
 import { css } from '@crui/css-emotion/setups/css';
 import { DRW$B } from '@crui/reactive/rx/box/types';
 import { bindCheck } from '@crui/reactive/setups/bind';
@@ -11,7 +12,7 @@ import { cssTx } from '@crui/transitions/elems/cssTx';
 import { Todo, TodoStore } from '../store';
 
 export function TodoList(store: TodoStore) {
-    return h('ul', [
+    return h('ul', sc2(
         s$filter$$(
             store.getTodos(),
             TodoComponent,
@@ -23,7 +24,7 @@ export function TodoList(store: TodoStore) {
             margin: 0,
             paddingTop: '0.5rem',
         })
-    ])
+    ))
 }
 
 const TodoComponent = (todo: Todo): Component<{}> => (
@@ -37,7 +38,7 @@ const TodoComponent = (todo: Todo): Component<{}> => (
 
 const wrapper = <C>(cs: Component<C>[]) => 
     Remove(Slide(
-        h('label', [
+        h('label', sc2( 
             children(cs),
             css({
                 display: 'block',
@@ -46,7 +47,7 @@ const wrapper = <C>(cs: Component<C>[]) =>
                 marginBottom: '0.5rem',
                 cursor: 'pointer',
             }),
-        ])
+        ))
     ))
 
 const Remove = cssTx(
@@ -61,11 +62,11 @@ const Slide = cssTx(
 )
 
 const input = (check: DRW$B<boolean>) => (
-    h('input', [
+    h('input', sc2(
         bindCheck(check),
         css({
             verticalAlign: 'middle',
             marginRight: '0.5rem',
         }),
-    ])
+    ))
 )

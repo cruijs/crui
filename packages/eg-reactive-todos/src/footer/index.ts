@@ -3,6 +3,7 @@ import { h } from '@crui/core/elems/h';
 import { ht } from '@crui/core/elems/ht';
 import { text } from '@crui/core/elems/text';
 import { children, onClick } from '@crui/core/setups';
+import { sc } from '@crui/core/setups/combine/multi';
 import { $css } from '@crui/css-emotion-reactive/setups/css';
 import { hcs } from '@crui/css-emotion/elems/hcs';
 import { css } from '@crui/css-emotion/setups/css';
@@ -24,7 +25,7 @@ const Filter = (
     vis: Visibility,
     label: string
 ): Component => {
-    return h('button', [
+    return h('button', sc([
         children([
             text(label)
         ]),
@@ -42,5 +43,5 @@ const Filter = (
             cond: map($vis, (v) => v === vis),
             style: { color: 'red' }
         }])
-    ])
+    ]))
 }

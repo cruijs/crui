@@ -1,5 +1,6 @@
-import { Setup } from '../dom/index';
-import { mergeLifecycles, result } from '../dom/rendered';
+import { Setup } from '../../dom/index';
+import { mergeLifecycles, result } from '../../dom/rendered';
+
 /**
  * SetupCombine2
  * Combine 2 setups into one

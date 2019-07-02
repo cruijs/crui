@@ -9,7 +9,7 @@ import { text } from './text';
  * It's a combination of `hc` and `text`.
  */
 export function ht<T extends Tag>(tag: T, txt: string) {
-    return h(tag, [children([
+    return h(tag, children([
         text(txt)
-    ])])
+    ]))
 }

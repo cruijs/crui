@@ -5,7 +5,7 @@ import { proxyNode, replace } from '../utils';
 
 export function hAsync<T, C>(
     p: PromiseLike<T>,
-    comp: (s: T) => Component<C>
+    comp: (s: T) => Component<C, any>
 ): Component<C & WithSuspense, {}> {
     return (dom, ctxt) => {
         const rn = empty(dom, ctxt)

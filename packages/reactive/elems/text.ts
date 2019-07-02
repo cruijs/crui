@@ -11,7 +11,7 @@ export function text$(s: DR$B<string>): Component<{}, {}> {
 
         const lifecycle = modLifecycle((r) => {
             s.subscribe((val) => {
-                node.textContent = val
+                dom.setText(node, val)
             })
             r.unsub = s.destroy
         })

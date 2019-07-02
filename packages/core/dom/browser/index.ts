@@ -1,9 +1,27 @@
 import { assign } from '../../utils/object';
-import { Component, DOM, Listen, render } from '../index';
+import { BoundingRect, Component, DOM, Listen, render } from '../index';
 
-const listen: Listen<Node> = (elem, event, handler) => {
+interface WithHandler {
+    addEventListener(event: string, handler: EventListener): void
+    removeEventListener(event: string, handler: EventListener): void
+}
+const listen: Listen<WithHandler> = (elem, event, handler) => {
     elem.addEventListener(event, handler)
     return () => elem.removeEventListener(event, handler)
+}
+
+const noDim: BoundingRect = { top: 0, left: 0, bottom: 0, right: 0, width: 0, height: 0 }
+
+function measure(node: HTMLElement): BoundingRect {
+    const brect = node.getBoundingClientRect()
+    return {
+        top: brect.top + window.scrollY,
+        left: brect.left + window.scrollX,
+        bottom: brect.bottom + window.scrollY,
+        right: brect.right + window.scrollX,
+        width: brect.width,
+        height: brect.height,
+    }
 }
 
 let fragment: DocumentFragment|undefined
@@ -22,10 +40,13 @@ export function mount<Ctxt extends C, C>(root: Node, comp: Component<C, any>, co
 }
 
 export const dom: DOM<Node> = {
-    create: (tag) => document.createElement(tag),
     createText: (s: string) => document.createTextNode(s),
-    createFragment: () => document.createDocumentFragment(),
+    setText: (n, s) => {
+        n.nodeValue = s
+        return n
+    },
 
+    create: (tag) => document.createElement(tag),
     replace: (old, rpl) => {
         const p = old.parentElement
         if (p) p.replaceChild(rpl, old)
@@ -99,5 +120,13 @@ export const dom: DOM<Node> = {
             window.requestAnimationFrame(resolve)
         })
         return nextFrame.then(f)
-    }
+    },
+
+    onWindowResize: (f) => listen(window, 'resize', f),
+
+    measure: (n) => (
+        (n instanceof HTMLElement)
+            ? measure(n)
+            : noDim
+    )
 }

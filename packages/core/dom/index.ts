@@ -1,6 +1,7 @@
 import { AsyncFn, Unsubscribe, Tag } from '../types';
 import { Rendered, SetupR, Meta } from './rendered'
 import { Style } from './style';
+import { Fn0 } from '../utils/combine'
 
 export * from '../types';
 
@@ -10,14 +11,23 @@ export type Setup<C = {}, M = any> = <N>(
     meta: M, dom: DOM<N>, node: N, ctxt: C
 ) => SetupR<M>
 
-type Props = { [key: string]: PropVal } 
-type PropVal = string|number|boolean|null
+export type Props = { [key: string]: PropVal } 
+export type PropVal = string|number|boolean|null
+
+export type BoundingRect = {
+    top: number,
+    bottom: number,
+    left: number,
+    right: number,
+    width: number,
+    height: number,
+}
 
 export interface DOM<N> {
-    create(tag: string): N
-    createText(s: string): N & { textContent: string|null }
-    createFragment(): N
+    createText(s: string): N
+    setText(node: N, s: string): N
 
+    create(tag: string): N
     replace(old: N, rpl: N): void
     remove(parent: N, child: N): void
     insert(parent: N, child: N): void
@@ -38,7 +48,10 @@ export interface DOM<N> {
     setProp(node: N, prop: string, value: PropVal): N
     getProp(node: N, prop: string): PropVal
 
-    runOnNextFrame(f: AsyncFn): PromiseLike<void>
+    runOnNextFrame(f: AsyncFn|Fn0): PromiseLike<void>
+
+    onWindowResize(f: Fn0): Unsubscribe
+    measure(node: N): BoundingRect
 }
 
 export function render<N, Ctxt extends C, C, M>(

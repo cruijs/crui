@@ -1,12 +1,12 @@
 import { Component, Tag } from '@crui/core/dom';
 import { Meta, modifyLfc } from '@crui/core/dom/rendered';
 import { combine, combineAsync } from '@crui/core/utils/combine';
-import { Dimensions } from '../dimensions';
+import { WDim } from '../dimensions';
 import { enhanceDom } from '../dom/changeDetector';
 
 export function withMeasure<C, T extends Tag>(
+    dim: WDim,
     comp: Component<C, Meta<T>>,
-    dim: Dimensions
 ): Component<C, Meta<T>> {
     return (dom, ctxt) => {
         const edom = enhanceDom(dom)

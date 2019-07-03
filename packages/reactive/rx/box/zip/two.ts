@@ -1,6 +1,6 @@
 import { combine2 } from '@crui/core/utils/combine';
-import { StreamBox } from './stream';
-import { DR$B, R$B } from './types';
+import { StreamBox } from '../stream';
+import { DR$B, R$B } from '../types';
 
 export function zip<A, B, C>(
     a: R$B<A>,

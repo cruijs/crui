@@ -1,5 +1,5 @@
 import { keys } from '@crui/core/utils/object';
-import { DRW$B, R$B, W$B } from '@crui/reactive/rx';
+import { DRW$B, R$B, RW$B, W$B } from '@crui/reactive/rx';
 import { StreamBox } from '@crui/reactive/rx/box';
 import { Destroyable } from '@crui/reactive/rx/types';
 
@@ -12,10 +12,11 @@ type Dimensions<N> = {
 
 export type RDim = Dimensions<R$B<number>>
 export type WDim = Dimensions<W$B<number>>
-export type RWDim = Dimensions<DRW$B<number>>
+export type RWDim = Dimensions<RW$B<number>>
 export type DDim = Dimensions<Destroyable>
+export type DRWDim = Dimensions<DRW$B<number>>
 
-export function makeDim(): RWDim {
+export function makeDim(): DRWDim {
     return {
         top: new StreamBox(0),
         left: new StreamBox(0),

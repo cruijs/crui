@@ -4,7 +4,7 @@ import { combine, combineAsync } from '@crui/core/utils/combine';
 import { WDim } from '../dimensions';
 import { enhanceDom } from '../dom/changeDetector';
 
-export function withMeasure<C, T extends Tag>(
+export function measure<C, T extends Tag>(
     dim: WDim,
     comp: Component<C, Meta<T>>,
 ): Component<C, Meta<T>> {

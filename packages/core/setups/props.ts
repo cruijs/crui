@@ -5,6 +5,9 @@ import { defResult } from '../dom/rendered';
 type KProps = keyof Props
 type PProps<K extends KProps> = Pick<Props, K>
 
+/**
+ * Setup a set of properties
+ */
 export function props<K extends KProps>(props: PProps<K>): Setup {
     return (meta, dom, node) => {
         dom.setProps(node, props)

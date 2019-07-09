@@ -4,6 +4,9 @@ import { children } from '../setups/children';
 import { Tag } from '../types';
 import { h } from './h';
 
+/**
+ * An element with children
+ */
 export function hc<T extends Tag, C0>(tag: T, cs: [Component<C0, any>]): Component<C0, Meta<T>>
 export function hc<T extends Tag, C0, C1>(tag: T, cs: [Component<C0, any>, Component<C1, any>]): Component<C0 & C1, Meta<T>>
 export function hc<T extends Tag, C0, C1, C2>(tag: T, cs: [Component<C0, any>, Component<C1, any>, Component<C2, any>]): Component<C0 & C1 & C2, Meta<T>>

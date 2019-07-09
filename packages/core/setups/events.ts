@@ -27,6 +27,9 @@ export function on<E extends EventType>(ev: E, handler: (ev: any) => void): Setu
     }))
 }
 
+/**
+ * Setup a `click` event handler
+ */
 export function onClick<T extends Tag>(handler: MouseHandler): Setup<{}, Meta<T>> {
     return on('click', handler)
 }

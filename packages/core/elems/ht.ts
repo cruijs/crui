@@ -6,7 +6,7 @@ import { text } from './text';
 /**
  * A simple element with just one text child
  * 
- * It's a combination of `hc` and `text`.
+ * It's a combination of `h`, `child` and `text`.
  */
 export function ht<T extends Tag>(tag: T, txt: string) {
     return h(tag, children([

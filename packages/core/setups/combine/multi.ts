@@ -1,6 +1,11 @@
 import { Setup } from '../../dom/index';
 import { Lifecycle, mergeLifecycles, result } from '../../dom/rendered';
 
+/**
+ * Setup Combine
+ * 
+ * Combine multiple Setups into one
+ */
 export function sc<C0, C1, M>(setups: [Setup<C0, M>]): Setup<C0, M>
 export function sc<C0, C1, C2, M>(setups: [Setup<C0, M>, Setup<C1, M>]): Setup<C0 & C1, M>
 export function sc<C0, C1, C2, C3, M>(setups: [Setup<C0, M>, Setup<C1, M>, Setup<C2, M>]): Setup<C0 & C1 & C2, M>

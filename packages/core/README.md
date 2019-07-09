@@ -3,11 +3,11 @@ The aim of this package is to be the foundation on top of which the rest is buil
 
 @crui/core has three main concepts: 
 
-* Elements: building blocks that generate Components
-* Components: representation of a piece of UI
-* Setups: configure the many aspects of an Element
+* Components: represent a piece of UI
+* Elements: any function that generates a Component
+* Setups: used by Elements to configure the many aspects of a Component
 
-Both Elements and Setups are based on functions, therefore are immutable definitions of our UI
+All three are based on functions and therefore are immutable and composable by definition.
 
 ## Setups
 

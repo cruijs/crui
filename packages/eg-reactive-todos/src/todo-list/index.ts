@@ -6,7 +6,7 @@ import { children } from '@crui/core/setups/children';
 import { sc2 } from '@crui/core/setups/combine/two';
 import { css } from '@crui/css-emotion/setups/css';
 import { DRW$B } from '@crui/reactive/rx/box/types';
-import { bindCheck } from '@crui/reactive/setups/bind';
+import { bindChecked } from '@crui/reactive/setups/bind';
 import { s$filter$$ } from '@crui/reactive/setups/filter';
 import { cssTx } from '@crui/transitions/elems/cssTx';
 import { Todo, TodoStore } from '../store';
@@ -63,7 +63,7 @@ const Slide = cssTx(
 
 const input = (check: DRW$B<boolean>) => (
     h('input', sc2(
-        bindCheck(check),
+        bindChecked(check),
         css({
             verticalAlign: 'middle',
             marginRight: '0.5rem',

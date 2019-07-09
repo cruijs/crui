@@ -6,14 +6,14 @@ import { sc, sc2 } from '@crui/core/setups/combine';
 import { onClick } from '@crui/core/setups/events';
 import { css } from '@crui/css-emotion/setups/css';
 import { cloneRW } from '@crui/reactive/rx/box/clone';
-import { bindVal } from '@crui/reactive/setups/bind';
+import { bindValue } from '@crui/reactive/setups/bind';
 import { TodoStore } from '../store';
 
 export function AddTodo(store: TodoStore) {
     const inp = store.getInput()
     return hc('div', [
         h('input', sc2( 
-            bindVal(cloneRW(inp)),
+            bindValue(cloneRW(inp)),
             css({ width: '13rem' }),
         )),
         h('button', sc([

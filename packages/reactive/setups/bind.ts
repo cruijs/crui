@@ -15,9 +15,9 @@ export type $Checked = DRW$B<boolean>
 
 type MSetup<T> = Setup<{}, Meta<T>>
 
-export const bindVal = <T extends BVTag>(stream: $Value): MSetup<T> => bind('value', stream)
+export const bindValue = <T extends BVTag>(stream: $Value): MSetup<T> => bind('value', stream)
 
-export const bindCheck = (stream: $Checked): MSetup<BCTag> => (meta, dom, node, ctxt) => {
+export const bindChecked = (stream: $Checked): MSetup<BCTag> => (meta, dom, node, ctxt) => {
     dom.setProp(node, 'type', 'checkbox')
     return bind('checked', stream)(meta, dom, node, ctxt) as SetupR<Meta<BCTag>>
 }

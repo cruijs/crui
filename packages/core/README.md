@@ -1,9 +1,10 @@
 # @crui/core
 The aim of this package is to be the foundation on top of which the rest is built. For this reason, we value composability and performance over everything else.
 
-@crui/core has two main concepts: 
+@crui/core has three main concepts: 
 
-* Elements: building blocks that generate Components and the final UI
+* Elements: building blocks that generate Components
+* Components: representation of a piece of UI
 * Setups: configure the many aspects of an Element
 
 Both Elements and Setups are based on functions, therefore are immutable definitions of our UI

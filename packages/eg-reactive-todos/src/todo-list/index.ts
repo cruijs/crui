@@ -7,13 +7,13 @@ import { sc2 } from '@crui/core/setups/combine/two';
 import { css } from '@crui/css-emotion/setups/css';
 import { DRW$B } from '@crui/reactive/rx/box/types';
 import { bindChecked } from '@crui/reactive/setups/bind';
-import { s$filter$$ } from '@crui/reactive/setups/filter';
+import { c$filter$$ } from '@crui/reactive/setups/filter';
 import { cssTx } from '@crui/transitions/elems/cssTx';
 import { Todo, TodoStore } from '../store';
 
 export function TodoList(store: TodoStore) {
     return h('ul', sc2(
-        s$filter$$(
+        c$filter$$(
             store.getTodos(),
             TodoComponent,
             store.getVisibilityFilter(),

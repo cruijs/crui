@@ -5,9 +5,11 @@ import { $map as l$map } from '../rx/list/map';
 import { with$Children } from './internals/children';
 
 /**
- * Map a stream of items I into children and setup them in an element
+ * Children Stream Map
+ * 
+ * Map a stream of items T into children and add them in the element
  */
-export function s$map<T, C>(
+export function c$map<T, C>(
     $list: R$L<T>,
     item: (i: T) => Component<C>
 ): Setup<C> {

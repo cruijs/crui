@@ -4,6 +4,6 @@ import { child } from './children';
 /**
  * Append a new text node to Element
  */
-export function addText(str: string) {
+export function ctext(str: string) {
     return child(text(str))
 }

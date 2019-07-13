@@ -3,6 +3,9 @@ import { result } from '@crui/core/dom/rendered';
 import { DR$B } from '../rx/box/types';
 import { swapNode } from './internals/swapNode';
 
+/**
+ * Display a child based on Stream
+ */
 export function $child<T, C>(
     stream: DR$B<T>,
     render: (item: T) => Component<C>

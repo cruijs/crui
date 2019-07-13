@@ -9,9 +9,11 @@ import { $map } from '../rx/list/map';
 import { with$Children } from './internals/children';
 
 /**
- * Setup a dynamic list of children that are also filtered
+ * Children stream filtered by a stream of predicate streams
+ * 
+ * React on each change of the provided stream and filter by approprietaly manipulate children
  */
-export function s$filter$$<T, C>(
+export function c$filter$$<T, C>(
     $list: R$L<T>,
     child: (item: T) => Component<C>,
     $p$: $Predicate$<T>

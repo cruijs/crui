@@ -6,7 +6,10 @@ import { noop } from '@crui/core/utils/noop';
 import { Cond$B } from '../rx/box/types';
 import { swapNode } from './internals/swapNode';
 
-export function $ite<A, B>(
+/**
+ * Display the first or second child based on a condition that change over time
+ */
+export function c$ite<A, B>(
     $cond: Cond$B,
     cThen: Component<A>,
     cElse: Component<B>

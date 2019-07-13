@@ -75,7 +75,7 @@ export class DomChangeDetector<N> implements DOM<N> {
         this.dom.batchInsertBefore(parent, ref, node)
     }
     nextChild(parent: N, ref: N): N | null {
-        return this.nextChild(parent, ref)
+        return this.dom.nextChild(parent, ref)
     }
     listen: Listen<N> = (n, e, h) => {
         return this.dom.listen(n, e, h)

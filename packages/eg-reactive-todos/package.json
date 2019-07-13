@@ -26,11 +26,11 @@
     "webpack-dev-server": "^3.7.1"
   },
   "dependencies": {
-    "@crui/core": "^0.1.0-alpha.8",
-    "@crui/css-emotion": "^0.1.0-alpha.8",
-    "@crui/css-emotion-reactive": "^0.1.0-alpha.8",
-    "@crui/reactive": "^0.1.0-alpha.8",
-    "@crui/transitions": "^0.1.0-alpha.5",
+    "@crui/core": "^0.1.0-alpha.11",
+    "@crui/css-emotion": "^0.1.0-alpha.11",
+    "@crui/css-emotion-reactive": "^0.1.0-alpha.11",
+    "@crui/reactive": "^0.1.0-alpha.11",
+    "@crui/transitions": "^0.1.0-alpha.11",
     "emotion": "^10.0.9"
   }
 }

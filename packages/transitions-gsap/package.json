@@ -22,12 +22,14 @@
     "crui",
     "ui"
   ],
+  "dependencies": {
+    "gsap": "^2.1.3"
+  },
   "devDependencies": {
     "@crui/core": "^0.1.0-alpha.11",
     "@crui/transitions": "^0.1.0-alpha.11",
     "@types/gsap": "^1.20.2",
     "@types/jest": "^24.0.12",
-    "gsap": "^2.1.3",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
@@ -47,8 +49,5 @@
       "js"
     ]
   },
-  "gitHead": "e6bdcfbc524d014df27ce3089b458b07635b7190",
-  "dependencies": {
-    "gsap": "^2.1.3"
-  }
+  "gitHead": "e6bdcfbc524d014df27ce3089b458b07635b7190"
 }

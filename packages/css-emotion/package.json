@@ -22,10 +22,12 @@
     "ui"
   ],
   "peerDependencies": {
-    "@crui/core": "^0.1.0-alpha.3",
+    "@crui/core": "^0.1.0-alpha.11",
     "emotion": "^10.0.9"
   },
   "devDependencies": {
+    "@crui/core": "^0.1.0-alpha.11",
+    "emotion": "^10.0.9",
     "@types/jest": "^24.0.12",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",

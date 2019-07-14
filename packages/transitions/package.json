@@ -22,13 +22,14 @@
     "ui"
   ],
   "devDependencies": {
+    "@crui/core": "^0.1.0-alpha.11",
     "@types/jest": "^24.0.12",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
   },
   "peerDependencies": {
-    "@crui/core": "^0.1.0-alpha.3"
+    "@crui/core": "^0.1.0-alpha.11"
   },
   "jest": {
     "transform": {

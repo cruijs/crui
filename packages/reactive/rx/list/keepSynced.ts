@@ -1,6 +1,7 @@
 import { Unsubscribe } from '../../../core/types';
-import { opApply } from './operations/apply';
-import { R$L, W$L } from './types';
+import { opApply, opsApply } from './operations/apply';
+import { opReplace } from './operations/factory';
+import { R$L, RW$L, Update } from './types';
 
 /**
  * Keep two streams in sync. 
@@ -8,12 +9,25 @@ import { R$L, W$L } from './types';
  */
 export function keepSynced<T>(
     $source: R$L<T>,
-    $dest: W$L<T>
+    $dest: RW$L<T>
+): Unsubscribe {
+    return keepSyncedWith($source, $dest, (src, dst) => [
+        opReplace(dst, src)
+    ])
+}
+
+export function keepSyncedWith<T>(
+    $source: R$L<T>,
+    $dest: RW$L<T>,
+    replace: (src: T[], dst: T[]) => Update<T>[]
 ): Unsubscribe {
     if (isSame($source, $dest)) {
         throw Error('Sync on same stream is not supported')
     }
-    $dest.set($source.get().slice())
+    opsApply(
+        $dest,
+        replace($source.get(), $dest.get())
+    )
     return $source.subscribe(opApply($dest))
 }
 

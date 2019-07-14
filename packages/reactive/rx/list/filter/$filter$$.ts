@@ -1,8 +1,9 @@
 import { R$B } from '../../box/types';
-import { keepSynced } from '../keepSynced';
+import { keepSynced, keepSyncedWith } from '../keepSynced';
 import { StreamList } from '../stream';
-import { DR$L, R$L, Replace } from '../types'
+import { DR$L, R$L } from '../types';
 import { $filter$, Predicate$ } from './$filter$';
+import { diff } from './diff';
 
 export type $Predicate$<T> = R$B<Predicate$<T>>
 export function $filter$$<S, T>(
@@ -24,7 +25,10 @@ export function $filter$$<S, T>(
             $filtered = $filter$(
                 $source, f(p$)
             )
-            keepSynced($filtered, $filtered$)
+
+            keepSyncedWith($filtered, $filtered$, (target, src) =>
+                diff(src, target)
+            )
         })
     )
 

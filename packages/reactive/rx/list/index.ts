@@ -1,7 +1,6 @@
-export { $filter } from './filter';
-export { keepSynced } from './keepSynced';
-export { $map } from './map';
-export { mapToBox } from './map/mapToBox';
-export { StreamList } from './stream';
-
+export * from './filter';
+export * from './keepSynced';
+export * from './map';
+export * from './map/mapToBox';
+export * from './stream';
 export * from './types';

@@ -1,7 +1,7 @@
 import { R$B } from '../../box/types';
 import { keepSynced } from '../keepSynced';
 import { StreamList } from '../stream';
-import { DR$L, R$L } from '../types';
+import { DR$L, R$L, Replace } from '../types'
 import { $filter$, Predicate$ } from './$filter$';
 
 export type $Predicate$<T> = R$B<Predicate$<T>>

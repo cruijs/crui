@@ -1,5 +1,6 @@
 import { Unsubscribe } from '../../../core/types';
-import { R$L, UpdateType, W$L } from './types';
+import { opApply } from './operations/apply';
+import { R$L, W$L } from './types';
 
 /**
  * Keep two streams in sync. 
@@ -13,21 +14,7 @@ export function keepSynced<T>(
         throw Error('Sync on same stream is not supported')
     }
     $dest.set($source.get().slice())
-    return $source.subscribe((upd) => {
-        switch (upd.type) {
-            case UpdateType.Update:
-                $dest.update(upd.index, upd.newValue)
-                return
-
-            case UpdateType.Replace:
-                $dest.set(upd.newList)
-                return
-            
-            case UpdateType.Splice:
-                $dest.splice(upd.index, upd.removed.length, upd.added)
-                return
-        }
-    })
+    return $source.subscribe(opApply($dest))
 }
 
 function isSame(a: Object, b: Object): boolean {

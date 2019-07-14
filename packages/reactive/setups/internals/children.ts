@@ -1,13 +1,12 @@
 import { AsyncFn, DOM, Unsubscribe } from '@crui/core/dom';
-import { combineMount, combineUnmount, Rendered } from '@crui/core/dom/rendered';
-import { last } from '@crui/core/utils/array';
+import { combineMount, combineUnmount, Lifecycle, modLifecycle, Rendered } from '@crui/core/dom/rendered';
 import { combine, combineAsync } from '@crui/core/utils/combine';
 import { noop } from '@crui/core/utils/noop';
-import { Lifecycle, modLifecycle } from '@crui/core/dom/rendered';
 import { R$L, UpdateType } from '../../rx/list/types';
 import { Cancel, Guard, makeGuard } from '../../utils/guard';
 
-type $Children<N> = R$L<Rendered<N>> 
+type Meta = { mounted?: boolean }
+type $Children<N> = R$L<Rendered<N, Meta>> 
 /**
  * Dynamically add and remove children from the DOM.
  * 
@@ -31,6 +30,7 @@ export function with$Children<N>(
 
     $children.forEach((r) => {
         dom.insert(p, r.node)
+        r.meta.mounted = true
     })
 
     return modLifecycle((m) => {
@@ -59,8 +59,8 @@ function setupUpdate<N>(
     return $children.subscribe((upd) => {
         switch (upd.type) {
             case UpdateType.Replace:
-                replace(upd.oldList, upd.newList, (node) => {
-                    dom.insert(p, node)
+                replace(upd.oldList, upd.newList, (r) => {
+                    dom.insert(p, r.node)
                 })
                 return
 
@@ -68,23 +68,21 @@ function setupUpdate<N>(
                 if (upd.newValue === upd.oldValue) {
                     return
                 }
-                const ref = dom.nextChild(p, upd.oldValue.node)
                 replace(
                     [upd.oldValue],
                     [upd.newValue],
-                    (node) => {
-                        dom.insertBefore(p, ref, node)
+                    (r) => {
+                        const ref = findNext($children, r)
+                        dom.insertBefore(p, ref, r.node)
                     }
                 )
                 return
             }
 
             case UpdateType.Splice: {
-                const rl = last(upd.removed)
-                const ref = rl ? dom.nextChild(p, rl.node) : null
-
-                replace(upd.removed, upd.added, (node) => {
-                    dom.insertBefore(p, ref, node)
+                replace(upd.removed, upd.added, (r) => {
+                    const ref = findNext($children, r)
+                    dom.insertBefore(p, ref, r.node)
                 })
                 return
             }
@@ -108,9 +106,9 @@ type MakeReplace = <N>(
 ) => Replace<N>
 
 type Replace<N> = (
-    toRemove: Rendered<N>[],
-    toAdd: Rendered<N>[],
-    insert: (node: N) => void
+    toRemove: Rendered<N, Meta>[],
+    toAdd: Rendered<N, Meta>[],
+    insert: (node: Rendered<N>) => void
 ) => Promise<void>
 
 type RemoveNode<N> = (r: Rendered<N>) => void
@@ -128,8 +126,10 @@ const makeReplace: MakeReplace =
             toAdd.forEach((r) => {
                 if (removing.has(r.node))
                     removing.delete(r.node)
-                else
-                    insert(r.node)
+                else {
+                    insert(r)
+                    r.meta.mounted = true
+                }
             })
             return dom.runOnNextFrame(() =>
                 Promise.all(toAdd.map(
@@ -141,14 +141,27 @@ const makeReplace: MakeReplace =
 
 type Removing<N> = Map<N, Cancel> 
 function makeRemoveNode<N>(dom: DOM<N>, parent: N, removing: Removing<N>): RemoveNode<N> {
-    return (r: Rendered<N>) => {
+    return (r: Rendered<N, Meta>) => {
         let { guard, cancel } = makeGuard()
 
         removing.set(r.node, cancel)
 
         return r.lfc.onUnmount().then(guard(() => {
+            r.meta.mounted = false
             dom.remove(parent, r.node)
             removing.delete(r.node)
         }))
     }
+}
+
+function findNext<N>($children: $Children<N>, r: Rendered<N, Meta>): N|null {
+    const list = $children.get()
+    let index = list.lastIndexOf(r) + 1
+
+    let rr = list[index]
+    while (rr != null && !rr.meta.mounted) {
+        rr = list[++index]
+    }
+
+    return rr ? rr.node : null
 }

@@ -15,7 +15,7 @@ import { with$Children } from './internals/children';
  */
 export function c$filter$$<T, C>(
     $list: R$L<T>,
-    child: (item: T) => Component<C>,
+    child: (item: T) => Component<C, any>,
     $p$: $Predicate$<T>
 ): Setup<C> {
     return (meta, dom, parent, ctxt) => {

@@ -13,12 +13,12 @@ All three are based on functions and therefore are immutable and composable by d
 
 * child: append a child to an Element
 * children: append many children to an Element
+* ctext: append a Text. Equivalent of `child` + `text`
 * on: setup an event handler
-* onClick: setup an 'click' event handler
+* onClick: setup a 'click' event handler
 * props: setup Element's properties
 * style: setup inline styling
 * cleanup: hook to cleanup resources once the Element is disposed
-* addText: append a Text. Equivalent of `child` + `text`
 
 We also provide two utilities to combine setups:
 
@@ -181,7 +181,7 @@ const label = (target: string, text: string) =>
     h('label', sc([
         props({ labelFor: target }),
         style({ fontWeight: 'bold', marginRight: '1rem' }),
-        addText(text)
+        ctext(text)
     ]))
 ```
 
@@ -253,7 +253,7 @@ type I18n = {
 const t = (i18n: I18n, key: string) => 
     h('span', sc2(
         props({ className: 'i18n' }),
-        addText(msg)
+        ctext(msg)
     ))
 ```
 
@@ -277,7 +277,7 @@ const t = (key: string) => useContext(
     ({ t }) => (
         h('span', sc2(
             props({ className: 'i18n' }),
-            addText(t(key))
+            ctext(t(key))
         ))
     )
 )

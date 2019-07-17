@@ -45,17 +45,17 @@ This package is quite small and for some use cases could be too simple, however 
 
 This package implements Reactivity through Streams and **does not** rely on any Virtual DOM. Here is an example of a reactive component:
 ```typescript
-import { h, hc, ht, props } from '@crui/core'
+import { h, hc, ht, sc2, props } from '@crui/core'
 import { mount } from '@crui/core/dom/browser'
 import { StreamBox, bindValue, text$ } from '@crui/reactive'
 
 const Component = (input: StreamBox<string>) => (
     hc('section', [
         ht('h1', 'Echo'),
-        h('input', {
+        h('input', sc2(
             props({ type: 'text' }),
             bindValue(input)
-        }),
+        )),
         hc('p', [
             text$(input)
         ])

@@ -6,12 +6,11 @@ type SCombinator = <T extends Tag, C, D, M extends Meta<T>>(
 ) => Component<C & D, M>
 
 /**
- * With Setup
  * Apply a new Setup to a Component
  */
-export const ws: SCombinator = (comp, setup) =>
+export const setup: SCombinator = (comp, stp) =>
     (dom, ctxt) => {
         const c = comp(dom, ctxt)
-        const s = setup(c.meta, dom, c.node, ctxt)
+        const s = stp(c.meta, dom, c.node, ctxt)
         return rendered(c.node, mergeLifecycles([c.lfc, s.lfc]), s.meta)
     }

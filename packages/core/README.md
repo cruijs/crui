@@ -36,9 +36,9 @@ We also provide two utilities to combine setups:
 
 We also have higher-order elements, ie: elements that build on top of other elements:
 
+* setup: apply a new setup to a Component
 * useContext: allow the use of [Context](#context-api) to generate a new [Component](#what-is-a-component)
 * withContext: adapt Context to a Component
-* withSetup: apply a new setup to a Component
 
 ## Mounting
 Generating components will do nothing at all, remember that they are just definition of what needs to be done. To materialize a definition, we need to *mount* it.

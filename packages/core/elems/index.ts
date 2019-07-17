@@ -6,4 +6,4 @@ export * from './empty';
 export * from './h';
 export * from './ht';
 export * from './text';
-export * from './withSetup';
+export * from './setup';

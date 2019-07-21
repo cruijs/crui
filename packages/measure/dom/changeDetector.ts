@@ -110,6 +110,9 @@ export class DomChangeDetector<N> implements DOM<N> {
     getProp(node: N, prop: string): PropVal {
         return this.dom.getProp(node, prop)
     }
+    setFocus(node: N): N {
+        return this.dom.setFocus(node)
+    }
     runOnNextFrame(f: AsyncFn | Fn0): PromiseLike<void> {
         return this.dom.runOnNextFrame(f)
     }

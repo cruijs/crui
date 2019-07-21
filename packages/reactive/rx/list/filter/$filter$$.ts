@@ -26,9 +26,7 @@ export function $filter$$<S, T>(
                 $source, f(p$)
             )
 
-            keepSyncedWith($filtered, $filtered$, (target, src) =>
-                diff(src, target)
-            )
+            keepSyncedWith($filtered, $filtered$, diff)
         })
     )
 

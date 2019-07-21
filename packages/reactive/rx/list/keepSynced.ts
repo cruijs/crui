@@ -1,4 +1,4 @@
-import { Unsubscribe } from '../../../core/types';
+import { Unsubscribe } from '@crui/core/types';
 import { opApply, opsApply } from './operations/apply';
 import { opReplace } from './operations/factory';
 import { R$L, RW$L, Update } from './types';
@@ -8,27 +8,27 @@ import { R$L, RW$L, Update } from './types';
  * Any values contained in `$dest` will be replaced by `$source` content.
  */
 export function keepSynced<T>(
-    $source: R$L<T>,
-    $dest: RW$L<T>
+    $master: R$L<T>,
+    $slave: RW$L<T>
 ): Unsubscribe {
-    return keepSyncedWith($source, $dest, (src, dst) => [
-        opReplace(dst, src)
+    return keepSyncedWith($master, $slave, (slave, master) => [
+        opReplace(slave, master)
     ])
 }
 
 export function keepSyncedWith<T>(
-    $source: R$L<T>,
-    $dest: RW$L<T>,
-    replace: (src: T[], dst: T[]) => Update<T>[]
+    $master: R$L<T>,
+    $slave: RW$L<T>,
+    diff: (slave: T[], master: T[]) => Update<T>[]
 ): Unsubscribe {
-    if (isSame($source, $dest)) {
+    if (isSame($master, $slave)) {
         throw Error('Sync on same stream is not supported')
     }
     opsApply(
-        $dest,
-        replace($source.get(), $dest.get())
+        $slave,
+        diff($slave.get(), $master.get())
     )
-    return $source.subscribe(opApply($dest))
+    return $master.subscribe(opApply($slave))
 }
 
 function isSame(a: Object, b: Object): boolean {

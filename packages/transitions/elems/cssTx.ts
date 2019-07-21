@@ -68,12 +68,14 @@ export const onTrans = <N, K extends KS>(
          * that this edge case is handled.
          */
         const timeout = setTimeout(cancel, 100)
+        const once = dom.listen(node, 'transitionrun', () => {
+            if (timeout) clearTimeout(timeout)
+            once()
+        })
         unsub = combine([
             () => { if (timeout) clearTimeout(timeout) },
             dom.listen(node, 'transitionend', handler),
-            dom.listen(node, 'transitionrun', () => {
-                if (timeout) clearTimeout(timeout)
-            })
+            once
         ])
         return new Promise<void>((resolve) => {
             dom.applyStyle(node, style)

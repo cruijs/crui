@@ -1,5 +1,5 @@
-import { Setup, Tag } from '../dom';
-import { Meta, modLifecycle, result } from '../dom/rendered';
+import { Meta, Setup, Tag } from '../dom';
+import { modLifecycle, result } from '../dom/rendered';
 
 export type EventHandler = EventListener
 export type MouseHandler = (ev: MouseEvent) => void

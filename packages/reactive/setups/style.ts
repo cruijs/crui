@@ -1,4 +1,4 @@
-import { Setup } from '@crui/core/dom';
+import { Meta, Setup, Tag } from '@crui/core/dom';
 import { modLifecycle, result } from '@crui/core/dom/rendered';
 import { Style } from '@crui/core/dom/style';
 import { combine } from '@crui/core/utils/combine';
@@ -9,7 +9,7 @@ import { Reactive } from '../utils/reactive';
 export type $Style = Reactive<Style>
 export type K$S = keyof $Style
 export type P$S<K extends K$S> = Pick<$Style, K>
-export function $style<K extends K$S>(style: P$S<K>): Setup {
+export function $style<T extends Tag, K extends K$S>(style: P$S<K>): Setup<{}, Meta<T>> {
     return (meta, dom, node) => result(
         meta,
         modLifecycle((m) => {

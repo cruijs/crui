@@ -1,8 +1,7 @@
-import { Setup } from '@crui/core/dom';
+import { Meta, Setup, Unsubscribe } from '@crui/core/dom';
 import { compatibleInputEvent } from '@crui/core/dom/events';
 import { KProps, Props } from '@crui/core/dom/props';
-import { Meta, modLifecycle, result, SetupR } from '@crui/core/dom/rendered';
-import { Unsubscribe } from '@crui/core/types';
+import { modLifecycle, result, SetupR } from '@crui/core/dom/rendered';
 import { combine } from '@crui/core/utils/combine';
 import { DRW$B } from '../rx/box/types';
 import { makeAtomic } from '../utils/atomic';

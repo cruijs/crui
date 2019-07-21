@@ -9,8 +9,6 @@ export type Rendered<N, M = {}> = {
     readonly lfc: Lifecycle 
 }
 
-export type Meta<T> = { tag: T }
-
 export type SetupR<M> = {
     lfc: Lifecycle,
     meta: M

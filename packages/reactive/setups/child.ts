@@ -6,10 +6,10 @@ import { swapNode } from './internals/swapNode';
 /**
  * Display a child based on Stream
  */
-export function $child<T, C>(
+export function $child<T, C, M>(
     stream: DR$B<T>,
     render: (item: T) => Component<C>
-): Setup<C> {
+): Setup<C, M> {
     return (meta, dom, node, ctxt) => result(
         meta, 
         swapNode(

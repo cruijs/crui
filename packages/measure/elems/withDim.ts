@@ -1,5 +1,5 @@
-import { Component, Tag } from '@crui/core/dom';
-import { Meta, modifyLfc } from '@crui/core/dom/rendered';
+import { Component, Meta, Tag } from '@crui/core/dom';
+import { modifyLfc } from '@crui/core/dom/rendered';
 import { combine2 } from '@crui/core/utils/combine';
 import { destroyDim, makeDim, RWDim } from '../dimensions';
 

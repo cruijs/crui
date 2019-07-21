@@ -1,5 +1,5 @@
-import { Component } from '@crui/core/dom';
-import { Meta, modLifecycle, rendered } from '@crui/core/dom/rendered';
+import { Component, Meta } from '@crui/core/dom';
+import { modLifecycle, rendered } from '@crui/core/dom/rendered';
 import { combine, Fn0 } from '@crui/core/utils/combine';
 import { WithSuspense } from '../context';
 

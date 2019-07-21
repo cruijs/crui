@@ -1,13 +1,13 @@
-import { AsyncFn, Unsubscribe, Tag } from '../types';
-import { Rendered, SetupR, Meta } from './rendered'
+import { AsyncFn, Meta, Tag, Unsubscribe } from '../types';
+import { Fn0 } from '../utils/combine';
+import { Rendered, SetupR } from './rendered';
 import { Style } from './style';
-import { Fn0 } from '../utils/combine'
 
 export * from '../types';
 
 export type Component<C = {}, M = Meta<Tag>> = <N>(dom: DOM<N>, context: C) => Rendered<N, M>
 
-export type Setup<C = {}, M = any> = <N>(
+export type Setup<C, M> = <N>(
     meta: M, dom: DOM<N>, node: N, ctxt: C
 ) => SetupR<M>
 
@@ -47,6 +47,8 @@ export interface DOM<N> {
     setProps(node: N, props: Props): N
     setProp(node: N, prop: string, value: PropVal): N
     getProp(node: N, prop: string): PropVal
+
+    setFocus(node: N): N,
 
     runOnNextFrame(f: AsyncFn|Fn0): PromiseLike<void>
 

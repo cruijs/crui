@@ -1,5 +1,5 @@
-import { Component } from '../dom';
-import { defRendered, Meta } from '../dom/rendered';
+import { Component, Meta } from '../dom';
+import { defRendered } from '../dom/rendered';
 
 /**
  * A vanilla element

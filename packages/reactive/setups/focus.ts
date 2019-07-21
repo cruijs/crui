@@ -1,5 +1,5 @@
-import { Setup } from '@crui/core/dom';
-import { Meta, modLifecycle, result } from '@crui/core/dom/rendered';
+import { Meta, Setup } from '@crui/core/dom';
+import { modLifecycle, result } from '@crui/core/dom/rendered';
 import { Signal } from '../rx/signal';
 
 type Tag = 'input'|'textarea'|'select'

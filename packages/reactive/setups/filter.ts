@@ -13,11 +13,11 @@ import { with$Children } from './internals/children';
  * 
  * React on each change of the provided stream and filter by approprietaly manipulate children
  */
-export function c$filter$$<T, C>(
+export function c$filter$$<T, C, M>(
     $list: R$L<T>,
     child: (item: T) => Component<C, any>,
     $p$: $Predicate$<T>
-): Setup<C> {
+): Setup<C, M> {
     return (meta, dom, parent, ctxt) => {
         const $mapped = $map($list, (item) => ({
             item,

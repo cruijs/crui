@@ -9,11 +9,11 @@ import { swapNode } from './internals/swapNode';
 /**
  * Display the first or second child based on a condition that change over time
  */
-export function c$ite<A, B>(
+export function c$ite<A, B, M>(
     $cond: Cond$B,
-    cThen: Component<A>,
-    cElse: Component<B>
-): Setup<A & B> { 
+    cThen: Component<A, any>,
+    cElse: Component<B, any>
+): Setup<A & B, M> { 
     return (meta, dom, parent, ctxt) => {
         const ar = cThen(dom, ctxt)
         const br = cElse(dom, ctxt)

@@ -14,9 +14,10 @@ function c(n, sep) {
 }
 
 function sig(n) {
-    return 'export function children<'+ c(n, ', ') +'>(cs: [' + children(n) + ']): Setup<'+ c(n, ' & ') +'>'
+    return 'export function children<'+ c(n, ', ') +', M>(cs: [' + children(n) + ']): Setup<'+ c(n, ' & ') +', M>'
 }
 
 for (let i = 0; i < 10; ++i) {
     console.log(sig(i))
 }
+console.log('export function children<C, M>(cs: Component<C, any>[]): Setup<C, M>')

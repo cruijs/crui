@@ -1,5 +1,4 @@
-import { Component, Tag } from '@crui/core/dom';
-import { Meta } from '@crui/core/dom/rendered';
+import { Component, Meta, Tag } from '@crui/core/dom';
 import { h } from '@crui/core/elems/h';
 import { children } from '@crui/core/setups/children';
 import { sc2 } from '@crui/core/setups/combine/two';

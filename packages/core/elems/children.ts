@@ -1,7 +1,5 @@
-import { Component } from '../dom/index';
-import { Meta } from '../dom/rendered';
+import { Component, Meta, Tag } from '../dom';
 import { children } from '../setups/children';
-import { Tag } from '../types';
 import { h } from './h';
 
 /**

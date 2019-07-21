@@ -3,6 +3,7 @@ export type Node<T extends AnyTag> = { nodeName: T }
 export type AnyNode = Node<AnyTag>
 export type Unsubscribe = () => void
 export type AsyncFn = () => PromiseLike<void>
+export type Meta<T> = { tag: T }
 
 export type Tag = 'a' 
     | 'abbr' | 'address' | 'area' | 'article' | 'aside' | 'audio' | 'b'

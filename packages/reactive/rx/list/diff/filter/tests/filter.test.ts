@@ -1,8 +1,8 @@
-import { opsApply } from '../../operations/apply';
-import { opAdd, opRemove, opReplace, opSplice } from '../../operations/factory';
-import { StreamList } from '../../stream';
-import { Update } from '../../types';
-import { diff } from '../diff';
+import { opsApply } from '../../../operations/apply';
+import { opAdd, opRemove, opReplace, opSplice } from '../../../operations/factory';
+import { StreamList } from '../../../stream';
+import { Update } from '../../../types';
+import { diff } from '..';
 
 function assert(source: number[], target: number[], expected: Update<number>[]) {
     const $list = new StreamList(source)

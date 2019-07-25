@@ -3,7 +3,7 @@ import { keepSynced, keepSyncedWith } from '../keepSynced';
 import { StreamList } from '../stream';
 import { DR$L, R$L } from '../types';
 import { $filter$, Predicate$ } from './$filter$';
-import { diff } from './diff';
+import { diff } from '../diff/filter';
 
 export type $Predicate$<T> = R$B<Predicate$<T>>
 export function $filter$$<S, T>(

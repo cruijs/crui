@@ -1,6 +1,6 @@
-import { opsApply } from '../../operations/apply';
-import { StreamList } from '../../stream';
-import { diff } from '../diff';
+import { opsApply } from '../../../operations/apply';
+import { StreamList } from '../../../stream';
+import { diff } from '..';
 
 describe(diff, () => {
     describe('combined with opsApply', () => {

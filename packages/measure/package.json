@@ -1,6 +1,6 @@
 {
   "name": "@crui/measurer",
-  "version": "0.1.0-alpha.12",
+  "version": "0.1.0-alpha.13",
   "description": "Add the ability to measure elements",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",
@@ -26,8 +26,8 @@
     "@crui/reactive": "^0.1.0-alpha"
   },
   "devDependencies": {
-    "@crui/core": "^0.1.0-alpha.12",
-    "@crui/reactive": "^0.1.0-alpha.12",
+    "@crui/core": "^0.1.0-alpha.13",
+    "@crui/reactive": "^0.1.0-alpha.13",
     "@types/jest": "^24.0.12",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",

@@ -1,6 +1,6 @@
 {
   "name": "@crui/transitions",
-  "version": "0.1.0-alpha.12",
+  "version": "0.1.0-alpha.13",
   "description": "Add transitions to CRUI components",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",
@@ -22,7 +22,7 @@
     "ui"
   ],
   "devDependencies": {
-    "@crui/core": "^0.1.0-alpha.12",
+    "@crui/core": "^0.1.0-alpha.13",
     "@types/jest": "^24.0.12",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",

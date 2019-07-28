@@ -1,6 +1,6 @@
 {
   "name": "@crui/css-emotion",
-  "version": "0.1.0-alpha.12",
+  "version": "0.1.0-alpha.13",
   "description": "Add CSS-in-JS support through emotion package",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",
@@ -26,7 +26,7 @@
     "emotion": "^10.0.9"
   },
   "devDependencies": {
-    "@crui/core": "^0.1.0-alpha.12",
+    "@crui/core": "^0.1.0-alpha.13",
     "@types/jest": "^24.0.12",
     "emotion": "^10.0.9",
     "jest": "^24.7.1",

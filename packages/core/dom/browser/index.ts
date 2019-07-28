@@ -88,6 +88,13 @@ export const dom: DOM<Node> = {
         throw new Error('Props can be retrieved only on HTMLElements')
     },
 
+    setAttribute: (node, attr, val) => {
+        if (node instanceof HTMLElement) {
+            node.setAttribute(attr, val)
+        }
+        return node
+    },
+
     setFocus: (node) => {
         if (node instanceof HTMLElement)
             node.focus()

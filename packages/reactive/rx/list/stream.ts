@@ -45,6 +45,10 @@ export class StreamList<T> extends Stream<T[], Update<T>> implements RW$L<T>
         this.splice(i, 0, [item])
     }
 
+    deleteAt(i: number): T {
+        return this.splice(i, 1, [])[0]
+    }
+
     remove(val: T) {
         const i = this.value.lastIndexOf(val)
         if (i !== -1)

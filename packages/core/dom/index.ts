@@ -14,6 +14,8 @@ export type Setup<C, M> = <N>(
 export type Props = { [key: string]: PropVal } 
 export type PropVal = string|number|boolean|null
 
+export type Attributes = { [key: string]: string } 
+
 export type BoundingRect = {
     top: number,
     bottom: number,
@@ -47,6 +49,8 @@ export interface DOM<N> {
     setProps(node: N, props: Props): N
     setProp(node: N, prop: string, value: PropVal): N
     getProp(node: N, prop: string): PropVal
+
+    setAttribute(node: N, attr: string, value: string): N
 
     setFocus(node: N): N,
 

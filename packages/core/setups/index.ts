@@ -1,3 +1,4 @@
+export * from './attribute';
 export * from './children';
 export * from './cleanup';
 export * from './combine';

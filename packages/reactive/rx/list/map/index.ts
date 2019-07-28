@@ -1,7 +1,7 @@
 import { StreamList } from '../stream';
 import { DR$L, R$L, W$L, Update, UpdateType } from '../types';
 
-type FMap<A, B> = (v: A, i: number) => B
+export type FMap<A, B> = (v: A, i: number) => B
 export function $map<A, B>(
     $source: R$L<A>, 
     f: FMap<A, B>

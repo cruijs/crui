@@ -37,78 +37,81 @@ export class DomChangeDetector<N> implements DOM<N> {
         })
     }
 
-    createText(s: string): N {
+    createText(s: string) {
         this.schedule()
         return this.dom.createText(s)
     }
-    setText(n: N, s: string): N {
+    setText(n: N, s: string) {
         this.schedule()
         return this.dom.setText(n, s)
     }
 
-    create(tag: string): N {
+    create(tag: string) {
         this.schedule()
         return this.dom.create(tag)
     }
-    replace(old: N, rpl: N): void {
+    replace(old: N, rpl: N) {
         this.schedule()
         this.dom.replace(old, rpl)
     }
-    remove(parent: N, child: N): void {
+    remove(parent: N, child: N) {
         this.schedule()
         this.dom.remove(parent, child)
     }
-    insert(parent: N, child: N): void {
+    insert(parent: N, child: N) {
         this.schedule()
         this.dom.insert(parent, child)
     }
-    insertBefore(parent: N, ref: N | null, node: N): void {
+    insertBefore(parent: N, ref: N | null, node: N) {
         this.schedule()
         this.dom.insertBefore(parent, ref, node)
     }
-    batchInsert(parent: N, children: N[]): void {
+    batchInsert(parent: N, children: N[]) {
         this.schedule()
         this.dom.batchInsert(parent, children)
     }
-    batchInsertBefore(parent: N, ref: N | null, node: N[]): void {
+    batchInsertBefore(parent: N, ref: N | null, node: N[]) {
         this.schedule()
         this.dom.batchInsertBefore(parent, ref, node)
     }
-    nextChild(parent: N, ref: N): N | null {
+    nextChild(parent: N, ref: N) {
         return this.dom.nextChild(parent, ref)
     }
     listen: Listen<N> = (n, e, h) => {
         return this.dom.listen(n, e, h)
     }
-    applyStyle<S extends KS>(node: N, style: PS<S>): N {
+    applyStyle<S extends KS>(node: N, style: PS<S>) {
         this.schedule()
         return this.dom.applyStyle(node, style)
     }
-    modStyle(node: N, f: (style: Style) => void): N {
+    modStyle(node: N, f: (style: Style) => void) {
         this.schedule()
         return this.dom.modStyle(node, f)
     }
     getCss(node: N): string[] {
         return this.dom.getCss(node)
     }
-    addCss(node: N, klass: string): N {
+    addCss(node: N, klass: string) {
         this.schedule()
         return this.dom.addCss(node, klass)
     }
-    removeCss(node: N, klass: string): N {
+    removeCss(node: N, klass: string) {
         this.schedule()
         return this.dom.removeCss(node, klass)
     }
-    setProps(node: N, props: Props): N {
+    setProps(node: N, props: Props) {
         this.schedule()
         return this.dom.setProps(node, props)
     }
-    setProp(node: N, prop: string, value: PropVal): N {
+    setProp(node: N, prop: string, value: PropVal) {
         this.schedule()
         return this.dom.setProp(node, prop, value)
     }
     getProp(node: N, prop: string): PropVal {
         return this.dom.getProp(node, prop)
+    }
+    setAttribute(node: N, attr: string, val: string) {
+        return this.dom.setAttribute(node, attr, val)
     }
     setFocus(node: N): N {
         return this.dom.setFocus(node)

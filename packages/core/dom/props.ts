@@ -1,6 +1,7 @@
 export type KProps = keyof Props
 export type PProps<K extends KProps> = Pick<Props, K>
 export type Props = {
+    id: string,
     className: string,
 
     // input
@@ -19,6 +20,7 @@ export type Props = {
     selectionEnd: number,
     selectionDirection: string,
     wrap: string,
+    spellcheck: boolean
 
     // img
     src: string,

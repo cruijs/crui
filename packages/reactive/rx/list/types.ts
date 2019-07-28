@@ -94,6 +94,11 @@ export interface WriteStreamList<T> extends WriteStream<T[]> {
     insertAt(i: number, item: T): void
 
     /**
+     * Delete element at `index` position
+     */
+    deleteAt(i: number): T
+
+    /**
      * Remove item form the StreamList if exists
      */
     remove(item: T): void

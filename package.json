@@ -3,5 +3,9 @@
   "private": true,
   "devDependencies": {
     "lerna": "^3.13.4"
+  },
+  "scripts": {
+      "version": "lerna exec -- tsc --noEmit && lerna version",
+      "publish": "lerna publish from-package"
   }
 }

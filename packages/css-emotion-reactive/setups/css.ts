@@ -1,8 +1,9 @@
-import { Setup } from '@crui/core/dom';
+import { Setup, Tag } from '@crui/core/dom';
 import { modLifecycle, result } from '@crui/core/dom/rendered';
 import { combine } from '@crui/core/utils/combine';
 import { apply, Cond$B } from '@crui/reactive/rx/box';
-import { css, Interpolation } from 'emotion';
+import { css, Interpolation, ClassNamesArg, cx } from 'emotion';
+import { CSSMeta } from '@crui/css-emotion/setups/css';
 
 export type $CSS<MP> = ReadonlyArray<{
     cond: Cond$B
@@ -15,20 +16,23 @@ export type $CSS<MP> = ReadonlyArray<{
  * - styles in later classes have an higher priority
  * - all `cond` streams will be destroyed once Component is removed
  */
-export function $css<M, S>(style: $CSS<S>): Setup<{}, M> {
+export function $css<S, T extends Tag>(style: $CSS<S>): Setup<{}, CSSMeta<T>> {
     return (meta, dom, node) => result(
         meta,
         modLifecycle((m) => {
             m.unsub = combine(
                 style.map(({ style, cond }) => {
+                    const cs: ClassNamesArg[] = meta.classes || []
                     const klass = css(style as Interpolation<undefined>)
+                    const obj = {[klass]: false}
+                    cs.push(obj)
+                    meta.classes = cs
 
                     apply(cond, (shouldAdd) => {
-                        if (shouldAdd)
-                            dom.addCss(node, klass)
-                        else
-                            dom.removeCss(node, klass)
+                        obj[klass] = shouldAdd
+                        dom.setProp(node, 'className', cx(...cs))
                     })
+
                     return cond.destroy
                 })
             )

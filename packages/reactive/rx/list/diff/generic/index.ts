@@ -1,4 +1,5 @@
-import { opAdd, opRemove, opReplace, opBatch } from '../../operations/factory';
+import { pushAll } from '@crui/core/utils/array';
+import { opAdd, opBatch, opRemove, opReplace } from '../../operations/factory';
 import { Splice, Update } from '../../types';
 import { optimiseAdd, optimiseRem } from './optimise';
 
@@ -62,7 +63,7 @@ export function diff<T>(prev: T[], next: T[]): Update<T> {
     }
 
     return opBatch(
-        optimiseRem(rem).concat(optimiseAdd(add))
+        pushAll(optimiseRem(rem), optimiseAdd(add))
     )
 }
 

@@ -1,9 +1,15 @@
-import { Replace } from '../../types';
-import { Index, Payload } from '../types';
+import { Replace, UpdateType } from '../../types';
+import { Payload } from '../types';
 import { filteredList } from './filteredList';
 
-export function handleReplace<T>(upd: Replace<T>, { p, $list: $nl }: Payload<T>): Index {
-    const state = filteredList(upd.newList, 0, p);
-    $nl.set(state.filtered);
-    return state.indexMap;
+export function handleReplace<T>(p: Payload<T>, upd: Replace<T>): Replace<T> {
+    const { indexMap, filtered } = filteredList(upd.newList, 0, p.p);
+    p.indexMap = indexMap
+    return {
+        type: UpdateType.Replace,
+        get oldList() {
+            return p.$list.get()
+        },
+        newList: filtered
+    }
 }

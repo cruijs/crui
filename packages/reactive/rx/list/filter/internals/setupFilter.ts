@@ -1,5 +1,6 @@
+import { opBatch } from '../../operations/factory';
 import { StreamList } from '../../stream';
-import { DR$L, R$L, UpdateItem, UpdateType } from '../../types';
+import { DR$L, R$L, Update, UpdateType } from '../../types';
 import { Payload, Predicate } from '../types';
 import { filteredList } from './filteredList';
 import { handleReplace } from './handleReplace';
@@ -13,38 +14,41 @@ type Result<T> = {
 export function setupFilter<T>($source: R$L<T>, p: Predicate<T>): Result<T> {
     const state = filteredList($source.get(), 0, p)
     const $list = new StreamList(state.filtered)
-    let indexMap = state.indexMap
+    const payload: Payload<T> = {
+        p, $list, indexMap: state.indexMap
+    }
 
     const unsub = $source.subscribe((upd) => {
-        const payload: Payload<T> = {
-            indexMap, p, $list
-        }
-        switch (upd.type) {
-            case UpdateType.Replace:
-                indexMap = handleReplace(upd, payload)
-                return
-            case UpdateType.Update:
-                indexMap = handleUpdate(upd, payload)
-                return
-            case UpdateType.Splice:
-                indexMap = handleSplice(upd, payload)
-                return
-        }
+        $list.apply(handle(payload, upd))
     })
     $list.addUnsub(unsub)
 
     const refreshItem = (index: number) => {
-        const payload: Payload<T> = {
-            indexMap, p, $list
-        }
         const val = $source.get()[index]
-        const upd: UpdateItem<T> = {
+        $list.apply(handle(payload, {
             index,
             newValue: val,
             oldValue: val,
             type: UpdateType.Update,
-        }
-        indexMap = handleUpdate(upd, payload)
+        }))
     }
     return { refreshItem, $list }
+}
+
+function handle<T>(payload: Payload<T>, upd: Update<T>): Update<T> {
+    switch (upd.type) {
+        case UpdateType.Replace:
+            return handleReplace(payload, upd)
+
+        case UpdateType.Update:
+            return handleUpdate(payload, upd)
+
+        case UpdateType.Splice:
+            return handleSplice(payload, upd)
+        
+        case UpdateType.Batch:
+            return opBatch(upd.ops.map(
+                (u) => handle(payload, u)
+            ))
+    }
 }

@@ -1,5 +1,7 @@
 import { Batch, Replace, Splice, Update, UpdateItem, UpdateType } from '../types'
 
+export const opNoop: Update<any> = opBatch([])
+
 export function opBatch<T>(ops: Update<T>[]): Batch<T> {
     return {
         type: UpdateType.Batch,

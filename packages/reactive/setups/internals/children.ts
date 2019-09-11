@@ -2,11 +2,13 @@ import { AsyncFn, DOM, Unsubscribe } from '@crui/core/dom';
 import { combineMount, combineUnmount, Lifecycle, modLifecycle, Rendered } from '@crui/core/dom/rendered';
 import { combine, combineAsync } from '@crui/core/utils/combine';
 import { noop } from '@crui/core/utils/noop';
-import { R$L, UpdateType } from '../../rx/list/types';
+import { R$L, UpdateType, Update } from '../../rx/list/types';
 import { Cancel, Guard, makeGuard } from '../../utils/guard';
+import { pushAll } from '@crui/core/utils/array';
 
 type Meta = { mounted?: boolean }
-type $Children<N> = R$L<Rendered<N, Meta>> 
+type Child<N> = Rendered<N, Meta>
+type $Children<N> = R$L<Child<N>> 
 /**
  * Dynamically add and remove children from the DOM.
  * 
@@ -56,6 +58,11 @@ function setupUpdate<N>(
     replace: Replace<N>,
     $children: $Children<N>,
 ): Unsubscribe {
+    const insertBefore = (r: Child<N>) => {
+        const ref = findNext($children, r)
+        dom.insertBefore(p, ref, r.node)
+    }
+
     return $children.subscribe((upd) => {
         switch (upd.type) {
             case UpdateType.Replace:
@@ -64,28 +71,22 @@ function setupUpdate<N>(
                 })
                 return
 
-            case UpdateType.Update: {
-                if (upd.newValue === upd.oldValue) {
-                    return
-                }
-                replace(
-                    [upd.oldValue],
-                    [upd.newValue],
-                    (r) => {
-                        const ref = findNext($children, r)
-                        dom.insertBefore(p, ref, r.node)
-                    }
-                )
+            case UpdateType.Update:
+                if (upd.newValue !== upd.oldValue)
+                    replace([upd.oldValue], [upd.newValue], insertBefore)
                 return
-            }
 
-            case UpdateType.Splice: {
-                replace(upd.removed, upd.added, (r) => {
-                    const ref = findNext($children, r)
-                    dom.insertBefore(p, ref, r.node)
-                })
+            case UpdateType.Splice:
+                replace(upd.removed, upd.added, insertBefore)
                 return
-            }
+            
+            case UpdateType.Batch:
+                const { add, remove } = upd.ops.reduce(
+                    collect,
+                    { add: [], remove: [] } as Collector<Child<N>>
+                )
+                replace(remove, add, insertBefore)
+                return
         }
     })
 }
@@ -106,8 +107,8 @@ type MakeReplace = <N>(
 ) => Replace<N>
 
 type Replace<N> = (
-    toRemove: Rendered<N, Meta>[],
-    toAdd: Rendered<N, Meta>[],
+    toRemove: Child<N>[],
+    toAdd: Child<N>[],
     insert: (node: Rendered<N>) => void
 ) => Promise<void>
 
@@ -140,7 +141,7 @@ const makeReplace: MakeReplace =
 
 type Removing<N> = Map<N, Cancel> 
 function makeRemoveNode<N>(dom: DOM<N>, parent: N, removing: Removing<N>): RemoveNode<N> {
-    return (r: Rendered<N, Meta>) => {
+    return (r: Child<N>) => {
         let { guard, cancel } = makeGuard()
 
         removing.set(r.node, cancel)
@@ -153,7 +154,7 @@ function makeRemoveNode<N>(dom: DOM<N>, parent: N, removing: Removing<N>): Remov
     }
 }
 
-function findNext<N>($children: $Children<N>, r: Rendered<N, Meta>): N|null {
+function findNext<N>($children: $Children<N>, r: Child<N>): N|null {
     const list = $children.get()
     let index = list.lastIndexOf(r) + 1
 
@@ -163,4 +164,30 @@ function findNext<N>($children: $Children<N>, r: Rendered<N, Meta>): N|null {
     }
 
     return rr ? rr.node : null
+}
+
+type Collector<T> = {
+    add: T[],
+    remove: T[]
+}
+function collect<T>(c: Collector<T>, upd: Update<T>): Collector<T> {
+    switch (upd.type) {
+        case UpdateType.Replace:
+            pushAll(c.remove, upd.oldList)
+            pushAll(c.add, upd.newList)
+            return c
+
+        case UpdateType.Update:
+            c.remove.push(upd.oldValue)
+            c.add.push(upd.newValue)
+            return c
+
+        case UpdateType.Splice:
+            pushAll(c.remove, upd.removed)
+            pushAll(c.add, upd.added)
+            return c
+        
+        case UpdateType.Batch:
+            return upd.ops.reduce(collect, c)
+    }
 }

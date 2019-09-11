@@ -1,4 +1,4 @@
-import { opAdd, opRemove, opReplace } from '../../operations/factory';
+import { opAdd, opRemove, opReplace, opBatch } from '../../operations/factory';
 import { Splice, Update } from '../../types';
 import { optimiseAdd, optimiseRem } from './optimise';
 
@@ -9,7 +9,7 @@ type IMap<T> = Map<T, number>
  * 
  * Produce the minimum number of operations needed to transform `prev` into `next`
  */
-export function diff<T>(prev: T[], next: T[]): Update<T>[] {
+export function diff<T>(prev: T[], next: T[]): Update<T> {
     const pim = buildIndex(prev)
     const nim = buildIndex(next)
     const shouldAdd = new Set<T>()
@@ -51,7 +51,7 @@ export function diff<T>(prev: T[], next: T[]): Update<T>[] {
     }
 
     if ((next.length - i) + add.length === next.length) {
-        return [opReplace(prev, next)]
+        return opReplace(prev, next)
     }
 
     if (i < next.length) {
@@ -61,7 +61,9 @@ export function diff<T>(prev: T[], next: T[]): Update<T>[] {
         rem.push(opRemove(j, prev.slice(j)))
     }
 
-    return optimiseRem(rem).concat(optimiseAdd(add))
+    return opBatch(
+        optimiseRem(rem).concat(optimiseAdd(add))
+    )
 }
 
 function buildIndex<T>(xs: T[]): IMap<T> {

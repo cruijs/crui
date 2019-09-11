@@ -1,4 +1,11 @@
-import { Replace, Splice, UpdateType, UpdateItem } from '../types'
+import { Batch, Replace, Splice, Update, UpdateItem, UpdateType } from '../types'
+
+export function opBatch<T>(ops: Update<T>[]): Batch<T> {
+    return {
+        type: UpdateType.Batch,
+        ops
+    }
+}
 
 export function opReplace<T>(oldList: T[], newList: T[]): Replace<T> {
     return {

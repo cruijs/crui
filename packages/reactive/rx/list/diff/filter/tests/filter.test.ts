@@ -1,10 +1,13 @@
-import { opsApply } from '../../../operations/apply';
-import { opAdd, opRemove, opReplace, opSplice } from '../../../operations/factory';
+import { diff } from '..';
+import { opAdd, opBatch, opRemove, opReplace, opSplice } from '../../../operations/factory';
 import { StreamList } from '../../../stream';
 import { Update } from '../../../types';
-import { diff } from '..';
 
-function assert(source: number[], target: number[], expected: Update<number>[]) {
+function assertBatch(source: number[], target: number[], expected: Update<number>[]) {
+    return assert(source, target, opBatch(expected))
+}
+
+function assert(source: number[], target: number[], expected: Update<number>) {
     const $list = new StreamList(source)
 
     expect(diff(
@@ -12,14 +15,16 @@ function assert(source: number[], target: number[], expected: Update<number>[]) 
         target,
     )).toEqual(expected)
 
-    opsApply($list, expected)
+    $list.apply(expected)
     expect($list.get()).toEqual(target)
 }
 
 describe(diff, () => {
     describe('with empty lists', () => {
         it('no updates', () => {
-            expect(diff([], [])).toEqual([])
+            expect(diff([], [])).toEqual(
+                opBatch([])
+            )
         })
     })
 
@@ -28,22 +33,22 @@ describe(diff, () => {
             expect(diff(
                 [1, 2, 3],
                 [1, 2, 3]
-            )).toEqual([])
+            )).toEqual(
+                opBatch([])
+            )
         })
     })
 
     describe('all elements are different', () => {
         it('replace all', () => {
-            assert([1], [2], [
-                opReplace([1], [2])
-            ])
+            assert([1], [2], opReplace([1], [2]))
         })
     })
 
     describe('fragmented', () => {
         describe('removal', () => {
             it('fragmented updates', () => {
-                assert(
+                assertBatch(
                     [0, 1, 2, 3, 4, 5],
                     [0, 2, 4],
                     [
@@ -57,7 +62,7 @@ describe(diff, () => {
 
         describe('addition', () => {
             it('fragmented updates', () => {
-                assert(
+                assertBatch(
                     [0, 2, 4],
                     [0, 1, 2, 3, 4, 5],
                     [
@@ -72,7 +77,7 @@ describe(diff, () => {
 
     describe('least amount of operations', () => {
         it('squash subsequent one', () => {
-            assert(
+            assertBatch(
                 [0, 1, 2, 3, 4],
                 [0, 5, 6, 3, 4, 7, 8],
                 [

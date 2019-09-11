@@ -115,12 +115,11 @@ type RemoveNode<N> = (r: Rendered<N>) => void
 
 const makeReplace: MakeReplace = 
     (guard, dom, removing, removeNode) => (toRemove, toAdd, insert) => {
-        const ps = toRemove.map(removeNode)
-
         toAdd.forEach((r) => {
             const cancel = removing.get(r.node)
             cancel && cancel()
         })
+        const ps = toRemove.map(removeNode)
 
         return Promise.all(ps).then(guard(() => {
             toAdd.forEach((r) => {

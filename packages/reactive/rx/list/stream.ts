@@ -66,4 +66,27 @@ export class StreamList<T> extends Stream<T[], Update<T>> implements RW$L<T>
     forEach(f: (v: T) => void) {
         this.value.forEach(f)
     }
+
+    apply(upd: Update<T>): void {
+        this.value = updateList(this.value, upd)
+        this.notify(upd)
+    }
+}
+
+function updateList<T>(list: T[], upd: Update<T>): T[] {
+    switch (upd.type) {
+        case UpdateType.Replace:
+            return upd.newList
+
+        case UpdateType.Update:
+            list[upd.index] = upd.newValue
+            return list
+
+        case UpdateType.Splice:
+            list.splice(upd.index, upd.removed.length, ...upd.added)
+            return list
+
+        case UpdateType.Batch:
+            return upd.ops.reduce(updateList, list)
+    }
 }

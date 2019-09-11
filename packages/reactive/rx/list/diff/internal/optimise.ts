@@ -1,4 +1,4 @@
-import { opReplace } from '../../operations/factory';
+import { opReplace, opBatch } from '../../operations/factory';
 import { Splice, Update } from '../../types';
 
 export function squashSameIndex<T>(ops: Splice<T>[]): Splice<T>[] {
@@ -45,15 +45,15 @@ export function squashAdjacentInc<T>(ops: Splice<T>[]): Splice<T>[] {
     return res
 }
 
-export function tryReplace<T>(prev: T[], next: T[], ops: Splice<T>[]): Update<T>[] {
-    if (ops.length !== 1)
-        return ops
-
+export function batchOrReplace<T>(prev: T[], next: T[], ops: Splice<T>[]): Update<T> {
     const last = ops[0]
+    if (ops.length !== 1)
+        return last
+
     const isReplace = 
         last.index === 0
         && last.removed.length === prev.length 
         && last.added.length === next.length
 
-    return isReplace ? [opReplace(prev, next)] : ops
+    return isReplace ? opReplace(prev, next) : opBatch(ops)
 }

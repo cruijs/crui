@@ -1,6 +1,5 @@
-import { opsApply } from '../../../operations/apply';
-import { StreamList } from '../../../stream';
 import { diff } from '..';
+import { StreamList } from '../../../stream';
 
 type Item = { n: number }
 describe(diff, () => {
@@ -18,7 +17,7 @@ describe(diff, () => {
                 it('becomes target', () => {
                     const $list = new StreamList(prev)
 
-                    opsApply($list, diff(prev, target))
+                    $list.apply(diff(prev, target))
 
                     expect($list.get()).toEqual(target)
                 })

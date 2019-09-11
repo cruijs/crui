@@ -1,5 +1,4 @@
 import { Unsubscribe } from '@crui/core/types';
-import { opApply, opsApply } from './operations/apply';
 import { opReplace } from './operations/factory';
 import { R$L, RW$L, Update } from './types';
 
@@ -11,24 +10,23 @@ export function keepSynced<T>(
     $master: R$L<T>,
     $slave: RW$L<T>
 ): Unsubscribe {
-    return keepSyncedWith($master, $slave, (slave, master) => [
+    return keepSyncedWith($master, $slave, (slave, master) => (
         opReplace(slave, master)
-    ])
+    ))
 }
 
 export function keepSyncedWith<T>(
     $master: R$L<T>,
     $slave: RW$L<T>,
-    diff: (slave: T[], master: T[]) => Update<T>[]
+    diff: (slave: T[], master: T[]) => Update<T>
 ): Unsubscribe {
     if (isSame($master, $slave)) {
         throw Error('Sync on same stream is not supported')
     }
-    opsApply(
-        $slave,
+    $slave.apply(
         diff($slave.get(), $master.get())
     )
-    return $master.subscribe(opApply($slave))
+    return $master.subscribe((upd) => $slave.apply(upd))
 }
 
 function isSame(a: Object, b: Object): boolean {

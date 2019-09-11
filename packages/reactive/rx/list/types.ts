@@ -7,8 +7,10 @@ export enum UpdateType {
     Update,
     Splice,
     Replace,
+    Batch
 }
-export type Update<T> = UpdateItem<T> | Splice<T> | Replace<T>
+export type Update<T> = UpdateItem<T> | Splice<T> | Replace<T> | Batch<T>
+
 export type UpdateItem<T> = {
     type: UpdateType.Update,
     index: number,
@@ -25,6 +27,10 @@ export type Replace<T> = {
     type: UpdateType.Replace,
     oldList: T[],
     newList: T[],
+}
+export type Batch<T> = {
+    type: UpdateType.Batch,
+    ops: Update<T>[]
 }
 
 /**
@@ -102,6 +108,8 @@ export interface WriteStreamList<T> extends WriteStream<T[]> {
      * Remove item form the StreamList if exists
      */
     remove(item: T): void
+
+    apply(op: Update<T>): void
 }
 
 export type RW$L<T> = R$L<T> & W$L<T>

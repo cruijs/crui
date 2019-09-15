@@ -1,44 +1,46 @@
-import { StreamList } from '../stream';
-import { DR$L, R$L, W$L, Update, UpdateType } from '../types';
+import { LazyStreamList } from '../lazy-stream';
+import { DR$L, R$L, Update, UpdateType, W$L } from '../types';
 
 export type FMap<A, B> = (v: A, i: number) => B
 export function $map<A, B>(
     $source: R$L<A>, 
     f: FMap<A, B>
 ): DR$L<B> {
-    const $list = new StreamList($source.map(f))
+    const $list = new LazyStreamList($source.map(f))
     $list.addUnsub(
-        $source.subscribe(onUpdate(f, $list))
+        $source.subscribe((upd) => {
+            handle(f, $list, upd)
+            $list.runNotify()
+        })
     )
     return $list
 }
 
-export function onUpdate<A, B>(
-    fmap: FMap<A, B>,
-    $children: W$L<B>
-) {
-    return (upd: Update<A>) => {
-        switch (upd.type) {
-            case UpdateType.Update:
-                $children.update(
-                    upd.index,
-                    fmap(upd.newValue, upd.index)
-                )
-                break
+function handle<A, B>(f: FMap<A, B>, $list: W$L<B>, upd: Update<A>): void {
+    switch (upd.type) {
+        case UpdateType.Update:
+            $list.update(
+                upd.index,
+                f(upd.newValue, upd.index)
+            )
+            return
 
-            case UpdateType.Replace:
-                $children.set(
-                    upd.newList.map(fmap)
-                )
-                break
+        case UpdateType.Replace:
+            $list.set(
+                upd.newList.map(f)
+            )
+            return
 
-            case UpdateType.Splice:
-                $children.splice(
-                    upd.index,
-                    upd.removed.length,
-                    upd.added.map((v, i) => fmap(v, i + upd.index))
-                )
-                break
-        }
+        case UpdateType.Splice:
+            $list.splice(
+                upd.index,
+                upd.removed.length,
+                upd.added.map((v, i) => f(v, i + upd.index))
+            )
+            return
+
+        case UpdateType.Batch:
+            upd.ops.forEach((upd) => handle(f, $list, upd))
+            return
     }
 }

@@ -116,3 +116,6 @@ export type RW$L<T> = R$L<T> & W$L<T>
 export type ReadWriteStreamList<T> = RW$L<T>
 
 export type DRW$L<T> = RW$L<T> & Destroyable
+export type Lazy = {
+    runNotify(): void
+}

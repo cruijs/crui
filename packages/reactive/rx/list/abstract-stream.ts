@@ -17,7 +17,7 @@ export abstract class AbstractStreamList<T> extends Stream<T[], Update<T>> imple
         this.updated(opReplace(oldList, newList))
     }
 
-    splice(index: number, delCount: number, added: T[]): T[] {
+    splice(index: number, delCount: number, added: readonly T[]): T[] {
         if (delCount <= 0 && added.length === 0) {
             return []
         }
@@ -80,7 +80,7 @@ export abstract class AbstractStreamList<T> extends Stream<T[], Update<T>> imple
 function updateList<T>(list: T[], upd: Update<T>): T[] {
     switch (upd.type) {
         case UpdateType.Replace:
-            return upd.newList
+            return upd.newList.slice()
 
         case UpdateType.Update:
             list[upd.index] = upd.newValue

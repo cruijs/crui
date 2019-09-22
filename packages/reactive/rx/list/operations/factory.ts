@@ -2,14 +2,14 @@ import { Batch, Replace, Splice, Update, UpdateItem, UpdateType } from '../types
 
 export const opNoop: Update<any> = opBatch([])
 
-export function opBatch<T>(ops: Update<T>[]): Batch<T> {
+export function opBatch<T>(ops: readonly Update<T>[]): Batch<T> {
     return {
         type: UpdateType.Batch,
         ops
     }
 }
 
-export function opReplace<T>(oldList: T[], newList: T[]): Replace<T> {
+export function opReplace<T>(oldList: readonly T[], newList: readonly T[]): Replace<T> {
     return {
         type: UpdateType.Replace,
         oldList,
@@ -26,15 +26,15 @@ export function opUpdate<T>(index: number, oldValue: T, newValue: T): UpdateItem
     }
 }
 
-export function opRemove<T>(index: number, removed: T[]): Splice<T> {
+export function opRemove<T>(index: number, removed: readonly T[]): Splice<T> {
     return opSplice(index, removed, [])
 }
 
-export function opAdd<T>(index: number, added: T[]): Splice<T> {
+export function opAdd<T>(index: number, added: readonly T[]): Splice<T> {
     return opSplice(index, [], added)
 }
 
-export function opSplice<T>(index: number, removed: T[], added: T[]): Splice<T> {
+export function opSplice<T>(index: number, removed: readonly T[], added: readonly T[]): Splice<T> {
     return {
         type: UpdateType.Splice,
         index,

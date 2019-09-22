@@ -8,11 +8,11 @@ import { Splice, Update } from '../../types';
  * This algorithm is much more efficient than general one thanks to the assumption
  * that elements will only be added or removed, but not changing position.
  */
-export function diff<T>(prev: T[], next: T[]): Update<T> {
+export function diff<T>(prev: readonly T[], next: readonly T[]): Update<T> {
     return optimise(prev, next, calculate(prev, next))
 }
 
-function calculate<T>(prev: T[], next: T[]): Splice<T>[] {
+function calculate<T>(prev: readonly T[], next: readonly T[]): Splice<T>[] {
     const ops: Splice<T>[] = []
 
     let p = 0, n = 0

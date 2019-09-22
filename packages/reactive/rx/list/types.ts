@@ -20,24 +20,24 @@ export type UpdateItem<T> = {
 export type Splice<T> = {
     type: UpdateType.Splice,
     index: number,
-    removed: T[],
-    added: T[],
+    removed: readonly T[],
+    added: readonly T[],
 }
 export type Replace<T> = {
     type: UpdateType.Replace,
-    oldList: T[],
-    newList: T[],
+    oldList: readonly T[],
+    newList: readonly T[],
 }
 export type Batch<T> = {
     type: UpdateType.Batch,
-    ops: Update<T>[]
+    ops: readonly Update<T>[]
 }
 
 /**
  * Stream shaped based on a list of elements.
  */
 export type R$L<T> = ReadStreamList<T>
-export interface ReadStreamList<T> extends ReadStream<T[], Update<T>> {
+export interface ReadStreamList<T> extends ReadStream<readonly T[], Update<T>> {
     /**
      * Returns the i-th element if exists or undefined otherwise
      */
@@ -75,7 +75,7 @@ export interface WriteStreamList<T> extends WriteStream<T[]> {
     /**
      * Modify StreamList by adding and removing elements starting at index
      */
-    splice(index: number, delCount: number, added: T[]): T[]
+    splice(index: number, delCount: number, added: readonly T[]): T[]
 
     /**
      * Replace the item at index.
@@ -86,7 +86,7 @@ export interface WriteStreamList<T> extends WriteStream<T[]> {
     /**
      * Append all items at the end of the StreamList
      */
-    concat(items: T[]): void
+    concat(items: readonly T[]): void
 
     /**
      * Append an item at the end of the StreamList

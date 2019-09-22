@@ -29,6 +29,10 @@ export interface WriteStreamBox<T> extends WriteStream<T> {}
  * Write StreamBox
  */
 export type W$B<T> = WriteStreamBox<T>
+/**
+ * Destroyabe Write StreamBox
+ */
+export type DW$B<T> = Destroyable & WriteStreamBox<T>
 
 /**
  * A read-write stream containing a single value at a time

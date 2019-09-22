@@ -10,7 +10,7 @@ type IMap<T> = Map<T, number>
  * 
  * Produce the minimum number of operations needed to transform `prev` into `next`
  */
-export function diff<T>(prev: T[], next: T[]): Update<T> {
+export function diff<T>(prev: readonly T[], next: readonly T[]): Update<T> {
     const pim = buildIndex(prev)
     const nim = buildIndex(next)
     const shouldAdd = new Set<T>()
@@ -67,7 +67,7 @@ export function diff<T>(prev: T[], next: T[]): Update<T> {
     )
 }
 
-function buildIndex<T>(xs: T[]): IMap<T> {
+function buildIndex<T>(xs: readonly T[]): IMap<T> {
     const map: IMap<T> = new Map()
     for (let i = 0; i < xs.length; ++i)
         map.set(xs[i], i)

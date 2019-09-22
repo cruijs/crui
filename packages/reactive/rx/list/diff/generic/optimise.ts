@@ -5,11 +5,11 @@ export function optimiseRem<T>(ops: Splice<T>[]) {
     return ops.length === 0 ? ops : squashAdjacentInc(squashSameIndex(ops))
 }
 
-export function optimiseAdd<T>(ops: Splice<T>[]) {
+export function optimiseAdd<T>(ops: readonly Splice<T>[]) {
     return (ops.length === 0) ? ops : squashAdjacent(ops)
 }
 
-function squashAdjacent<T>(ops: Splice<T>[]): Splice<T>[] {
+function squashAdjacent<T>(ops: readonly Splice<T>[]): Splice<T>[] {
     let last = ops[0]
     const res = [last]
     let di = 1

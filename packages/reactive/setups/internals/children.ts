@@ -107,8 +107,8 @@ type MakeReplace = <N>(
 ) => Replace<N>
 
 type Replace<N> = (
-    toRemove: Child<N>[],
-    toAdd: Child<N>[],
+    toRemove: readonly Child<N>[],
+    toAdd: readonly Child<N>[],
     insert: (node: Rendered<N>) => void
 ) => Promise<void>
 

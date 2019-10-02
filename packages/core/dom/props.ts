@@ -3,6 +3,7 @@ export type PProps<K extends KProps> = Pick<Props, K>
 export type Props = {
     id: string,
     className: string,
+    tabIndex: number,
 
     // input
     type: string,

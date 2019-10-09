@@ -1,15 +1,11 @@
-import { Elem, x, ElemDriver, PropDriver, AttrDriver, Driver, CreateDriver, Emitter, Emit, AnyAction, Drivers, PropType, ElemType, AttrType } from './actions/prop'
+import { Deferred, dependsOn } from './deferred';
+import { Emitter } from './emitter';
+import { AnyAction, Driver, Drivers } from './types';
 
 type DtoS<D> = { [K in keyof D]: InferAction<D[K]> }[keyof D]
-type InferAction<FD> = FD extends Driver<infer A, any> ? A : never;
+type InferAction<FD> = FD extends Driver<any, infer A, any> ? A : never;
 
-const d = {
-    [PropType]: 0 as any,
-    [ElemType]: 0 as any,
-}
-render(0 as any, d, x)
-
-function render<N, A extends AnyAction, D extends A['_d']>(
+export function render<N, A extends AnyAction, D extends A['_d']>(
     node: N,
     driver: D,
     action: A
@@ -17,39 +13,69 @@ function render<N, A extends AnyAction, D extends A['_d']>(
     exec(node, driver, action)
 }
 
-function exec<N, A extends AnyAction, D extends Drivers>(
+export function exec<N, A extends AnyAction, D extends Drivers<N>>(
     node: N,
     driver: D,
     action: A
 ): void {
-    type E = Emit<DtoS<D>>
-    type Item = {
-        node: any,
+    type E = Emitter<N, DtoS<D>>
+    type A1 = DtoS<D>
+    type Item  = {
+        node: N,
         action: DtoS<D>
+        deferred: Deferred<N>
     }
 
-    let nextBatch: Item[] = [{ node, action: action as any }]
-    const syncEmit: E = (node, action) => {
-        nextBatch.push({ node, action })
+    let nextBatch: Item[] = []
+    const syncEmit = (node: N, action: A1) => {
+        const deferred = new Deferred<N>()
+        nextBatch.push({ node, action, deferred })
+        return deferred
     }
-    const asyncEmit: E = (node, action) => {
+    syncEmit(node, action as any)
+
+    const asyncEmit = (node: N, action: A1) => {
         window.requestAnimationFrame(() => {
             exec()
         })
-        syncEmit(node, action)
+        const t = syncEmit(node, action)
         emitter.emit = syncEmit
+        return t
     }
 
-    const emitter = {
-        emit: syncEmit
+    const emitter: E = {
+        emit: syncEmit,
+        emitAll: (node: N, actions: A1[]) => {
+            let counter = actions.length
+            const collected: N[] = new Array(counter)
+            const deferred = new Deferred<N[]>()
+
+            actions.forEach((a, i) => {
+                emitter.emit(node, a).then = (n) => {
+                    collected[i] = n
+                    if (--counter === 0) {
+                        deferred.done(collected)
+                    }
+                }
+            })
+
+            return deferred
+        }
     }
+
     const exec = () => {
         while (nextBatch.length !== 0) {
             const batch = nextBatch
             nextBatch = []
 
-            batch.forEach(({ node, action }) => {
-                driver[action.type](node, action, emitter)
+            batch.forEach(({ node, action, deferred }) => {
+                const dn = driver[action.type](node, action, emitter)
+                if (dn instanceof Deferred) {
+                    dependsOn(dn, deferred)
+                }
+                else {
+                    deferred.done(dn)
+                }
             })
         }
         emitter.emit = asyncEmit

@@ -1,12 +1,14 @@
-import { child, h } from './elem'
-import { prop } from './prop/index'
-import { attr } from './attr'
+import { attr } from './attr';
+import { h } from './elem';
+import { on } from './event';
+import { prop } from './prop/index';
+import { text } from './text';
 
 export const x = h('div', [
     prop('className', 'test'),
-    prop('tabIndex', -1),
-    child('span', [
-        prop('className', 'child'),
-        attr('test', 'er'),
+    attr('tabIndex', '-1'),
+    text(''),
+    h('form', [
+        on('submit', (e) => e.preventDefault()),
     ])
 ])

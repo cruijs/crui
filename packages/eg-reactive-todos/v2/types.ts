@@ -2,17 +2,40 @@ import { Emitter } from './emitter'
 import { Deferred } from './deferred'
 
 export type Driver<N, A extends AnyAction, S extends AnyAction = AnyAction, R = N> =
-    (node: N, action: A, emitter: Emitter<N, S>) => R|Deferred<R>
+    (node: N, action: A, emitter: Emitter<N, S>) => R | Deferred<R>
 
 export type Drivers<N = any, R = N> = {
     [k: string]: Driver<N, AnyAction, AnyAction, R>
 }
 
-export type Action<T extends symbol, D extends Drivers<any, DR>, R = {}, DR = any> = {
-    readonly type: T
-    _r: R,
-    _d: D,
-    _dr: DR,
-}
+/**
+ * Transform Union into Intersection
+ * 
+ * Example:
+ *   UtoI<A | B | C> := A & B & C
+ */
+export type UtoI<U> = 
+  (U extends any ? (k: U)=>void : never) extends ((k: infer I)=>void) ? I : never
 
-export type AnyAction = Action<any, any, any, any>
+export type Action<
+    T extends symbol,
+    D extends Drivers<any, DR>,
+    RP = {},
+    DR = any,
+> = {
+    readonly type: T
+    _restriction: RP,
+    _drivers: D,
+    _return: DR,
+}
+export type AnyAction = Action<any, any, any, {}>
+
+export type MatchRestr<R, A> =
+    A extends AnyAction
+        ? R extends A['_restriction'] ? A : never
+        : never
+
+export type RemoveRestr<R, A> =
+    A extends AnyAction
+        ? R extends (infer R0) & A['_restriction'] ? R0 : never
+        : never

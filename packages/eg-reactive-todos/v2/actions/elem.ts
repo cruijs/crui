@@ -1,31 +1,31 @@
 import { Tag } from '../../../core/types'
-import { then, Deferred } from '../deferred'
+import { Deferred, then } from '../deferred'
 import { Emitter } from '../emitter'
-import { Action, Driver } from '../types'
-import { CreateTag, createTag } from './createTag'
-import { TagAction } from './tagAction'
+import { Action, AnyAction, Driver, MatchRestr, RemoveRestr, UtoI } from '../types'
 import { action } from './action'
 import { Append, append } from './append'
+import { CreateTag, createTag } from './createTag'
+import { TagAction, TagR } from './tagAction'
 
 export const ElemType = Symbol('h')
-export type ElemDriver<A extends TagAction, N = any> = {
+export type ElemDriver<A extends AnyAction, N = any> = {
     [ElemType]: Driver<N, Elem<Tag, A>, A>
 }
 
-type UtoI<U> = 
-  (U extends any ? (k: U)=>void : never) extends ((k: infer I)=>void) ? I : never
-
-export type Elem<T extends Tag, A extends TagAction> =
+export type Elem<T extends Tag, A extends AnyAction> =
     Action<
         typeof ElemType,
-        ElemDriver<A> & UtoI<A['_d']>,
-        A['_r']
+        ElemDriver<A> & UtoI<A['_drivers']>,
+        UtoI<RemoveRestr<TagR<T>, A>>
     > & {
         tag: T
         actions: readonly A[]
     }
 
-export function h<T extends Tag, A extends TagAction>(tag: T, actions: readonly A[]): Elem<T, A> {
+export function h<T extends Tag, A extends AnyAction>(
+    tag: T,
+    actions: readonly MatchRestr<TagR<T>, A>[]
+): Elem<T, A> {
     return action({
         type: ElemType,
         tag,

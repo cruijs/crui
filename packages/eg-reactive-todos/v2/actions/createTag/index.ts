@@ -1,5 +1,6 @@
 import { Tag } from '../../../../core/types'
 import { Action, Driver } from '../../types'
+import { action } from '../action'
 
 export const CreateTagType = Symbol('create-tag')
 export type CreateTagDriver<N = any> = {
@@ -10,18 +11,14 @@ export type CreateTag<N = any> =
     Action<
         typeof CreateTagType,
         CreateTagDriver,
-        {},
         N
     > & {
         tag: Tag
     }
 
 export function createTag(tag: Tag): CreateTag {
-    return {
+    return action({
         type: CreateTagType,
         tag,
-        _r: 0 as any,
-        _d: 0 as any,
-        _dr: 0 as any,
-    }
+    })
 }

@@ -1,5 +1,5 @@
-import { Emitter } from './emitter'
 import { Deferred } from './deferred'
+import { Emitter } from './emitter'
 
 export type Driver<N, A extends AnyAction, S extends AnyAction = AnyAction, R = N> =
     (node: N, action: A, emitter: Emitter<N, S>) => R | Deferred<R>
@@ -28,7 +28,7 @@ export type Action<
     _drivers: D,
     _return: DR,
 }
-export type AnyAction = Action<any, any, any, {}>
+export type AnyAction = Action<any, any, any, any>
 
 export type MatchRestr<R, A> =
     A extends Action<any, any, infer MR>

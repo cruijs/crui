@@ -31,11 +31,11 @@ export type Action<
 export type AnyAction = Action<any, any, any, {}>
 
 export type MatchRestr<R, A> =
-    A extends AnyAction
-        ? R extends A['_restriction'] ? A : never
+    A extends Action<any, any, infer MR>
+        ? R extends Pick<MR, Extract<keyof MR, keyof R>> ? A : never
         : never
 
 export type RemoveRestr<R, A> =
-    A extends AnyAction
-        ? R extends (infer R0) & A['_restriction'] ? R0 : never
+    A extends Action<any, any, infer MR>
+        ? Pick<MR, Exclude<keyof MR, keyof R>>
         : never

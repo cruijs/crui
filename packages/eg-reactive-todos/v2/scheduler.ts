@@ -1,51 +1,38 @@
+import { Fn0 } from '../../core/utils/combine';
 import { Deferred, dependsOn } from './deferred';
 import { Emitter } from './emitter';
-import { AnyAction, Driver, Drivers } from './types';
+import { AnyAction, Drivers } from './types';
 
-type DtoS<D> = { [K in keyof D]: InferAction<D[K]> }[keyof D]
-type InferAction<FD> = FD extends Driver<any, infer A, any> ? A : never;
-
-export function render<N, A extends AnyAction, D extends A['_d']>(
+export function schedule<N, A extends AnyAction, D extends Drivers<N>>(
+    onNext: (w: Fn0) => void,
     node: N,
     driver: D,
-    action: A
+    action: A,
 ): void {
-    exec(node, driver, action)
-}
-
-export function exec<N, A extends AnyAction, D extends Drivers<N>>(
-    node: N,
-    driver: D,
-    action: A
-): void {
-    type E = Emitter<N, DtoS<D>>
-    type A1 = DtoS<D>
     type Item  = {
         node: N,
-        action: DtoS<D>
+        action: AnyAction,
         deferred: Deferred<N>
     }
 
     let nextBatch: Item[] = []
-    const syncEmit = (node: N, action: A1) => {
+    const syncEmit = (node: N, action: AnyAction) => {
         const deferred = new Deferred<N>()
         nextBatch.push({ node, action, deferred })
         return deferred
     }
     syncEmit(node, action as any)
 
-    const asyncEmit = (node: N, action: A1) => {
-        window.requestAnimationFrame(() => {
-            exec()
-        })
+    const asyncEmit = (node: N, action: AnyAction) => {
+        onNext(exec)
         const t = syncEmit(node, action)
         emitter.emit = syncEmit
         return t
     }
 
-    const emitter: E = {
+    const emitter: Emitter<N, AnyAction> = {
         emit: syncEmit,
-        emitAll: (node: N, actions: A1[]) => {
+        emitAll: (node: N, actions: AnyAction[]) => {
             let counter = actions.length
             const collected: N[] = new Array(counter)
             const deferred = new Deferred<N[]>()

@@ -5,4 +5,4 @@ export type TagR = {
     tag: Tag
 }
 
-export type TagAction = Action<any, any, TagR>
+export type TagAction<R = any> = Action<any, any, TagR, R>

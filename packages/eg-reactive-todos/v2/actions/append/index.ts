@@ -1,23 +1,21 @@
-import { Driver, Action } from '../types'
+import { Driver, Action } from '../../types'
+import { action } from '../action'
 
 export const AppendType = Symbol('append')
 export type AppendDriver<N> = {
-    append: Driver<Append<N>, {}>
+    [AppendType]: Driver<N, Append<N>>
 }
 export type Append<N> =
     Action<
         typeof AppendType,
-        AppendDriver<N>,
-        {}
+        AppendDriver<N>
     > & {
         node: N,
     }
 
 export function append<N>(node: N): Append<N> {
-    return {
+    return action({
         type: AppendType,
         node,
-        _r: 0 as any,
-        _d: 0 as any,
-    }
+    })
 }

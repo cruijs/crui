@@ -2,9 +2,10 @@ import { Tag } from '../../../core/types'
 import { then, Deferred } from '../deferred'
 import { Emitter } from '../emitter'
 import { Action, Driver } from '../types'
-import { Append, append } from './append'
 import { CreateTag, createTag } from './createTag'
 import { TagAction } from './tagAction'
+import { action } from './action'
+import { Append, append } from './append'
 
 export const ElemType = Symbol('h')
 export type ElemDriver<A extends TagAction, N = any> = {
@@ -25,14 +26,14 @@ export type Elem<T extends Tag, A extends TagAction> =
     }
 
 export function h<T extends Tag, A extends TagAction>(tag: T, actions: readonly A[]): Elem<T, A> {
-    return {
+    return action({
         type: ElemType,
         tag,
         actions,
-        _r: 0 as any,
-        _d: 0 as any,
-    }
+    })
 }
+
+export const child = h
 
 export function elemDriver<N, A extends TagAction>(
     parent: N,

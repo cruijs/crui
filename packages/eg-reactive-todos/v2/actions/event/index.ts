@@ -22,7 +22,7 @@ export const EventType = Symbol('event')
 export type EventDriver<N = any> = {
     [EventType]: Driver<N, EventAction>
 }
-type EventAction<T extends Tag = Tag> = Action<typeof EventType, EventDriver, TagR<T>> & {
+export type EventAction<T extends Tag = Tag> = Action<typeof EventType, EventDriver, TagR<T>> & {
     event: string,
     handler: EventHandler,
 }

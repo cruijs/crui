@@ -6,7 +6,7 @@ export const AttrType = Symbol('attr')
 export type AttrDriver<N = any> = {
     [AttrType]: Driver<N, Attr>
 }
-type Attr = Action<typeof AttrType, AttrDriver, TagR> & {
+export type Attr = Action<typeof AttrType, AttrDriver, TagR> & {
     name: string,
     value: string,
 }

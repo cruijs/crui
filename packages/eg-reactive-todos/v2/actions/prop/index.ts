@@ -7,7 +7,7 @@ export const PropType = Symbol('prop')
 export type PropDriver<N = any> = {
     [PropType]: Driver<N, Prop<any>>
 }
-type Prop<K extends keyof Props> = Action<typeof PropType, PropDriver, TagR> & {
+export type Prop<K extends keyof Props> = Action<typeof PropType, PropDriver, TagR> & {
     name: K
     value: Props[K]
 }

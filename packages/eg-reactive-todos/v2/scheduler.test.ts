@@ -35,13 +35,13 @@ describe('emit multiple actions', () => {
 })
 
 describe('action value depends on emitted', () => {
-    const SumType = Symbol()
-    type Sum = Action<typeof SumType, Drivers> & {
-        type: typeof SumType,
+    const AddType = Symbol()
+    type Add = Action<typeof AddType, Drivers> & {
+        type: typeof AddType,
         value: number
     }
-    const sum = (value: number): Sum => action({
-        type: SumType,
+    const add = (value: number): Add => action({
+        type: AddType,
         value,
     })
 
@@ -69,7 +69,7 @@ describe('action value depends on emitted', () => {
         value: number
     }
     const driver: Drivers<Num> = {
-        [SumType]: (n, { value }: Sum) => {
+        [AddType]: (n, { value }: Add) => {
             n.value += value
             return n
         },
@@ -91,9 +91,9 @@ describe('action value depends on emitted', () => {
     it('should execute one after the other', () => {
         const n = { value: 0 }
         schedule(sync, n, driver, expr([
-            sum(1),
+            add(1),
             mult(5),
-            sum(5),
+            add(5),
             mult(2)
         ]))
         expect(n.value).toBe(20)

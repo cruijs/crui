@@ -30,9 +30,9 @@ export function schedule<N, A extends AnyAction, D extends Drivers<N>>(
         return t
     }
 
-    const emitter: Emitter<N, AnyAction> = {
+    const emitter: Emitter<N> = {
         emit: syncEmit,
-        emitAll: (node: N, actions: AnyAction[]) => {
+        emitAll: (node, actions) => {
             let counter = actions.length
             const collected: N[] = new Array(counter)
             const deferred = new Deferred<N[]>()

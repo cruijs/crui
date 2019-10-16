@@ -1,18 +1,14 @@
-import { Component } from '@crui/core/dom';
-import { hc } from '@crui/core/elems/children';
-import { h } from '@crui/core/elems/h';
-import { ht } from '@crui/core/elems/ht';
-import { children } from '@crui/core/setups/children';
-import { sc2 } from '@crui/core/setups/combine/two';
-import { css } from '@crui/css-emotion/setups/css';
 import { DRW$B } from '@crui/reactive/rx/box/types';
-import { bindChecked } from '@crui/reactive/setups/bind';
-import { c$filter$$ } from '@crui/reactive/setups/filter';
 import { cssTx } from '@crui/transitions/elems/cssTx';
+import { bindChecked } from '../../v2/actions/bind';
+import { children } from '../../v2/actions/children';
+import { css } from '../../v2/actions/css';
+import { Elem, h } from '../../v2/actions/elem';
+import { ht } from '../../v2/actions/ht';
 import { Todo, TodoStore } from '../store';
 
 export function TodoList(store: TodoStore) {
-    return h('ul', sc2(
+    return h('ul', [
         c$filter$$(
             store.getTodos(),
             TodoComponent,
@@ -24,11 +20,11 @@ export function TodoList(store: TodoStore) {
             margin: 0,
             paddingTop: '0.5rem',
         })
-    ))
+    ])
 }
 
-const TodoComponent = (todo: Todo): Component<{}> => (
-    hc('li', [
+const TodoComponent = (todo: Todo) => (
+    h('li', [
         wrapper([
             input(todo.done),
             ht('span', todo.text)
@@ -36,9 +32,9 @@ const TodoComponent = (todo: Todo): Component<{}> => (
     ])
 )
 
-const wrapper = <C>(cs: Component<C>[]) => 
-    Remove(Slide(
-        h('label', sc2( 
+const wrapper = <E extends Elem<any, any>>(cs: E[]) => 
+    // Remove(Slide(
+        h('label', [
             children(cs),
             css({
                 display: 'block',
@@ -47,8 +43,8 @@ const wrapper = <C>(cs: Component<C>[]) =>
                 marginBottom: '0.5rem',
                 cursor: 'pointer',
             }),
-        ))
-    ))
+        ])
+    // ))
 
 const Remove = cssTx(
     { height: 500, margin: 500, padding: 500 },
@@ -62,11 +58,11 @@ const Slide = cssTx(
 )
 
 const input = (check: DRW$B<boolean>) => (
-    h('input', sc2(
+    h('input', [
         bindChecked(check),
         css({
             verticalAlign: 'middle',
             marginRight: '0.5rem',
         }),
-    ))
+    ])
 )

@@ -1,18 +1,16 @@
-import { Component } from '@crui/core/dom/index';
-import { h } from '@crui/core/elems/h';
-import { ht } from '@crui/core/elems/ht';
-import { text } from '@crui/core/elems/text';
-import { children, onClick } from '@crui/core/setups';
-import { sc } from '@crui/core/setups/combine/multi';
-import { $css } from '@crui/css-emotion-reactive/setups/css';
-import { hcs } from '@crui/css-emotion/elems/hcs';
-import { css } from '@crui/css-emotion/setups/css';
 import { map, RW$B } from '@crui/reactive/rx/box';
+import { css } from '../../v2/actions/css/index';
+import { h } from '../../v2/actions/elem';
+import { onClick } from '../../v2/actions/event';
+import { ht } from '../../v2/actions/ht';
+import { $css } from '../../v2/actions/rx-css';
+import { text } from '../../v2/actions/text';
 import { TodoStore, Visibility } from '../store';
 
 export const Footer = (s: TodoStore) => {
     const vis = s.getVisibility()
-    return hcs('div', { marginTop: '1rem' }, [
+    return h('div', [
+        css({ marginTop: '1rem' }),
         ht('span', 'Show: '),
         Filter(vis, Visibility.ALL, 'All'),
         Filter(vis, Visibility.TODO, 'Active'),
@@ -24,11 +22,9 @@ const Filter = (
     $vis: RW$B<Visibility>,
     vis: Visibility,
     label: string
-): Component => {
-    return h('button', sc([
-        children([
-            text(label)
-        ]),
+) => (
+    h('button', [
+        text(label),
         onClick((e) => {
             e.preventDefault()
             $vis.set(vis)
@@ -39,9 +35,9 @@ const Filter = (
                 marginLeft: 0,
             }
         }),
-        $css([{
-            cond: map($vis, (v) => v === vis),
-            style: { color: 'red' }
-        }])
-    ]))
-}
+        $css(
+            map($vis, (v) => v === vis),
+            { color: 'red' }
+        )
+    ])
+)

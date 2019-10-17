@@ -11,7 +11,7 @@ export type Children<E extends Elem<any, any>, N = any> =
     Action<
         typeof ChildrenType,
         ChildrenDriver<E> & UtoI<E['_drivers']>,
-        TagR,
+        TagR & UtoI<E['_drivers']>,
         N[]
     > & {
         children: E[],
@@ -19,6 +19,7 @@ export type Children<E extends Elem<any, any>, N = any> =
 
 export function children<E extends Elem<any, any>>(cs: E[]): Children<E> {
     return action({
+        type: ChildrenType,
         children: cs
     })
 }

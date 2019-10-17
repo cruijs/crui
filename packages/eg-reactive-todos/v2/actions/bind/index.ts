@@ -19,7 +19,12 @@ export type BindValueDriver<N = any, S extends AnyAction = AnyAction> = {
     [BindValueType]: Driver<N, BindValue, S>
 }
 
-export const bindValue: Bind<$Value, BindValue> = bind
+export function bindValue(stream: DRW$B<string>): BindValue {
+    return action({ 
+        type: BindValueType,
+        stream 
+    })
+}
 
 export type $Checked = DRW$B<boolean>
 export const BindCheckedType = Symbol('bindChecked')
@@ -36,10 +41,9 @@ export type BindCheckedDriver<N = any, S extends AnyAction = AnyAction> = {
     [BindCheckedType]: Driver<N, BindChecked, S>
 }
 
-export const bindChecked: Bind<$Checked, BindChecked> = bind
-
-type Bind<S, A> = (stream: S) => A
-
-function bind(stream: DRW$B<any>) {
-    return action({ stream })
+export function bindChecked(stream: DRW$B<boolean>): BindChecked {
+    return action({ 
+        type: BindCheckedType,
+        stream 
+    })
 }

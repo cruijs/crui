@@ -1,62 +1,36 @@
 import { Fn0 } from '../../core/utils/combine';
 import { Deferred, dependsOn } from './deferred';
-import { Emitter } from './emitter';
+import { Emit, Emitter, Job } from './emitter';
 import { AnyAction, Drivers } from './types';
 
 export function schedule<N, A extends AnyAction, D extends Drivers<N>>(
     onNext: (w: Fn0) => void,
     node: N,
-    driver: D,
+    drivers: D,
     action: A,
 ): void {
-    type Item  = {
-        node: N,
-        action: AnyAction,
-        deferred: Deferred<N>
+    let nextBatch: Job<N>[] = []
+    const syncEmit: Emit<N> = (job) => {
+        nextBatch.push(job)
     }
-
-    let nextBatch: Item[] = []
-    const syncEmit = (node: N, action: AnyAction) => {
-        const deferred = new Deferred<N>()
-        nextBatch.push({ node, action, deferred })
-        return deferred
-    }
-    syncEmit(node, action as any)
-
-    const asyncEmit = (node: N, action: AnyAction) => {
+    const asyncEmit: Emit<N> = (job) => {
         onNext(exec)
-        const t = syncEmit(node, action)
-        emitter.emit = syncEmit
-        return t
+        syncEmit(job)
+        curEmit = syncEmit
     }
+    let curEmit: Emit<N> = syncEmit
+    const emit: Emit<N> = (job) => curEmit(job)
+    const emitter = new Emitter(drivers, emit)
 
-    const emitter: Emitter<N> = {
-        emit: syncEmit,
-        emitAll: (node, actions) => {
-            let counter = actions.length
-            const collected: N[] = new Array(counter)
-            const deferred = new Deferred<N[]>()
-
-            actions.forEach((a, i) => {
-                emitter.emit(node, a).then = (n) => {
-                    collected[i] = n
-                    if (--counter === 0) {
-                        deferred.done(collected)
-                    }
-                }
-            })
-
-            return deferred
-        }
-    }
+    emitter.emit(node, action)
 
     const exec = () => {
         while (nextBatch.length !== 0) {
             const batch = nextBatch
             nextBatch = []
 
-            batch.forEach(({ node, action, deferred }) => {
-                const dn = driver[action.type](node, action, emitter)
+            batch.forEach(({ node, action, deferred, drivers, emitter }) => {
+                const dn = drivers[action.type](node, action, emitter)
                 if (dn instanceof Deferred) {
                     dependsOn(dn, deferred)
                 }
@@ -65,7 +39,7 @@ export function schedule<N, A extends AnyAction, D extends Drivers<N>>(
                 }
             })
         }
-        emitter.emit = asyncEmit
+        curEmit = asyncEmit
     }
     exec()
 }

@@ -12,9 +12,8 @@ export function elemDriver<N, A extends TagAction>(
 ): Deferred<N> {
     return then(emit(parent, createTag(tag)), (node: N) => {
         actions.forEach((a) => {
-            emit(node, a);
+            emit(node, a)
         })
-        emit(parent, append(node))
-        return node
+        return emit(parent, append(node))
     });
 }

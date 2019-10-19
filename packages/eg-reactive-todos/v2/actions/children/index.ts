@@ -1,7 +1,6 @@
 import { Action, Driver, UtoI } from '../../types'
 import { action } from '../action'
 import { Elem } from '../elem'
-import { TagR } from '../tagAction'
 
 export const ChildrenType = Symbol('children')
 export type ChildrenDriver<E extends Elem<any, any>, N = any> = {
@@ -11,7 +10,7 @@ export type Children<E extends Elem<any, any>, N = any> =
     Action<
         typeof ChildrenType,
         ChildrenDriver<E> & UtoI<E['_drivers']>,
-        TagR & UtoI<E['_drivers']>,
+        UtoI<E['_drivers']>,
         N[]
     > & {
         children: E[],

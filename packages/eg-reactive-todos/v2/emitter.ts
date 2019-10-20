@@ -1,4 +1,4 @@
-import { Deferred } from './deferred'
+import { Deferred, waitAll } from './deferred'
 import { AnyAction, Drivers } from './types'
 
 export type Job<N, A extends AnyAction = AnyAction, D extends A['_drivers'] = A['_drivers']> = {
@@ -32,22 +32,10 @@ export class Emitter<N, A0 extends AnyAction = AnyAction, D0 extends Drivers<N> 
         return deferred
     }
 
-    emitAll = <A extends A0>(node: N, actions: readonly A[]): Deferred<A['_return'][]> => {
-        let counter = actions.length
-        const collected: N[] = new Array(counter)
-        const deferred = new Deferred<N[]>()
-
-        actions.forEach((a, i) => {
-            this.emit(node, a).then = (n) => {
-                collected[i] = n
-                if (--counter === 0) {
-                    deferred.done(collected)
-                }
-            }
-        })
-
-        return deferred
-    }
+    emitAll = <A extends A0>(node: N, actions: readonly A[]): Deferred<A['_return'][]> =>
+        waitAll(actions.map((a) =>
+            this.emit(node, a)
+        ))
 
     withDrivers<D extends Drivers<N>>(
         f: (drivers: Readonly<D0>) => D

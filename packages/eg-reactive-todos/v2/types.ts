@@ -40,7 +40,7 @@ export type RemoveRestr<R, A> =
         ? Pick<MR, Exclude<keyof MR, keyof R>>
         : never
 
-export type RemoveDriver<D, A> =
+export type ProvideDriver<D, A> =
     A extends Action<any, infer DR, any>
         ? Pick<DR, Exclude<keyof DR, keyof D>>
         : never

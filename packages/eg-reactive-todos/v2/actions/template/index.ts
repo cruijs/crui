@@ -1,25 +1,24 @@
 import { Tag } from '@crui/core/dom'
 import { Deferred } from '../../deferred'
-import { Action, AnyAction, Driver, MatchRestr, RemoveDriver, RemoveRestr, UtoI } from '../../types'
+import { Action, AnyAction, Driver, MatchRestr, ProvideDriver, RemoveRestr, UtoI } from '../../types'
 import { action } from '../action'
 import { TagR } from '../tagAction'
 import { DynamicDriver, DynamicR } from './dynamic'
 
 export const TemplateType = Symbol('template')
-export type DriverF<A extends AnyAction, N = any, T = any> = Driver<
+export type TemplateDriver<A extends AnyAction, N = any, T = any> = {
+    [TemplateType]: Driver<
         N,
         Template<Tag, A, T, N>,
         A,
         MakeItem<T, N>
     >
-export type TemplateDriver<A extends AnyAction, N = any, T = any> = {
-    [TemplateType]: DriverF<A, N, T>
 }
 export type Restr<T extends Tag, D> = TagR<T> & DynamicR<D>
 export type MakeItem<T, N> = (item: T) => Deferred<N>
 
 type DeriveDriver<T, A extends AnyAction> = TemplateDriver<A> & UtoI<
-    RemoveDriver<
+    ProvideDriver<
         DynamicDriver<T, AnyAction>, 
         A['_drivers']
     >
@@ -37,7 +36,7 @@ export type Template<T extends Tag, A extends AnyAction, V, N = any> =
 
 export function template<T extends Tag, A extends AnyAction, V>(
     tag: T,
-    actions: readonly MatchRestr<TagR<T>, A>[]
+    actions: readonly MatchRestr<Restr<T, V>, A>[]
 ): Template<T, A, V> {
     return action({
         type: TemplateType,

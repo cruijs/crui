@@ -2,7 +2,7 @@ import { compatibleInputEvent } from '@crui/core/dom/events'
 import { apply } from '@crui/reactive/rx/box/apply'
 import { DRW$B } from '@crui/reactive/rx/box/types'
 import { makeAtomic } from '@crui/reactive/utils/atomic'
-import { then } from '../../deferred'
+import { pipe } from '../../deferred'
 import { Emitter } from '../../emitter'
 import { cleanup } from '../cleanup'
 import { Cleanup } from '../cleanup/index'
@@ -42,7 +42,7 @@ function bind<P extends keyof Props>(name: P) {
             }))
         ))
         emit(node, on(event, atomic(() => {
-            then(emit(node, getProp(name)), (val) => {
+            pipe(emit(node, getProp(name)), (val) => {
                 stream.set(val)
             })
         })))

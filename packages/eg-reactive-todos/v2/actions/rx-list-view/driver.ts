@@ -1,11 +1,10 @@
 import { Tag } from '@crui/core/types'
 import { StreamList, UpdateType } from '@crui/reactive/rx/list'
-import { pipe, then, waitAll } from '../../deferred'
-import { Emitter } from '../../emitter'
+import { joinAll, pipe } from '../../deferred'
 import { AnyAction } from '../../types'
 import { cleanup, Cleanup } from '../cleanup/index'
 import { $Children, $children } from '../rx-children'
-import { Template, MakeItem } from '../template'
+import { MakeItem, Template } from '../template'
 import { ListViewDriver, ListViewType } from './index'
 
 type N = unknown
@@ -80,7 +79,7 @@ function withNodes<N, T extends object>(
         return
     }
     pipe(
-        waitAll(toRender.map(({ item }) => render(item))),
+        joinAll(toRender.map(({ item }) => render(item))),
         (nodes) => {
             nodes.forEach((n, i) => {
                 const { item, index } = toRender[i]

@@ -1,5 +1,5 @@
 import { UpdateType } from '@crui/reactive/rx/list';
-import { afterAll, pipe } from '../../deferred';
+import { waitAll, pipe } from '../../deferred';
 import { Emitter } from '../../emitter';
 import { Append, append } from '../append';
 import { InsertAt, insertAt } from '../insertAt';
@@ -56,7 +56,7 @@ function emitAllAsync<N, A extends AReq<N>>(
     node: N,
     actions: A[]
 ) {
-    return afterAll(actions.map((a) =>
+    return waitAll(actions.map((a) =>
         emit(node, a)
     ))
 }

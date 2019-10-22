@@ -10,7 +10,7 @@ export type Children<E extends Elem<any, any>, N = any> =
     Action<
         typeof ChildrenType,
         ChildrenDriver<E> & UtoI<E['_drivers']>,
-        UtoI<E['_drivers']>,
+        UtoI<E['_restriction']>,
         N[]
     > & {
         children: E[],

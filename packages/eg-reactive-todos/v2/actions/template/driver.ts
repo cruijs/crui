@@ -1,5 +1,5 @@
 import { Tag } from '@crui/core/types'
-import { afterAll, constMap, Deferred, map, thread } from '../../deferred'
+import { waitAll, constMap, Deferred, map, thread } from '../../deferred'
 import { Emitter } from '../../emitter'
 import { AnyAction, Drivers } from '../../types'
 import { createTag, CreateTag } from '../createTag'
@@ -34,7 +34,7 @@ export const templateDriver: TemplateDriver<A, N, T> = {
                 const root = template.cloneNode(true)
                 return constMap(
                     root,
-                    afterAll(
+                    waitAll(
                         lazies.map(({ path, make }) =>
                             emitter.emit(
                                 nodeFromPath(root, path),
@@ -72,7 +72,7 @@ function compile<T, A extends AnyAction, D extends A['_drivers']>(
             e.emit(parent, createTag(tag)),
             (root) => constMap(
                 root,
-                afterAll(actions.map((a) => e.emit(root, a)))
+                waitAll(actions.map((a) => e.emit(root, a)))
             )
         ),
         (root) => {

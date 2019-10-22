@@ -13,11 +13,6 @@ export class Deferred<T> {
     }
 }
 
-export function then<T>(d: Deferred<T>, f: Work<T>): Deferred<T> {
-    pipe(d, f)
-    return d
-}
-
 export function thread<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<B>): Deferred<B> {
     const z = new Deferred<B>()
     pipe(d, (a) => {
@@ -44,7 +39,7 @@ export function dependsOn<T>(slave: Readonly<Deferred<T>>, master: Deferred<T>):
     })
 }
 
-export function waitAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<readonly T[]> {
+export function joinAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<readonly T[]> {
     let counter = ds.length
     const deferred = new Deferred<readonly T[]>()
     const collected: T[] = new Array(ds.length)
@@ -59,7 +54,7 @@ export function waitAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<reado
     return deferred
 }
 
-export function afterAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<void> {
+export function waitAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<void> {
     let counter = ds.length
     const deferred = new Deferred<void>()
 

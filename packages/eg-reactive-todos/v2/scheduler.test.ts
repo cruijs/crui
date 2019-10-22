@@ -1,11 +1,10 @@
-import { Fn0 } from '../../core/utils/combine'
 import { action } from './actions/action'
-import { then } from './deferred'
+import { pipe } from './deferred'
 import { Emitter } from './emitter'
 import { schedule } from './scheduler'
 import { Action, AnyAction, Drivers } from './types'
 
-const sync = (f: Fn0) => f()
+const noop = () => {}
 
 describe('emit multiple actions', () => {
     const TestType = Symbol()
@@ -29,7 +28,7 @@ describe('emit multiple actions', () => {
 
     it('should execute three actions', () => {
         const executed: number[] = []
-        schedule(sync, 0, drivers(executed), action(1))
+        schedule(noop, 0, drivers(executed), action(1))
         expect(executed).toEqual([1, 2, 3])
     })
 })
@@ -82,20 +81,21 @@ describe('action value depends on emitted', () => {
                 return n
 
             const d = emit(n, actions.shift()!)
-            return (actions.length > 0)
-                ? then(d, (n) => emit(n, expr(actions)))
-                : d
+            if (action.length > 0)
+                pipe(d, (n) => emit(n, expr(actions)))
+
+            return d
         }
     }
 
     it('should execute one after the other', () => {
         const n = { value: 0 }
-        schedule(sync, n, driver, expr([
+        schedule(noop, n, driver, expr([
             add(1),
             mult(5),
             add(5),
             mult(2)
         ]))
-        expect(n.value).toBe(20)
+        expect(n.value).toBe(((0 + 1) * 5 + 5) * 2)
     })
 })

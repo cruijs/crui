@@ -1,4 +1,4 @@
-import { Deferred, waitAll } from './deferred'
+import { Deferred, joinAll } from './deferred'
 import { AnyAction, Drivers } from './types'
 
 export type Job<N, A extends AnyAction = AnyAction, D extends A['_drivers'] = A['_drivers']> = {
@@ -32,8 +32,8 @@ export class Emitter<N, A0 extends AnyAction = AnyAction, D0 extends Drivers<N> 
         return deferred
     }
 
-    emitAll = <A extends A0>(node: N, actions: readonly A[]): Deferred<A['_return'][]> =>
-        waitAll(actions.map((a) =>
+    emitAll = <A extends A0>(node: N, actions: readonly A[]): Deferred<readonly A['_return'][]> =>
+        joinAll(actions.map((a) =>
             this.emit(node, a)
         ))
 

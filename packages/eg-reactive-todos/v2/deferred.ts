@@ -1,4 +1,3 @@
-import { Fn0 } from '@crui/core/utils/combine'
 import { noop } from '@crui/core/utils/noop'
 
 type Work<T> = (v: T) => void
@@ -19,23 +18,35 @@ export function then<T>(d: Deferred<T>, f: Work<T>): Deferred<T> {
     return d
 }
 
-export function thread<A, B>(d: Deferred<A>, f: (a: A) => Deferred<B>): Deferred<B> {
+export function thread<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<B>): Deferred<B> {
     const z = new Deferred<B>()
-    then(d, (a) => {
-        dependsOn(f(a), z)
+    pipe(d, (a) => {
+        dependsOn(z, f(a))
     })
     return z
 }
 
-export function dependsOn<T>(master: Deferred<T>, slave: Readonly<Deferred<T>>): void {
+export function map<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => B): Deferred<B> {
+    const z = new Deferred<B>()
+    pipe(d, (a) => {
+        z.done(f(a))
+    })
+    return z
+}
+
+export function constMap<K>(k: K, d: Readonly<Deferred<any>>): Deferred<K> {
+    return map(d, () => k)
+}
+
+export function dependsOn<T>(slave: Readonly<Deferred<T>>, master: Deferred<T>): void {
     pipe(master, (v) => {
         slave.done(v)
     })
 }
 
-export function waitAll<T>(ds: Deferred<T>[]): Deferred<T[]> {
+export function waitAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<readonly T[]> {
     let counter = ds.length
-    const deferred = new Deferred<T[]>()
+    const deferred = new Deferred<readonly T[]>()
     const collected: T[] = new Array(ds.length)
 
     ds.forEach((d, i) => {
@@ -48,9 +59,9 @@ export function waitAll<T>(ds: Deferred<T>[]): Deferred<T[]> {
     return deferred
 }
 
-export function afterAll<T>(ds: Deferred<T>[], f: Fn0): Deferred<void> {
+export function afterAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<void> {
     let counter = ds.length
-    const deferred = then(new Deferred<void>(), f)
+    const deferred = new Deferred<void>()
 
     ds.forEach((d) => {
         pipe(d, () => {

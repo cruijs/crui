@@ -32,7 +32,7 @@ export function schedule<N, A extends AnyAction, D extends Drivers<N>>(
             batch.forEach(({ node, action, deferred, drivers, emitter }) => {
                 const result = drivers[action.type](node, action, emitter)
                 if (result instanceof Deferred) {
-                    dependsOn(result, deferred)
+                    dependsOn(deferred, result)
                 }
                 else {
                     deferred.done(result)

@@ -1,14 +1,14 @@
 import { UpdateType } from '@crui/reactive/rx/list';
-import { then } from '../../deferred';
+import { afterAll, pipe } from '../../deferred';
 import { Emitter } from '../../emitter';
-import { Append, append } from '../append/index';
+import { Append, append } from '../append';
 import { InsertAt, insertAt } from '../insertAt';
 import { Remove, remove } from '../remove';
 import { $ChildrenDriver, $ChildrenType } from './index';
 
 type AReq<N> = Append<N>|Remove<N>|InsertAt<N>
 export const $childrenDriver: $ChildrenDriver<any, AReq<any>> = {
-    [$ChildrenType]: (parent, { stream }, { emit, emitAll }) => {
+    [$ChildrenType]: (parent, { stream }, { emit }) => {
         stream.forEach((n) => {
             emit(parent, append(n))
         })
@@ -16,7 +16,7 @@ export const $childrenDriver: $ChildrenDriver<any, AReq<any>> = {
         stream.subscribe((upd) => {
             switch (upd.type) {
                 case UpdateType.Update:
-                    then(
+                    pipe(
                         emit(parent, remove(upd.oldValue)),
                         () => { 
                             emit(parent, insertAt(upd.newValue, upd.index))
@@ -25,8 +25,8 @@ export const $childrenDriver: $ChildrenDriver<any, AReq<any>> = {
                     return
 
                 case UpdateType.Replace:
-                    then(
-                        emitAll(parent, upd.oldList.map(remove)),
+                    pipe(
+                        emitAllAsync(emit, parent, upd.oldList.map(remove)),
                         () => { 
                             upd.newList.forEach((n) => {
                                 emit(parent, append(n))
@@ -36,8 +36,8 @@ export const $childrenDriver: $ChildrenDriver<any, AReq<any>> = {
                     return
                 
                 case UpdateType.Splice:
-                    then(
-                        emitAll(parent, upd.removed.map(remove)),
+                    pipe(
+                        emitAllAsync(emit, parent, upd.removed.map(remove)),
                         () => {
                             upd.added.forEach((n, i) => {
                                 emit(parent, insertAt(n, upd.index + i))
@@ -55,8 +55,8 @@ function emitAllAsync<N, A extends AReq<N>>(
     emit: Emitter<N, A>['emit'],
     node: N,
     actions: A[]
-): void {
-    actions.forEach((a) => {
+) {
+    return afterAll(actions.map((a) =>
         emit(node, a)
-    })
+    ))
 }

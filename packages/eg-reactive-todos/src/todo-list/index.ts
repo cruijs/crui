@@ -35,10 +35,9 @@ const TodoComponent = (todo: Todo) => (
     ])
 )
 
-const wrapper = <E extends Elem<any, any>>(elems: E[]) => (
+const wrapper = <E extends Elem<any, any>>(elems: readonly TagMR<E>[]) => (
     // Remove(Slide(
-        h<'label', Css|Children<E>>('label', [
-            children(elems) as TagMR<Children<E>>,
+        h<'label', Css|E>('label', [
             css({
                 display: 'block',
                 backgroundColor: 'aliceblue',
@@ -46,6 +45,7 @@ const wrapper = <E extends Elem<any, any>>(elems: E[]) => (
                 marginBottom: '0.5rem',
                 cursor: 'pointer',
             }),
+            ...elems,
         ])
     // ))
 )

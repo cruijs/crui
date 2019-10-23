@@ -3,9 +3,9 @@ import { action } from '../action'
 
 export const TextType = Symbol('text')
 export type TextDriver<N = any, R = N, S extends AnyAction = AnyAction> = {
-    [TextType]: Driver<N, TextAction, S, R>
+    [TextType]: Driver<N, TextElem, S, R>
 }
-export type TextAction =
+export type TextElem =
     Action<
         typeof TextType,
         TextDriver
@@ -13,7 +13,7 @@ export type TextAction =
         data: string
     }
 
-export function text(data: string): TextAction {
+export function text(data: string): TextElem {
     return action({
         type: TextType,
         data,

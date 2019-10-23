@@ -1,10 +1,13 @@
 import { DRW$B } from '@crui/reactive/rx/box/types';
 import { cssTx } from '@crui/transitions/elems/cssTx';
 import { bindChecked } from '../../v2/actions/bind';
-import { children } from '../../v2/actions/children';
+import { children, Children } from '../../v2/actions/children';
 import { css } from '../../v2/actions/css';
-import { Elem, h } from '../../v2/actions/elem';
+import { Css } from '../../v2/actions/css/index';
+import { h } from '../../v2/actions/elem';
+import { Elem } from '../../v2/actions/elem/index';
 import { ht } from '../../v2/actions/ht';
+import { TagMR } from '../../v2/actions/tagAction';
 import { Todo, TodoStore } from '../store';
 
 export function TodoList(store: TodoStore) {
@@ -32,10 +35,10 @@ const TodoComponent = (todo: Todo) => (
     ])
 )
 
-const wrapper = <E extends Elem<any, any>>(cs: E[]) => 
+const wrapper = <E extends Elem<any, any>>(elems: E[]) => (
     // Remove(Slide(
-        h('label', [
-            children(cs),
+        h<'label', Css|Children<E>>('label', [
+            children(elems) as TagMR<Children<E>>,
             css({
                 display: 'block',
                 backgroundColor: 'aliceblue',
@@ -45,6 +48,7 @@ const wrapper = <E extends Elem<any, any>>(cs: E[]) =>
             }),
         ])
     // ))
+)
 
 const Remove = cssTx(
     { height: 500, margin: 500, padding: 500 },

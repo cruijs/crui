@@ -33,7 +33,7 @@ export type AnyAction = Action<any, any, any, any>
 export type MatchRestr<R, A> =
     A extends Action<any, any, infer MR>
         ? R extends Pick<MR, Extract<keyof MR, keyof R>> ? A : never
-        : never
+        : never 
 
 export type RemoveRestr<R, A> =
     A extends Action<any, any, infer MR>

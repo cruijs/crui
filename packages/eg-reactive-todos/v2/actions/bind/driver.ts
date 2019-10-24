@@ -32,7 +32,7 @@ type AReq<P extends keyof Props> =
 
 function bind<P extends keyof Props>(
     name: P,
-    then: (n: unknown, e: Emitter<unknown, AReq<any>>['emit']) => void = noop
+    then: (n: any, e: Emitter<any, AReq<any>>['emit']) => void = noop
 ) {
     return <N>(
         node: N,

@@ -38,18 +38,14 @@ export class TodoStore {
         this.input.destroy()
     }
 
-    getTodos(): $TodoList {
-        return this.todos
+    getVisibleTodos(): $TodoList {
+        return this.visibleTodos
     }
     addTodo(todo: string): void {
         this.todos.push({
             text: todo,
             done: new StreamBox<boolean>(false)
         })
-    }
-
-    getVisibleTodos(): $TodoList {
-        return this.visibleTodos
     }
 
     getInput(): $Input {

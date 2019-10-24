@@ -4,7 +4,7 @@ import { TextDriver, TextType } from './index'
 export const textDriver: TextDriver<Node, Text, Append<Node>> = {
     [TextType]: (parent, { data }, { emit }) => {
         const tn = document.createTextNode(data)
-        emit(parent, append(tn))
+        emit(parent, append<Node>(tn))
         return tn
     }
 }

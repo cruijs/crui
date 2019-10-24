@@ -9,25 +9,25 @@ import { Template, TemplateDriver, TemplateType } from './index'
 
 type N = Node
 
-type Lazy<T, A extends AnyAction> = {
-    path: NodePath, make: (item: T) => AReq<A>
+type Lazy<V, A extends AnyAction> = {
+    path: NodePath, make: (item: V) => AReq<A>
 }
-type LazyAction<T, A extends AnyAction> = {
+type LazyAction<V, A extends AnyAction> = {
     node: N,
-    make: (item: T) => AReq<A>
+    make: (item: V) => AReq<A>
 }
 type NodePath = number[]
-type TemplateNode<T, A extends AnyAction> = {
+type TemplateNode<V, A extends AnyAction> = {
     template: N,
-    lazies: Lazy<T, A>[]
+    lazies: Lazy<V, A>[]
 }
 
 type AReq<A extends AnyAction> = A | EventAction | CreateTag<N>
 
 export const makeTemplateDriver = <
     V = any,
-    T extends Tag = Tag,
-    A extends AnyAction = AnyAction
+    T extends Tag = any,
+    A extends AnyAction = any
 >(): TemplateDriver<V, T, AReq<A>, N> => ({
     [TemplateType]: (parent, action, emitter) => {
         const templateNode = compile(parent, action, emitter)
@@ -54,9 +54,9 @@ export const makeTemplateDriver = <
 type Provide<D, V, A extends AnyAction> =
     D & DynamicDriver<V, A, N> & EventDriver<N>
 
-function compile<V, A extends AnyAction, D extends Drivers<N>>(
+function compile<V, T extends Tag, A extends AnyAction, D extends Drivers<N>>(
     parent: N,
-    { tag, actions }: Template<V, Tag, A, N>,
+    { tag, actions }: Template<V, T, A, N>,
     emitter: Emitter<N, AReq<A>, D>,
 ): Deferred<TemplateNode<V, A>> {
     const lazyActions: LazyAction<V, A>[] = []

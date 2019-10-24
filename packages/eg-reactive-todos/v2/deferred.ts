@@ -46,6 +46,10 @@ export function joinAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<reado
     const deferred = new Deferred<readonly T[]>()
     const collected: T[] = new Array(ds.length)
 
+    if (counter === 0) {
+        deferred.done(collected)
+    }
+
     ds.forEach((d, i) => {
         pipe(d, (v) => {
             collected[i] = v
@@ -53,12 +57,17 @@ export function joinAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<reado
                 deferred.done(collected)
         })
     })
+
     return deferred
 }
 
 export function waitAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<void> {
     let counter = ds.length
     const deferred = new Deferred<void>()
+    
+    if (counter === 0) {
+        deferred.done()
+    }
 
     ds.forEach((d) => {
         pipe(d, () => {

@@ -1,4 +1,5 @@
 import { compatibleInputEvent } from '@crui/core/dom/events'
+import { noop } from '@crui/core/utils/noop'
 import { apply } from '@crui/reactive/rx/box/apply'
 import { DRW$B } from '@crui/reactive/rx/box/types'
 import { makeAtomic } from '@crui/reactive/utils/atomic'
@@ -16,7 +17,9 @@ export const bindValueDriver: BindValueDriver<any, AReq<'value'>> = {
 }
 
 export const bindCheckedDriver: BindCheckedDriver<any, AReq<'checked'>> = {
-    [BindCheckedType]: bind('checked')
+    [BindCheckedType]: bind('checked', (node, emit) => {
+        emit(node, prop('type', 'checkbox'))
+    })
 }
 
 type Props = {
@@ -27,7 +30,10 @@ type Props = {
 type AReq<P extends keyof Props> = 
     AProp<P>|GetProp<P>|EventAction<BVTag>|Cleanup
 
-function bind<P extends keyof Props>(name: P) {
+function bind<P extends keyof Props>(
+    name: P,
+    then: (n: unknown, e: Emitter<unknown, AReq<any>>['emit']) => void = noop
+) {
     return <N>(
         node: N,
         { stream }: { stream: DRW$B<Props[P]> },
@@ -46,6 +52,7 @@ function bind<P extends keyof Props>(name: P) {
                 stream.set(val)
             })
         })))
+        then(node, emit)
 
         return node
     }

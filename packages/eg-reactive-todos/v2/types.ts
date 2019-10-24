@@ -1,7 +1,7 @@
 import { Deferred } from './deferred'
 import { Emitter } from './emitter'
 
-export type Driver<N, A extends AnyAction, S extends AnyAction = AnyAction, R = N> =
+export type Driver<N, A extends AnyAction, S extends AnyAction = any, R = N> =
     (node: N, action: A, emitter: Emitter<N, S>) => R | Deferred<R>
 
 export type Drivers<N = any, R = N> = {

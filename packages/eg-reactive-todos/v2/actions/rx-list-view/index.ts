@@ -1,10 +1,9 @@
-import { Tag } from '@crui/core/types'
 import { DR$L } from '@crui/reactive/rx/list'
 import { Action, AnyAction, Driver, UtoI } from '../../types'
 import { action } from '../action'
 import { Template } from '../template'
 
-type Tpl<V, N = any> = Template<V, Tag, AnyAction, N>
+export type Tpl<V, N = any> = Template<V, any, any, N>
 export const ListViewType = Symbol('listview')
 export type ListViewDriver<
     V extends object,

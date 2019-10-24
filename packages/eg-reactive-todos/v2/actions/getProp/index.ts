@@ -1,7 +1,7 @@
 import { Props } from '@crui/core/dom/props'
 import { Action, Driver, AnyAction } from '../../types'
 import { action } from '../action'
-import { TagR } from '../tagAction'
+import { TagR } from '../../retrictions/tag'
 
 export const GetPropType = Symbol('getProp')
 export type GetPropDriver<K extends keyof Props, N = any> = {

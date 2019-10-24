@@ -1,7 +1,7 @@
 import { Props } from '@crui/core/dom'
+import { TagR } from '../../retrictions/tag'
 import { Action, Driver } from '../../types'
 import { action } from '../action'
-import { TagR } from '../tagAction'
 
 export const PropType = Symbol('prop')
 export type PropDriver<N = any> = {

@@ -9,10 +9,7 @@ export type Job<N, A extends AnyAction = AnyAction, D extends A['_drivers'] = A[
     deferred: Deferred<A['_return']>
 }
 
-export type Emit<N> =
-    <A extends AnyAction, D extends A['_drivers']>(
-        job: Job<N, A, D>
-    ) => void
+export type Emit<N> = (job: Job<N>) => void
 
 export class Emitter<N, A0 extends AnyAction = AnyAction, D0 extends Drivers<N> = Drivers<N>> {
     constructor(

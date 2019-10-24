@@ -1,7 +1,7 @@
 import { Interpolation } from 'emotion'
 import { Action, AnyAction, Driver } from '../../types'
 import { action } from '../action'
-import { TagR } from '../../retrictions/tag'
+import { TagR } from '../../restrictions/tag'
 
 export const CssType = Symbol('css')
 export type CssDriver<N = any, S extends AnyAction = AnyAction> = {

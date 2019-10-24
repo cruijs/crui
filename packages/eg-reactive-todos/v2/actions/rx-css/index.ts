@@ -1,7 +1,7 @@
 import { Cond$B } from '@crui/reactive/rx/box'
 import { Action, AnyAction, Driver } from '../../types'
 import { action } from '../action'
-import { TagR } from '../../retrictions/tag'
+import { TagR } from '../../restrictions/tag'
 import { Style } from '../css'
 
 export const $CssType = Symbol('css')

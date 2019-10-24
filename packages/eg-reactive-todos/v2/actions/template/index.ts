@@ -1,6 +1,6 @@
 import { Tag } from '@crui/core/dom'
 import { Deferred } from '../../deferred'
-import { TagR } from '../../retrictions/tag'
+import { TagR } from '../../restrictions/tag'
 import { Action, AnyAction, Driver, MatchRestr, ProvideDriver, RemoveRestr, UtoI } from '../../types'
 import { action } from '../action'
 import { DynamicDriver, DynamicR } from './dynamic'

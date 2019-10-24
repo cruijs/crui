@@ -1,7 +1,7 @@
 import { Tag } from '../../../../core/types'
 import { Action, AnyAction, Driver, RemoveRestr, UtoI } from '../../types'
 import { action } from '../action'
-import { TagMR, TagR } from '../../retrictions/tag'
+import { TagMR, TagR } from '../../restrictions/tag'
 
 export const ElemType = Symbol('elem')
 export type ElemDriver<A extends AnyAction, N = any> = {

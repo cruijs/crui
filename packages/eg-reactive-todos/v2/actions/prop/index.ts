@@ -1,5 +1,5 @@
 import { Props } from '@crui/core/dom'
-import { TagR } from '../../retrictions/tag'
+import { TagR } from '../../restrictions/tag'
 import { Action, Driver } from '../../types'
 import { action } from '../action'
 

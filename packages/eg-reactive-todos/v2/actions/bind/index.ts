@@ -1,7 +1,7 @@
 import { DRW$B } from '@crui/reactive/rx/box/types'
 import { action } from '../action'
 import { Action, Driver, AnyAction } from '../../types'
-import { TagR } from '../../retrictions/tag'
+import { TagR } from '../../restrictions/tag'
 
 export type $Value = DRW$B<string>
 export const BindValueType = Symbol('bindValue')

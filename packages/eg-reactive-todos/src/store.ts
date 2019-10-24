@@ -1,9 +1,7 @@
-import { map, R$B, RW$B, StreamBox } from '@crui/reactive/rx/box';
-import { clone } from '@crui/reactive/rx/box/clone';
-import { DRW$B } from '@crui/reactive/rx/box/types';
-import { RW$L, StreamList } from '@crui/reactive/rx/list';
+import { clone, DRW$B, map, RW$B, StreamBox } from '@crui/reactive/rx/box';
+import { Destroyable, DR$L, StreamList, W$L } from '@crui/reactive/rx/list';
 import { Predicate$ } from '@crui/reactive/rx/list/filter/$filter$';
-import { Destroyable } from '@crui/reactive/rx/types';
+import { $filter$$ } from '@crui/reactive/rx/list/filter/$filter$$';
 
 export type Todo = {
     done: DRW$B<boolean>,
@@ -16,27 +14,26 @@ export enum Visibility {
     TODO,
 }
 
-export type $TodoList = RW$L<Todo>
+export type $TodoList = DR$L<Todo>
 type $Input = RW$B<string>
 type $Visibilty = RW$B<Visibility>
-type $VisFilter = R$B<Predicate$<Todo>>
 
 export class TodoStore {
     private readonly input: $Input & Destroyable
     private readonly visibility: $Visibilty & Destroyable 
-    private readonly visibilityFilter: $VisFilter & Destroyable
-    private readonly todos: $TodoList & Destroyable
+    private readonly todos: $TodoList & W$L<Todo>
+    private readonly visibleTodos: $TodoList
 
     constructor() {
         this.input = new StreamBox('')
         this.todos = new StreamList<Todo>([])
         this.visibility = new StreamBox<Visibility>(Visibility.ALL)
-        this.visibilityFilter = map(this.visibility, vis2pred)
+        this.visibleTodos = $filter$$(this.todos, map(this.visibility, vis2pred))
     }
 
     dispose() {
         this.todos.destroy()
-        this.visibilityFilter.destroy()
+        this.visibleTodos.destroy()
         this.visibility.destroy()
         this.input.destroy()
     }
@@ -51,16 +48,16 @@ export class TodoStore {
         })
     }
 
+    getVisibleTodos(): $TodoList {
+        return this.visibleTodos
+    }
+
     getInput(): $Input {
         return this.input
     }
 
     getVisibility(): $Visibilty {
         return this.visibility
-    }
-
-    getVisibilityFilter(): $VisFilter {
-        return this.visibilityFilter
     }
 }
 

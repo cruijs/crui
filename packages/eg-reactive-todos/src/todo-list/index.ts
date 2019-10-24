@@ -1,21 +1,21 @@
 import { DRW$B } from '@crui/reactive/rx/box/types';
 import { cssTx } from '@crui/transitions/elems/cssTx';
 import { bindChecked } from '../../v2/actions/bind';
-import { children, Children } from '../../v2/actions/children';
-import { css } from '../../v2/actions/css';
-import { Css } from '../../v2/actions/css/index';
-import { h } from '../../v2/actions/elem';
-import { Elem } from '../../v2/actions/elem/index';
+import { children } from '../../v2/actions/children';
+import { css, Css } from '../../v2/actions/css';
+import { Elem, h } from '../../v2/actions/elem';
 import { ht } from '../../v2/actions/ht';
-import { TagMR } from '../../v2/actions/tagAction';
+import { listView } from '../../v2/actions/rx-list-view';
+import { template } from '../../v2/actions/template';
+import { dynamic } from '../../v2/actions/template/dynamic';
+import { TagMR } from '../../v2/retrictions/tag';
 import { Todo, TodoStore } from '../store';
 
 export function TodoList(store: TodoStore) {
     return h('ul', [
-        c$filter$$(
-            store.getTodos(),
-            TodoComponent,
-            store.getVisibilityFilter(),
+        listView(
+            store.getVisibleTodos(),
+            TodoComponent(),
         ),
         css({
             listStyle: 'none',
@@ -26,29 +26,33 @@ export function TodoList(store: TodoStore) {
     ])
 }
 
-const TodoComponent = (todo: Todo) => (
-    h('li', [
-        wrapper([
-            input(todo.done),
-            ht('span', todo.text)
-        ])
+const TodoComponent = () => {
+    const child = wrapper((todo) => [
+        input(todo.done),
+        ht('span', todo.text)
     ])
-)
+    return template<Todo, 'li', typeof child>('li', [
+        child
+    ])
+}
 
-const wrapper = <E extends Elem<any, any>>(elems: readonly TagMR<E>[]) => (
+const wrapper = <E extends Elem<any, any>>(make: (todo: Todo) => readonly E[]) => {
+    const dyn = dynamic(
+        (todo: Todo) => children(make(todo))
+    )
     // Remove(Slide(
-        h<'label', Css|E>('label', [
-            css({
-                display: 'block',
-                backgroundColor: 'aliceblue',
-                padding: '0.25rem 0.5rem',
-                marginBottom: '0.5rem',
-                cursor: 'pointer',
-            }),
-            ...elems,
-        ])
+    return h<'label', Css | typeof dyn>('label', [
+        css({
+            display: 'block',
+            backgroundColor: 'aliceblue',
+            padding: '0.25rem 0.5rem',
+            marginBottom: '0.5rem',
+            cursor: 'pointer',
+        }),
+        dyn as TagMR<typeof dyn>
+    ])
     // ))
-)
+}
 
 const Remove = cssTx(
     { height: 500, margin: 500, padding: 500 },

@@ -1,7 +1,7 @@
 import { Tag } from '../../../../core/types'
 import { Action, Driver } from '../../types'
 import { action } from '../action'
-import { TagR } from '../tagAction'
+import { TagR } from '../../retrictions/tag'
 
 export type EventHandler = EventListener
 export type MouseHandler = (ev: MouseEvent) => void

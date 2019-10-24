@@ -13,10 +13,10 @@ export type Children<E extends Elem<any, any>, N = any> =
         UtoI<E['_restriction']>,
         N[]
     > & {
-        children: E[],
+        children: readonly E[],
     }
 
-export function children<E extends Elem<any, any>>(cs: E[]): Children<E> {
+export function children<E extends Elem<any, any>>(cs: readonly E[]): Children<E> {
     return action({
         type: ChildrenType,
         children: cs

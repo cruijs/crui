@@ -1,36 +1,39 @@
 import { Tag } from '@crui/core/types'
-import { waitAll, constMap, Deferred, map, thread } from '../../deferred'
+import { bind, constMap, Deferred, map, waitAll } from '../../deferred'
 import { Emitter } from '../../emitter'
 import { AnyAction, Drivers } from '../../types'
 import { createTag, CreateTag } from '../createTag'
-import { EventType } from '../event'
+import { EventAction, EventDriver, EventType } from '../event'
 import { DynamicDriver, DynamicType } from './dynamic'
 import { Template, TemplateDriver, TemplateType } from './index'
 
 type N = Node
-type T = unknown
-type A = AnyAction
 
-type Lazy<T> = {
-    path: NodePath,
-    make: (item: T) => AnyAction
+type Lazy<T, A extends AnyAction> = {
+    path: NodePath, make: (item: T) => AReq<A>
 }
-type LazyAction<T> = {
+type LazyAction<T, A extends AnyAction> = {
     node: N,
-    make: (item: T) => AnyAction
+    make: (item: T) => AReq<A>
 }
 type NodePath = number[]
-type TemplateNode<T> = {
+type TemplateNode<T, A extends AnyAction> = {
     template: N,
-    lazies: Lazy<T>[]
+    lazies: Lazy<T, A>[]
 }
 
-export const templateDriver: TemplateDriver<A, N, T> = {
+type AReq<A extends AnyAction> = A | EventAction | CreateTag<N>
+
+export const makeTemplateDriver = <
+    V = any,
+    T extends Tag = Tag,
+    A extends AnyAction = AnyAction
+>(): TemplateDriver<V, T, AReq<A>, N> => ({
     [TemplateType]: (parent, action, emitter) => {
         const templateNode = compile(parent, action, emitter)
 
-        return (item: T): Deferred<N> => (
-            thread(templateNode, ({ template, lazies }) => {
+        return (item: V): Deferred<N> => (
+            bind(templateNode, ({ template, lazies }) => {
                 const root = template.cloneNode(true)
                 return constMap(
                     root,
@@ -46,15 +49,18 @@ export const templateDriver: TemplateDriver<A, N, T> = {
             })
         )
     }
-}
+})
 
-function compile<T, A extends AnyAction, D extends A['_drivers']>(
+type Provide<D, V, A extends AnyAction> =
+    D & DynamicDriver<V, A, N> & EventDriver<N>
+
+function compile<V, A extends AnyAction, D extends Drivers<N>>(
     parent: N,
-    { tag, actions }: Template<Tag, A, N>,
-    emitter: Emitter<N, A | CreateTag<N>, D>,
-): Deferred<TemplateNode<T>> {
-    const lazyActions: LazyAction<T>[] = []
-    const e = emitter.withDrivers(<D extends Drivers<N>>(d: D): D & DynamicDriver<T, A, N> => ({
+    { tag, actions }: Template<V, Tag, A, N>,
+    emitter: Emitter<N, AReq<A>, D>,
+): Deferred<TemplateNode<V, A>> {
+    const lazyActions: LazyAction<V, A>[] = []
+    const e = emitter.withDrivers((d: D): Provide<D, V, A> => ({
         ...d,
         [DynamicType]: (node, { make }) => {
             lazyActions.push({ node, make })
@@ -68,7 +74,7 @@ function compile<T, A extends AnyAction, D extends A['_drivers']>(
     }))
 
     return map(
-        thread(
+        bind(
             e.emit(parent, createTag(tag)),
             (root) => constMap(
                 root,

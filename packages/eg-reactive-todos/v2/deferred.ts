@@ -7,13 +7,15 @@ export class Deferred<T> {
     isDone: Boolean = false
 
     done(v: T): void {
-        this.then(v)
         this.result = v
         this.isDone = true
+
+        this.then(v)
+        this.then = noop
     }
 }
 
-export function thread<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<B>): Deferred<B> {
+export function bind<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<B>): Deferred<B> {
     const z = new Deferred<B>()
     pipe(d, (a) => {
         dependsOn(z, f(a))

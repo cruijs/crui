@@ -18,7 +18,7 @@ export function keepSynced<T>(
 export function keepSyncedWith<T>(
     $master: R$L<T>,
     $slave: RW$L<T>,
-    diff: (slave: T[], master: T[]) => Update<T>
+    diff: (slave: readonly T[], master: readonly T[]) => Update<T>
 ): Unsubscribe {
     if (isSame($master, $slave)) {
         throw Error('Sync on same stream is not supported')

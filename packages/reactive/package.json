@@ -1,6 +1,6 @@
 {
   "name": "@crui/reactive",
-  "version": "0.1.0-alpha.13",
+  "version": "alpha-2.0.0",
   "description": "Add reactivity to CRUI",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",
@@ -21,10 +21,10 @@
     "ui"
   ],
   "peerDependencies": {
-    "@crui/core": "^0.1.0-alpha.11"
+    "@crui/core": "alpha-2.0.0"
   },
   "devDependencies": {
-    "@crui/core": "^0.1.0-alpha.13",
+    "@crui/core": "alpha-2.0.0",
     "@types/jest": "^24.0.12",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",

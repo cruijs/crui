@@ -21,17 +21,12 @@ export function completed<T>(result: T): Deferred<T> {
     return d
 }
 
-export function pipe<T>(d: Deferred<T>, f: Work<T>): void {
-    if (d.isDone)
-        f(d.result!)
-    else
-        d.then = combineWork(d.then, f)
-}
-
-export function dependsOn<T>(slave: Readonly<Deferred<T>>, master: Deferred<T>): void {
-    pipe(master, (v) => {
-        slave.done(v)
+export function bind<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<B>): Deferred<B> {
+    const z = new Deferred<B>()
+    pipe(d, (a) => {
+        dependsOn(z, f(a))
     })
+    return z
 }
 
 export function map<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => B): Deferred<B> {
@@ -46,30 +41,10 @@ export function constMap<K>(k: K, d: Readonly<Deferred<any>>): Deferred<K> {
     return map(d, () => k)
 }
 
-export function bind<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<B>): Deferred<B> {
-    const z = new Deferred<B>()
-    pipe(d, (a) => {
-        dependsOn(z, f(a))
+export function dependsOn<T>(slave: Readonly<Deferred<T>>, master: Deferred<T>): void {
+    pipe(master, (v) => {
+        slave.done(v)
     })
-    return z
-}
-
-export function waitAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<void> {
-    let counter = ds.length
-    const deferred = new Deferred<void>()
-    
-    if (counter === 0) {
-        deferred.done()
-    }
-
-    ds.forEach((d) => {
-        pipe(d, () => {
-            if (--counter === 0)
-                deferred.done()
-        })
-    })
-
-    return deferred
 }
 
 export function joinAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<readonly T[]> {
@@ -90,6 +65,31 @@ export function joinAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<reado
     })
 
     return deferred
+}
+
+export function waitAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<void> {
+    let counter = ds.length
+    const deferred = new Deferred<void>()
+    
+    if (counter === 0) {
+        deferred.done()
+    }
+
+    ds.forEach((d) => {
+        pipe(d, () => {
+            if (--counter === 0)
+                deferred.done()
+        })
+    })
+
+    return deferred
+}
+
+export function pipe<T>(d: Deferred<T>, f: Work<T>): void {
+    if (d.isDone)
+        f(d.result!)
+    else
+        d.then = combineWork(d.then, f)
 }
 
 function combineWork<T>(a: Work<T>, b: Work<T>): Work<T> {

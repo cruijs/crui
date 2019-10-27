@@ -11,9 +11,9 @@ export abstract class AbstractStreamList<T> extends Stream<T[], Update<T>> imple
         return this.value[i]
     }
 
-    set(newList: T[]): void {
+    set(newList: readonly T[]): void {
         const oldList = this.value
-        this.value = newList
+        this.value = newList.slice()
         this.updated(opReplace(oldList, newList))
     }
 

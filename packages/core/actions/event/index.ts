@@ -32,8 +32,8 @@ export function on<T extends LoadTag>(ev: LoadType, handler: EventHandler): Even
 export function on(ev: FormType, handler: EventHandler): EventAction<'form'>
 export function on<T extends Tag>(ev: MouseType, handler: MouseHandler): EventAction<T> 
 export function on<T extends Tag>(ev: FocusType, handler: EventHandler): EventAction<T> 
-export function on<E extends EventType>(event: E, handler: EventHandler):  EventAction
-export function on<E extends EventType>(event: E, handler: (ev: any) => void):  EventAction {
+export function on<T extends Tag>(event: string, handler: EventHandler):  EventAction<T>
+export function on(event: string, handler: (ev: any) => void):  EventAction {
     return action({
         type: EventType,
         event,

@@ -1,4 +1,4 @@
-export { Component, Setup, Meta } from './dom';
-export * from './elems';
-export * from './setups';
+export * from './actions';
+export * from './restrictions';
 export * from './types';
+export * from './utils';

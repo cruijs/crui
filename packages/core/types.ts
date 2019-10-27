@@ -1,23 +1,49 @@
-export type AnyTag = string
-export type Node<T extends AnyTag> = { nodeName: T }
-export type AnyNode = Node<AnyTag>
+import { Deferred } from './utils/deferred'
+import { Emitter } from './emitter'
+
+export type Driver<N, A extends AnyAction, S extends AnyAction = any, R = N> =
+    (node: N, action: A, emitter: Emitter<N, S>) => R | Deferred<R>
+
+export type Drivers<N = any, R = N> = {
+    [k: string]: Driver<N, AnyAction, AnyAction, R>
+}
+
+/**
+ * Transform Union into Intersection
+ * 
+ * Example:
+ *   UtoI<A | B | C> := A & B & C
+ */
+export type UtoI<U> = 
+  (U extends any ? (k: U)=>void : never) extends ((k: infer I)=>void) ? I : never
+
+export type Action<
+    T extends symbol,
+    D extends Drivers<any, DR>,
+    RP = {},
+    DR = any,
+> = {
+    readonly type: T
+    _restriction: RP,
+    _drivers: D,
+    _return: DR,
+}
+export type AnyAction = Action<any, any, any, any>
+
+export type MatchRestr<R, A> =
+    A extends Action<any, any, infer MR>
+        ? R extends Pick<MR, Extract<keyof MR, keyof R>> ? A : never
+        : never 
+
+export type RemoveRestr<R, A> =
+    A extends Action<any, any, infer MR>
+        ? Pick<MR, Exclude<keyof MR, keyof R>>
+        : never
+
+export type ProvideDriver<D, A> =
+    A extends Action<any, infer DR, any>
+        ? Pick<DR, Exclude<keyof DR, keyof D>>
+        : never
+
 export type Unsubscribe = () => void
 export type AsyncFn = () => PromiseLike<void>
-export type Meta<T> = { tag: T }
-
-export type Tag = 'a' 
-    | 'abbr' | 'address' | 'area' | 'article' | 'aside' | 'audio' | 'b'
-    | 'base' | 'bdi' | 'bdo' | 'blockquote' | 'button' | 'canvas' | 'caption' | 'cite'
-    | 'code' | 'col' | 'colgroup' | 'data' | 'datalist' | 'dd'
-    | 'del' | 'details' | 'dfn' | 'dialog' | 'div' | 'dl' | 'dt' | 'em'
-    | 'embed' | 'fieldset' | 'figcaption' | 'figure' | 'footer' | 'form'
-    | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-    | 'head' | 'header' | 'hgroup' | 'hr' | 'i' | 'iframe' | 'img'
-    | 'input' | 'ins' | 'kbd' | 'label' | 'legend' | 'li' | 'link' | 'main'
-    | 'map' | 'mark' | 'menu' | 'meta' | 'meter' | 'nav' | 'object' | 'ol'
-    | 'optgroup' | 'option' | 'output' | 'p' | 'param' | 'picture' | 'pre'
-    | 'progress' | 'q' | 'rb' | 'rp' | 'rt' | 'rtc' | 'ruby' | 's' | 'samp'
-    | 'script' | 'section' | 'select' | 'slot' | 'small' | 'source' | 'span'
-    | 'strong' | 'style' | 'sub' | 'summary' | 'sup' | 'table' | 'tbody' | 'td'
-    | 'template' | 'textarea' | 'tfoot' | 'th' | 'thead' | 'time' | 'title'
-    | 'tr' | 'track' | 'u' | 'ul' | 'var' | 'video' | 'wbr'

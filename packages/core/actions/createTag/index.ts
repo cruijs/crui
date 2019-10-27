@@ -1,4 +1,4 @@
-import { Tag } from '../../../../core/restrictions/tag'
+import { Tag } from '../../restrictions/tag'
 import { Action, Driver } from '../../types'
 import { action } from '../action'
 

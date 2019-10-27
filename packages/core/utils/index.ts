@@ -1,4 +1,7 @@
-export * from './array'
+import * as A from './array'
+import * as O from './object'
+
 export * from './combine'
 export * from './noop'
-export * from './object'
+export const Arr = A
+export const Obj = O

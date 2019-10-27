@@ -1,4 +1,3 @@
-import { cssTx } from '@crui/transitions/elems/cssTx';
 import { bindChecked } from '../../v2/actions/bind';
 import { css } from '../../v2/actions/css';
 import { h } from '../../v2/actions/elem';
@@ -50,14 +49,15 @@ function TodoTemplate() {
         child
     ])
 }
-
+/*
 const Remove = cssTx(
     { height: 500, margin: 500, padding: 500 },
     { height: '0', margin: '0', padding: '0' },
     { height: '2rem', margin: null, padding: null },
 )
-    const Slide = cssTx(
-        { transform: 500, opacity: 500 },
-        { transform: 'translateX(-1em)', opacity: 0 },
-        { transform: 'translateX(0)', opacity: 1 },
-    )
+const Slide = cssTx(
+    { transform: 500, opacity: 500 },
+    { transform: 'translateX(-1em)', opacity: 0 },
+    { transform: 'translateX(0)', opacity: 1 },
+)
+*/

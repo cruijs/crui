@@ -22,6 +22,9 @@ export type ListView<V extends object, E extends Template<V>> =
         template: E
     }
 
+/**
+ * Warning: it will take full control over the Node children list!
+ */
 export function listView<V extends object, E extends Template<V>>(
     stream: DR$L<V>,
     template: E

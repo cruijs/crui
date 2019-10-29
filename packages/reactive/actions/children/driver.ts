@@ -1,10 +1,10 @@
 import { Append, append, InsertAt, insertAt, pipe, Remove, remove, waitAll } from '@crui/core';
 import { Emitter } from '@crui/core/scheduler/emitter';
-import { Update, UpdateType } from '../../rx';
+import { Update, UpdateType } from '../../rx/list/types';
 import { $ChildrenDriver, $ChildrenType } from './index';
 
 type AReq<N> = Append<N>|Remove<N>|InsertAt<N>
-export const $childrenDriver: $ChildrenDriver<any, AReq<any>> = {
+export const make$ChildrenDriver = <N>(): $ChildrenDriver<N, AReq<N>> => ({
     [$ChildrenType]: (parent, { stream }, { emit }) => {
         stream.subscribe((upd) => {
             runUpdate(parent, emit, upd)
@@ -14,7 +14,7 @@ export const $childrenDriver: $ChildrenDriver<any, AReq<any>> = {
             emit(parent, append(n))
         ))
     }
-}
+})
 
 function runUpdate<N>(
     parent: N,

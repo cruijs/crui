@@ -1,18 +1,21 @@
-import { AnyNodeAction, cleanup, destroy, Destroy, pipe, replace, Replace } from '@crui/core'
+import { AnyNodeAction, cleanup, destroy, Destroy, destroyable, Destroyable, pipe, replace, Replace } from '@crui/core'
 import { $ChildDriver, $ChildType } from './index'
 
-export const make$ChildDriver = <N, E extends AnyNodeAction<N>>(): $ChildDriver<N, E, Replace<N>|Destroy> => ({
+export const make$ChildDriver = <N, E extends AnyNodeAction<N>>(): $ChildDriver<N, E, Replace<N>|Destroyable<E>|Destroy> => ({
     [$ChildType]: (parent, { stream }, { emit }) => {
         let prev: N|undefined
         const f = (elem: E) => {
-            const d = emit(parent, elem)
+            const d = emit(parent, destroyable(elem))
             pipe(d, (node) => {
                 if (prev === undefined) {
                     prev = node
                 }
                 else {
-                    emit(parent, replace(prev, node))
-                    emit(prev, destroy)
+                    const toDestroy = prev
+                    pipe(
+                        emit(parent, replace(prev, node)),
+                        () => emit(toDestroy, destroy)
+                    )
                 }
             })
             return d

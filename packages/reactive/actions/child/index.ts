@@ -1,4 +1,4 @@
-import { Action, AnyNodeAction, Cleanup, destroyable, Destroyable, Driver, NodeAction } from '@crui/core'
+import { Action, AnyNodeAction, Cleanup, Driver, NodeAction } from '@crui/core'
 import { action } from '@crui/core/actions/action'
 import { DR$B } from '../../rx/box'
 
@@ -10,9 +10,9 @@ export type $Child<E extends AnyNodeAction> = NodeAction<typeof $ChildType, $Chi
     stream: DR$B<E>,
 }
 
-export function $child<E extends AnyNodeAction>(stream: DR$B<E>): Destroyable<$Child<E>> {
-    return destroyable(action({
+export function $child<E extends AnyNodeAction>(stream: DR$B<E>): $Child<E> {
+    return action({
         type: $ChildType,
         stream,
-    }))
+    })
 }

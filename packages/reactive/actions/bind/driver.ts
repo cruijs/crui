@@ -3,7 +3,6 @@ import { compatibleInputEvent } from '@crui/core/dom/events'
 import { Emitter } from '@crui/core/scheduler/emitter'
 import { DRW$B } from '../../rx'
 import { apply } from '../../rx/box'
-import { makeAtomic } from '../../utils/atomic'
 import { BindCheckedDriver, BindCheckedType, BindValueDriver, BindValueType, BVTag } from './index'
 
 export const bindValueDriver: BindValueDriver<any, AReq<'value'>> = {
@@ -33,19 +32,23 @@ function bind<P extends keyof Props>(
         { stream }: { stream: DRW$B<Props[P]> },
         { emit }: Emitter<N, AReq<P>>,
     ) => {
-        const atomic = makeAtomic()
+        let shouldUpdate = true
         const event = compatibleInputEvent(node)
 
         then(node, emit)
-        emit(node, cleanup(
-            apply(stream, atomic((val) => {
+        apply(stream, (val) => {
+            if (shouldUpdate)
                 emit(node, prop(name, val as never))
-            }))
-        ))
-        return emit(node, on<BVTag>(event, atomic(() => {
+            shouldUpdate = true
+        })
+
+        emit(node, cleanup(stream.destroy))
+
+        return emit(node, on<BVTag>(event, () => {
             pipe(emit(node, getProp(name)), (val) => {
+                shouldUpdate = false 
                 stream.set(val)
             })
-        })))
+        }))
     }
 }

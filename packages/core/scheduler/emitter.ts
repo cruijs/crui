@@ -1,7 +1,7 @@
-import { AnyAction, Drivers } from '../types'
+import { Action, Drivers } from '../types'
 import { Deferred, joinAll } from '../utils/deferred'
 
-export type Job<N, A extends AnyAction = AnyAction, D extends A['_drivers'] = A['_drivers']> = {
+export type Job<N, A extends Action = Action, D extends A['_drivers'] = A['_drivers']> = {
     emitter: Emitter<N, A, D>,
     drivers: D,
     node: N,
@@ -11,7 +11,7 @@ export type Job<N, A extends AnyAction = AnyAction, D extends A['_drivers'] = A[
 
 export type Emit<N> = (job: Job<N>) => void
 
-export class Emitter<N, A0 extends AnyAction = AnyAction, D0 extends Drivers<N> = Drivers<N>> {
+export class Emitter<N, A0 extends Action = Action, D0 extends Drivers<N> = Drivers<N>> {
     constructor(
         private drivers: D0,
         private readonly realEmit: Emit<N>,

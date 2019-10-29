@@ -1,4 +1,4 @@
-import { CreateTagDriver, CreateTagType } from '.'
+import { CreateTagDriver, CreateTagType } from './index'
 
 export const createTagDriver: CreateTagDriver<HTMLElement> = {
     [CreateTagType]: (_, { tag }) => {

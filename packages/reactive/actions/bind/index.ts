@@ -1,4 +1,4 @@
-import { Action, AnyAction, Driver, TagR } from '@crui/core'
+import { Action, Driver, TagR } from '@crui/core'
 import { action } from '@crui/core/actions/action'
 import { DRW$B } from '../../rx/box/types'
 
@@ -14,7 +14,7 @@ export type BindValue =
         stream: $Value
     }
 
-export type BindValueDriver<N = any, S extends AnyAction = AnyAction> = {
+export type BindValueDriver<N = any, S extends Action = never> = {
     [BindValueType]: Driver<N, BindValue, S>
 }
 
@@ -36,7 +36,7 @@ export type BindChecked =
         stream: $Checked
     }
 
-export type BindCheckedDriver<N = any, S extends AnyAction = AnyAction> = {
+export type BindCheckedDriver<N = any, S extends Action = never> = {
     [BindCheckedType]: Driver<N, BindChecked, S>
 }
 

@@ -1,12 +1,12 @@
-import { Driver, Action, AnyAction } from '../../types'
+import { Action, Driver, NodeAction } from '../../types'
 import { action } from '../action'
 
 export const TextType = Symbol('text')
-export type TextDriver<N = any, R = N, S extends AnyAction = never> = {
+export type TextDriver<N = any, R = N, S extends Action = never> = {
     [TextType]: Driver<N, TextElem, S, R>
 }
 export type TextElem =
-    Action<
+    NodeAction<
         typeof TextType,
         TextDriver
     > & {

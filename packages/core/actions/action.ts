@@ -1,8 +1,8 @@
-import { AnyAction } from '../types';
+import { Action } from '../types'
 
-type Typed = {
-    type: symbol
+type Typed<T extends symbol> = {
+    type: T
 }
-export function action<P extends Typed>(payload: P): AnyAction & P {
+export function action<T extends symbol, P extends Typed<T>>(payload: P): Action<T> & P {
     return payload as any
 }

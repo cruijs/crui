@@ -1,4 +1,4 @@
-import { Driver, SetupAction } from '../../types'
+import { Driver, InfraAction } from '../../types'
 import { action } from '../action'
 import { Destroy } from '../destroyable'
 
@@ -7,7 +7,7 @@ export type ReplaceDriver<N> = {
     [ReplaceType]: Driver<N, Replace<N>, Destroy, void>
 }
 export type Replace<N> =
-    SetupAction<
+    InfraAction<
         typeof ReplaceType,
         ReplaceDriver<N>
     > & {

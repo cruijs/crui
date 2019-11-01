@@ -1,15 +1,15 @@
 import { Tag, TagMR, TagR } from '../../restrictions/tag'
-import { AnyAction, AnyNodeAction, Driver, NodeAction, RemoveRestr, UtoI } from '../../types'
+import { AnySetupAction, AnyNodeAction, Driver, NodeAction, RemoveRestr, UtoI } from '../../types'
 import { action } from '../action'
 
 export const ElemType = Symbol('elem')
-export type ElemDriver<A extends AnyAction, C extends AnyNodeAction, N = any> = {
+export type ElemDriver<A extends AnySetupAction, C extends AnyNodeAction, N = any> = {
     [ElemType]: Driver<N, Elem<Tag, A, C>, A>
 }
 
 export type Elem<
     T extends Tag = any,
-    A extends AnyAction = any,
+    A extends AnySetupAction = any,
     C extends AnyNodeAction = any
 > =
     NodeAction<
@@ -22,13 +22,13 @@ export type Elem<
         children: readonly C[],
     }
 
-type ElemR<A extends AnyAction, C extends AnyNodeAction> = 
+type ElemR<A extends AnySetupAction, C extends AnyNodeAction> = 
     UtoI<RemoveRestr<TagR<any>, A>> & UtoI<C['_restriction']>
 
-type ElemD<A extends AnyAction, C extends AnyNodeAction> = 
+type ElemD<A extends AnySetupAction, C extends AnyNodeAction> = 
     ElemDriver<A, C> & UtoI<A['_drivers']> & UtoI<C['_drivers']>
 
-export function h<T extends Tag, A extends AnyAction, C extends AnyNodeAction>(
+export function h<T extends Tag, A extends AnySetupAction, C extends AnyNodeAction>(
     tag: T,
     actions: readonly TagMR<A, T>[],
     children: readonly C[] = [],

@@ -1,12 +1,12 @@
 import { constMap } from '../../../eg-reactive-todos/v2/deferred'
 import { Emitter } from '../../scheduler/emitter'
-import { AnyAction, AnyNodeAction } from '../../types'
+import { AnySetupAction, AnyNodeAction } from '../../types'
 import { bind, Deferred, joinAll, waitAll } from '../../utils/deferred'
 import { append, Append } from '../append'
 import { CreateTag, createTag } from '../createTag'
 import { Elem, ElemDriver, ElemType } from './index'
 
-function driver<N, A extends AnyAction, C extends AnyNodeAction<N>>(
+function driver<N, A extends AnySetupAction, C extends AnyNodeAction<N>>(
     parent: N,
     { tag, actions, children }: Elem<any, A, C>,
     { emit }: Emitter<N, A | C | Append<N> | CreateTag<N>>

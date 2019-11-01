@@ -1,5 +1,5 @@
 import { Tag, TagR } from '../../restrictions/tag'
-import { Action, Driver } from '../../types'
+import { Driver, SetupAction } from '../../types'
 import { action } from '../action'
 
 export type EventHandler = EventListener
@@ -21,7 +21,7 @@ export const EventType = Symbol('event')
 export type EventDriver<N = any> = {
     [EventType]: Driver<N, EventAction>
 }
-export type EventAction<T extends Tag = Tag> = Action<typeof EventType, EventDriver, TagR<T>> & {
+export type EventAction<T extends Tag = Tag> = SetupAction<typeof EventType, EventDriver, TagR<T>> & {
     event: string,
     handler: EventHandler,
 }

@@ -1,9 +1,9 @@
-import { AnyAction, Drivers } from '../types';
+import { Action, Drivers } from '../types';
 import { Fn0 } from '../utils/combine';
 import { Deferred, dependsOn } from '../utils/deferred';
 import { Emit, Emitter, Job } from './emitter';
 
-export function schedule<N, A extends AnyAction, D extends Drivers<N>>(
+export function schedule<N, A extends Action, D extends Drivers<N>>(
     onNext: (w: Fn0) => void,
     node: N,
     drivers: D,

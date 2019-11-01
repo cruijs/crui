@@ -1,4 +1,4 @@
-import { Action, AnyNodeAction, Driver, ProvideDriver, RemoveRestr, UtoI } from '../../types'
+import { Action, AnyNodeAction, Driver, InfraAction, ProvideDriver, RemoveRestr, UtoI } from '../../types'
 import { Deferred } from '../../utils/deferred'
 import { action } from '../action'
 import { DynamicDriver, DynamicR } from './dynamic'
@@ -21,7 +21,7 @@ type DeriveDriver<N, V, E extends AnyNodeAction<N>> = TemplateDriver<N, V, E> & 
     >
 >
 export type Template<V, E extends AnyNodeAction<N> = any, N = any> =
-    Action<
+    InfraAction<
         typeof TemplateType,
         DeriveDriver<N, V, E>,
         UtoI<RemoveRestr<DynamicR<V>, E>>,

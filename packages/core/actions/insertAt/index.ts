@@ -1,4 +1,4 @@
-import { Action, Driver } from '../../types'
+import { Driver, InfraAction } from '../../types'
 import { action } from '../action'
 
 export const InsertAtType = Symbol('insertAt')
@@ -6,7 +6,7 @@ export type InsertAtDriver<N> = {
     [InsertAtType]: Driver<N, InsertAt<N>>
 }
 export type InsertAt<N> =
-    Action<
+    InfraAction<
         typeof InsertAtType,
         InsertAtDriver<N>
     > & {

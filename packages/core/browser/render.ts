@@ -1,7 +1,7 @@
-import { AnyAction } from '../types';
 import { schedule } from '../scheduler';
+import { Action } from '../types';
 
-export function render<A extends AnyAction, D extends A['_drivers']>(
+export function render<A extends Action, D extends A['_drivers']>(
     node: Node,
     driver: D,
     action: A

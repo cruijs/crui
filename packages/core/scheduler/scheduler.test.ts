@@ -1,10 +1,9 @@
 import { action } from '../actions/action'
+import { Action, Drivers } from '../types'
 import { pipe } from '../utils/deferred'
+import { noop } from '../utils/noop'
 import { Emitter } from './emitter'
-import { schedule } from '.'
-import { Action, AnyAction, Drivers } from '../types'
-
-const noop = () => {}
+import { schedule } from './index'
 
 describe('emit multiple actions', () => {
     const TestType = Symbol()
@@ -57,9 +56,9 @@ describe('action value depends on emitted', () => {
     const ExprType = Symbol()
     type Expr = Action<typeof ExprType, Drivers> & {
         type: typeof ExprType,
-        actions: AnyAction[]
+        actions: Action[]
     }
-    const expr = (actions: AnyAction[]) => action({
+    const expr = (actions: Action[]) => action({
         type: ExprType,
         actions
     })

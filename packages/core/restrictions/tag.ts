@@ -1,10 +1,10 @@
-import { AnyAction, MatchRestr } from '../types'
+import { AnySetupAction, MatchRestr } from '../types'
 
 export type TagR<T extends Tag = Tag> = {
     tag: T
 }
 
-export type TagMR<A extends AnyAction, T extends Tag = Tag> =
+export type TagMR<A extends AnySetupAction, T extends Tag = Tag> =
     MatchRestr<TagR<T>, A>
 
 export type Tag = 'a' 

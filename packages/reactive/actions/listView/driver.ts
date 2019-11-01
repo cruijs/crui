@@ -1,4 +1,4 @@
-import { bind, Cleanup, cleanup, Deferred, joinAll, MakeItem, map, pipe, waitAll } from '@crui/core'
+import { bind, Cleanup, cleanup, Deferred, joinAll, MakeItem, map, pipe, then, waitAll } from '@crui/core'
 import { StreamList, Update, UpdateType } from '../../rx/list'
 import { opBatch, opReplace, opSplice, opUpdate } from '../../rx/list/operations/factory'
 import { $Children, $children } from '../children'
@@ -21,9 +21,6 @@ export const makeListViewDriver = <N, T extends object = any, E extends Tpl<T, N
             bind(emit(parent, template), (render) => {
                 const withNodes = makeRenderNodes<N, T>(new Map(), render)
 
-                const d = withNodes(stream.get())
-                pipe(d, (nodes) => $nodes.set(nodes))
-
                 stream.subscribe((upd) => {
                     pipe(
                         opMap(withNodes, upd),
@@ -31,7 +28,10 @@ export const makeListViewDriver = <N, T extends object = any, E extends Tpl<T, N
                     )
                 })
 
-                return d
+                return then(
+                    withNodes(stream.get()),
+                    (nodes) => $nodes.set(nodes)
+                )
             })
         ])
     }

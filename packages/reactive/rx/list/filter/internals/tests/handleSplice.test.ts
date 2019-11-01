@@ -31,11 +31,11 @@ function run(
     }
 ) {
     const $nl = new StreamList(state.list)
-    const actual = handleSplice(state.upd, {
+    const actual = handleSplice({
         $list: $nl,
         p: isEven,
         indexMap: state.imap
-    })
+    }, state.upd)
     expect($nl.get()).toEqual(expected.list)
     expect(actual).toEqual(expected.imap)
 }

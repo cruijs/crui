@@ -13,11 +13,11 @@ describe(handleReplace, () => {
             newList: [1, 2, 3, 4],
         }
         const $nl = new StreamList([6])
-        const actual = handleReplace(upd, {
+        const actual = handleReplace({
             $list: $nl,
             p: isEven,
             indexMap: [undefined, 0]
-        })
+        }, upd)
         expect($nl.get()).toEqual([2, 4])
         expect(actual).toEqual([undefined, 0, undefined, 1])
     })

@@ -1,6 +1,6 @@
 import { Index, Predicate } from '../types';
 
-export function filteredList<T>(ls: T[], start: number, p: Predicate<T>) {
+export function filteredList<T>(ls: readonly T[], start: number, p: Predicate<T>) {
     const filtered = [];
     const indexMap: Index = Array(ls.length);
     for (let i = 0; i < ls.length; ++i) {

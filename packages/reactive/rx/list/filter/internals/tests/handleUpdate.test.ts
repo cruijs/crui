@@ -24,11 +24,11 @@ function run(
     }
 ) {
     const $nl = new StreamList(state.list)
-    const actual = handleUpdate(state.upd, {
+    const actual = handleUpdate({
         $list: $nl,
         p: isEven,
         indexMap: state.imap
-    })
+    }, state.upd)
     expect($nl.get()).toEqual(expected.list)
     expect(actual).toEqual(expected.imap)
 }

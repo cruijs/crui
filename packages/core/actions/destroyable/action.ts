@@ -1,4 +1,4 @@
-import { AnyNodeAction, Driver, NodeAction, ProvideDriver } from '../../types'
+import { AnyNodeAction, Driver, InfraAction, ProvideDriver } from '../../types'
 import { action } from '../action'
 import { CleanupDriver } from './cleanup'
 
@@ -6,7 +6,7 @@ export const DestroyableType = Symbol('destroyable')
 export type DestroyableDriver<N = any, A extends AnyNodeAction = any> = {
     [DestroyableType]: Driver<N, Destroyable<A>, A, A['_return']>
 }
-export type Destroyable<E extends AnyNodeAction> = NodeAction<
+export type Destroyable<E extends AnyNodeAction> = InfraAction<
     typeof DestroyableType,
     DestroyableDriver & ProvideDriver<CleanupDriver, E>,
     E['_return'],

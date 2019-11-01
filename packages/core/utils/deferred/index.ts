@@ -28,6 +28,11 @@ export function pipe<T>(d: Deferred<T>, f: Work<T>): void {
         d.then = combineWork(d.then, f)
 }
 
+export function then<T>(d: Deferred<T>, f: Work<T>): Deferred<T> {
+    pipe(d, f)
+    return d
+}
+
 export function dependsOn<T>(slave: Readonly<Deferred<T>>, master: Deferred<T>): void {
     pipe(master, (v) => {
         slave.done(v)

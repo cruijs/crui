@@ -1,22 +1,20 @@
-import { AnyNodeAction, cleanup, destroyable, Destroyable, pipe, replace, Replace } from '@crui/core'
+import { AnyNodeAction, cleanup, Destroyable, Memoize, replace, Replace, then } from '@crui/core'
 import { $ChildDriver, $ChildType } from './index'
 
-export const make$ChildDriver = <N, E extends AnyNodeAction<N>>(): $ChildDriver<N, E, Replace<N>|Destroyable<E>> => ({
-    [$ChildType]: (parent, { stream }, { emit }) => {
+export const make$ChildDriver = <N, E extends AnyNodeAction<N>>(): $ChildDriver<N, E, Replace<N>|Destroyable<E>|Memoize<E>> => ({
+    [$ChildType]: (_, { stream, wrap }, { emit }) => {
         let prev: N|undefined
-        const f = (elem: E) => {
-            const d = emit(parent, destroyable(elem))
-            pipe(d, (node) => {
+        const f = (elem: E) => then(
+            emit(_, wrap(elem)),
+            (node) => {
                 if (prev)
-                    emit(parent, replace(prev, node)),
+                    emit(_, replace(prev, node))
                 prev = node
-            })
-            return d
-        }
+            }
+        )
 
         stream.subscribe(f)
-        emit(parent, cleanup(stream.destroy))
-
+        emit(_, cleanup(stream.destroy))
         return f(stream.get())
     }
 })

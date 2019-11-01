@@ -1,13 +1,12 @@
-import { Action, AnyNodeAction, Driver, NodeAction } from '../../types'
+import { Action, AnyNodeAction, Driver, InfraAction } from '../../types'
 import { action } from '../action'
-import { Destroyable } from '../destroyable/action'
 
 export const MemoizeType = Symbol('memoize')
 export type MemoizeDriver<E extends AnyNodeAction, N = any, S extends Action = never> = {
-    [MemoizeType]: Driver<N, Memoize<E>|S, E>
+    [MemoizeType]: Driver<N, Memoize<E>, E|S>
 }
 export type Memoize<E extends AnyNodeAction> = 
-    NodeAction<
+    InfraAction<
         typeof MemoizeType,
         MemoizeDriver<E>,
         E['_restriction'],
@@ -16,9 +15,7 @@ export type Memoize<E extends AnyNodeAction> =
         elem: E
     }
 
-type NoDestroyable<E> = E extends Destroyable<any> ? never : E
-
-export function memoize<E extends AnyNodeAction>(elem: NoDestroyable<E>): Memoize<E> {
+export function memoize<E extends AnyNodeAction>(elem: E): Memoize<E> {
     return action({
         type: MemoizeType,
         elem,

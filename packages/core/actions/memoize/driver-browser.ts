@@ -3,7 +3,7 @@ import { Deferred } from '../../utils/deferred'
 import { Memoize, MemoizeDriver, MemoizeType } from './index'
 
 type Cache<E extends AnyNodeAction, N> =
-    WeakMap<Memoize<E>, Deferred<N>>
+    WeakMap<E, Deferred<N>>
 
 export function makeMemoizeDriver<
     N = any,
@@ -12,12 +12,12 @@ export function makeMemoizeDriver<
     const cache: Cache<E, N> = new WeakMap()
 
     return {
-        [MemoizeType]: (_, action, { emit }) => {
-            let node = cache.get(action)
+        [MemoizeType]: (_, { elem }, { emit }) => {
+            let node = cache.get(elem)
 
             if (node === undefined) {
-                node = emit(_, action.elem)
-                cache.set(action, node)
+                node = emit(_, elem)
+                cache.set(elem, node)
             }
             
             return node

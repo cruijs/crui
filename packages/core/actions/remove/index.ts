@@ -1,9 +1,10 @@
 import { Driver, SetupAction } from '../../types'
 import { action } from '../action'
+import { Destroy } from '../destroyable'
 
 export const RemoveType = Symbol('remove')
 export type RemoveDriver<N> = {
-    [RemoveType]: Driver<N, Remove<N>, never, void>
+    [RemoveType]: Driver<N, Remove<N>, Destroy, void>
 }
 export type Remove<N> =
     SetupAction<

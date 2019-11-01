@@ -11,7 +11,7 @@ export function makeDestroyableDriver<N extends object>(): DestroyableDriver<N> 
     const cleanups = new WeakMap<N, Unsubscribe[]>()
 
     return {
-        [DestroyableType]: (parent, { elem: action }, emitter) => {
+        [DestroyableType]: (parent, { elem }, emitter) => {
             const unsubs: Unsubscribe[] = []
             const d = emitter
                 .withDrivers(<D extends Drivers<N>>(d: D): Provide<N, D> => ({
@@ -20,7 +20,7 @@ export function makeDestroyableDriver<N extends object>(): DestroyableDriver<N> 
                         unsubs.push(unsub)
                     },
                 }))
-                .emit(parent, action)
+                .emit(parent, elem)
 
             pipe(d, (node) => {
                 cleanups.set(node, unsubs)

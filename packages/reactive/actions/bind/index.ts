@@ -1,4 +1,4 @@
-import { Action, Driver, TagR } from '@crui/core'
+import { Action, Driver, SetupAction, TagR } from '@crui/core'
 import { action } from '@crui/core/actions/action'
 import { DRW$B } from '../../rx/box/types'
 
@@ -6,7 +6,7 @@ export type $Value = DRW$B<string>
 export const BindValueType = Symbol('bindValue')
 export type BVTag = 'input' | 'select' | 'textarea'
 export type BindValue = 
-    Action<
+    SetupAction<
         typeof BindValueType,
         BindValueDriver,
         TagR<BVTag>

@@ -59,7 +59,7 @@ export function bind<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<B>): 
     return z
 }
 
-export function waitAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<void> {
+export function waitAll(ds: readonly Readonly<Deferred<any>>[]): Deferred<void> {
     let counter = ds.length
     const deferred = new Deferred<void>()
     

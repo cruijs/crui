@@ -3,7 +3,7 @@ import { AnySetupAction, AnyNodeAction, Driver, NodeAction, RemoveRestr, UtoI } 
 import { action } from '../action'
 
 export const ElemType = Symbol('elem')
-export type ElemDriver<A extends AnySetupAction, C extends AnyNodeAction, N = any> = {
+export type ElemDriver<N = any, A extends AnySetupAction = any, C extends AnyNodeAction = any> = {
     [ElemType]: Driver<N, Elem<Tag, A, C>, A>
 }
 
@@ -26,7 +26,7 @@ type ElemR<A extends AnySetupAction, C extends AnyNodeAction> =
     UtoI<RemoveRestr<TagR<any>, A>> & UtoI<C['_restriction']>
 
 type ElemD<A extends AnySetupAction, C extends AnyNodeAction> = 
-    ElemDriver<A, C> & UtoI<A['_drivers']> & UtoI<C['_drivers']>
+    ElemDriver<any, A, C> & UtoI<A['_drivers']> & UtoI<C['_drivers']>
 
 export function h<T extends Tag, A extends AnySetupAction, C extends AnyNodeAction>(
     tag: T,

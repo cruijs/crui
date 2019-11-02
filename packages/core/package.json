@@ -1,6 +1,6 @@
 {
   "name": "@crui/core",
-  "version": "alpha-2.0.0",
+  "version": "2.0.0-alpha",
   "description": "Foundation on which the CRUI library builds on",
   "author": "Salvatore Pelligra",
   "license": "GPL-3.0",

@@ -1,5 +1,6 @@
 import { Drivers, Unsubscribe } from '../../types'
 import { pipe } from '../../utils/deferred'
+import { noop } from '../../utils/noop'
 import { DestroyableDriver, DestroyableType } from './action'
 import { CleanupDriver, CleanupType } from './cleanup'
 import { DestroyDriver, DestroyType } from './destroy'
@@ -7,10 +8,12 @@ import { DestroyDriver, DestroyType } from './destroy'
 type Provide<N, D extends Drivers<N>> =
     D & CleanupDriver<N>
 
-export function makeDestroyableDriver<N extends object>(): DestroyableDriver<N> & DestroyDriver {
+type DDrivers<N> = DestroyableDriver<N> & DestroyDriver<N> & CleanupDriver<N>
+export function makeDestroyableDriver<N extends object>(): DDrivers<N> {
     const cleanups = new WeakMap<N, Unsubscribe[]>()
 
     return {
+        [CleanupType]: noop,
         [DestroyableType]: (parent, { elem }, emitter) => {
             const unsubs: Unsubscribe[] = []
             const d = emitter

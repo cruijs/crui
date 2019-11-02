@@ -5,9 +5,9 @@ import { DR$L } from '../../rx/list/types'
 export type Tpl<V, N = any> = Template<V, any, N>
 export const ListViewType = Symbol('listview')
 export type ListViewDriver<
-    V extends object,
-    E extends Tpl<V, N>,
-    N = any,
+    N,
+    V extends object = any,
+    E extends Tpl<V, N> = any,
     S extends Action = never
 > = {
     [ListViewType]: Driver<N, ListView<V, E>, E|S, void>
@@ -15,7 +15,7 @@ export type ListViewDriver<
 export type ListView<V extends object, E extends Template<V>> = 
     NodeAction<
         typeof ListViewType,
-        ListViewDriver<V, E> & UtoI<E['_drivers']>,
+        ListViewDriver<any, V, E> & UtoI<E['_drivers']>,
         UtoI<E['_restriction']>
     > & {
         stream: DR$L<V>,

@@ -6,7 +6,7 @@ import { ListViewDriver, ListViewType, Tpl } from './index'
 
 type AReq<N> = Cleanup|$Children<N>
 export const makeListViewDriver = <N, T extends object = any, E extends Tpl<T, N> = any>(
-): ListViewDriver<T, E, N, AReq<N>> => ({
+): ListViewDriver<N, T, E, AReq<N>> => ({
     [ListViewType]: (parent, { stream, template }, { emit }) => {
         const cache = new Map<T, N>()
         const $nodes = new StreamList<N>([])

@@ -22,7 +22,7 @@ type Drivers =
     BindValueDriver<N>
     & BindCheckedDriver<N>
     & PropDriver<N, 'value'|'checked'>
-    & GetPropDriver<'value'|'checked', N>
+    & GetPropDriver<N, 'value'|'checked'>
     & EventDriver<N>
     & CleanupDriver<N>
 

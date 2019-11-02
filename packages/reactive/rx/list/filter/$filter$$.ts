@@ -6,12 +6,11 @@ import { $filter$, Predicate$ } from './$filter$';
 import { diff } from '../diff/filter';
 
 export type $Predicate$<T> = R$B<Predicate$<T>>
-export function $filter$$<S, T>(
+export function $filter$$<T>(
     $source: R$L<T>,
-    $p$: $Predicate$<S>,
-    f: (p: Predicate$<S>) => Predicate$<T>
+    $p$: $Predicate$<T>,
 ): DR$L<T> {
-    let $filtered = $filter$($source, f($p$.get()))
+    let $filtered = $filter$($source, $p$.get())
 
     const $filtered$ = new StreamList<T>([])
     $filtered$.addUnsub(
@@ -22,9 +21,7 @@ export function $filter$$<S, T>(
     $filtered$.addUnsub(
         $p$.subscribe((p$) => {
             $filtered.destroy()
-            $filtered = $filter$(
-                $source, f(p$)
-            )
+            $filtered = $filter$($source, p$)
 
             keepSyncedWith($filtered, $filtered$, diff)
         })

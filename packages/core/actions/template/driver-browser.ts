@@ -2,8 +2,7 @@ import { Emitter } from '../../scheduler'
 import { AnyNodeAction, AnySetupAction, Drivers } from '../../types'
 import { pushAll } from '../../utils/array'
 import { bind, constMap, Deferred, map, then, waitAll } from '../../utils/deferred'
-import { CreateTag } from '../createTag'
-import { emptyElem } from '../emptyElem'
+import { emptyNode, EmptyNode } from '../emptyNode'
 import { EventDriver, EventType } from '../event'
 import { replace, Replace } from '../replace'
 import { Template, TemplateDriver, TemplateType } from './action'
@@ -37,7 +36,7 @@ type TemplateNode<V> = {
 export const makeTemplateDriver = <
     V = any,
     E extends AnyNodeAction<N> = any
->(): TemplateDriver<N, V, E, CreateTag<N>|Replace<N>> => ({
+>(): TemplateDriver<N, V, E, EmptyNode<N>|Replace<N>> => ({
     [TemplateType]: (parent, action, emitter) => {
         const templateNode = compile<V, E>(parent, action, emitter)
 
@@ -77,7 +76,7 @@ type Provide<D, V> = D
 function compile<V, E extends AnyNodeAction<N>>(
     parent: N,
     { elem }: Template<V, E, N>,
-    emitter: Emitter<N, E|Replace<N>|CreateTag<N>, any>,
+    emitter: Emitter<N, E|Replace<N>|EmptyNode<N>, any>,
 ): Deferred<TemplateNode<V>> {
     const lazyNodes: LazyNode<V>[] = []
     const lazySetups: LazySetup<V>[] = []
@@ -88,7 +87,7 @@ function compile<V, E extends AnyNodeAction<N>>(
             lazySetups.push({ node, make })
         },
         [DynamicNodeType]: (parent, { make }, { emit }) => then(
-            emit(parent, emptyElem),
+            emit(parent, emptyNode),
             (node) => lazyNodes.push({ node, make })
         ),
         [EventType]: (node, action) => {

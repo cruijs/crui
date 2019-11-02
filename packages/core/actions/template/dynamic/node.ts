@@ -1,6 +1,6 @@
 import { AnyNodeAction, Driver, NodeAction } from '../../../types'
 import { action } from '../../action'
-import { CreateTag } from '../../createTag'
+import { EmptyNode } from '../../emptyNode'
 import { DynamicR, MakeAction } from './types'
 
 export const DynamicNodeType = Symbol('dynNode')
@@ -9,7 +9,7 @@ export type DynamicNodeDriver<
     T = any,
     A extends AnyNodeAction = any
 > = {
-    [DynamicNodeType]: Driver<N, DynamicNode<T, A>, CreateTag<N>>
+    [DynamicNodeType]: Driver<N, DynamicNode<T, A>, EmptyNode<N>>
 }
 export type DynamicNode<T, A extends AnyNodeAction> = NodeAction<
     typeof DynamicNodeType,

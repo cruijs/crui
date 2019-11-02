@@ -10,6 +10,8 @@ import { DestroyDriver } from '../actions/destroyable/destroy'
 import { makeDestroyableDriver } from '../actions/destroyable/driver'
 import { ElemDriver } from '../actions/elem'
 import { makeElemDriver } from '../actions/elem/driver'
+import { EmptyNodeDriver } from '../actions/emptyNode'
+import { emptyNodeDriver } from '../actions/emptyNode/driver-browser'
 import { EventDriver } from '../actions/event'
 import { eventDriver } from '../actions/event/driver-browser'
 import { GetPropDriver } from '../actions/getProp'
@@ -41,6 +43,7 @@ export type CoreDrivers<N extends Node = Element> =
     & DestroyDriver<N>
     & CleanupDriver<N>
     & ElemDriver<N>
+    & EmptyNodeDriver<Comment>
     & EventDriver<N>
     & GetPropDriver<N>
     & InsertAtDriver<Node>
@@ -60,6 +63,7 @@ export const drivers: CoreDrivers = {
     ...createTagDriver,
     ...makeDestroyableDriver(),
     ...makeElemDriver(),
+    ...emptyNodeDriver,
     ...eventDriver,
     ...getPropDriver,
     ...insertAtDriver,

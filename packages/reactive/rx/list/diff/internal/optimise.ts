@@ -47,7 +47,7 @@ export function squashAdjacentInc<T>(ops: readonly Splice<T>[]): Splice<T>[] {
 
 export function batchOrReplace<T>(prev: readonly T[], next: readonly T[], ops: readonly Splice<T>[]): Update<T> {
     const last = ops[0]
-    if (ops.length !== 1)
+    if (ops.length === 1)
         return last
 
     const isReplace = 

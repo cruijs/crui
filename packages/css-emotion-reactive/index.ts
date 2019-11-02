@@ -1,1 +1,1 @@
-export * from './setups';
+export * from './actions';

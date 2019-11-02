@@ -1,82 +1,115 @@
 import { Emitter } from '../../scheduler'
-import { Action, AnyNodeAction, Drivers } from '../../types'
-import { bind, constMap, Deferred, map, waitAll } from '../../utils/deferred'
+import { AnyNodeAction, AnySetupAction, Drivers } from '../../types'
+import { pushAll } from '../../utils/array'
+import { bind, constMap, Deferred, map, then, waitAll } from '../../utils/deferred'
+import { CreateTag } from '../createTag'
+import { emptyElem } from '../emptyElem'
 import { EventDriver, EventType } from '../event'
+import { replace, Replace } from '../replace'
 import { Template, TemplateDriver, TemplateType } from './action'
-import { DynamicDriver, DynamicType } from './dynamic'
+import { DynamicNodeDriver, DynamicNodeType, DynamicSetupDriver, DynamicSetupType } from './dynamic'
 
 type N = Node
 
-type Lazy<V> = {
-    path: NodePath, make: (item: V) => Action
+type LazyN<V> = {
+    path: NodePath,
+    make: (item: V) => AnyNodeAction
 }
-type LazyAction<V> = {
+type LazyS<V> = {
+    path: NodePath,
+    make: (item: V) => AnySetupAction
+}
+type LazyNode<V> = {
     node: N,
-    make: (item: V) => Action
+    make: (item: V) => AnyNodeAction
+}
+type LazySetup<V> = {
+    node: N,
+    make: (item: V) => AnySetupAction
 }
 type NodePath = number[]
 type TemplateNode<V> = {
     template: N,
-    lazies: Lazy<V>[]
+    lazyNodes: LazyN<V>[]
+    lazySetups: LazyS<V>[]
 }
 
 export const makeTemplateDriver = <
     V = any,
     E extends AnyNodeAction<N> = any
->(): TemplateDriver<N, V, E> => ({
+>(): TemplateDriver<N, V, E, CreateTag<N>|Replace<N>> => ({
     [TemplateType]: (parent, action, emitter) => {
-        const templateNode = compile(parent, action, emitter)
+        const templateNode = compile<V, E>(parent, action, emitter)
 
         return (item: V): Deferred<N> => (
-            bind(templateNode, ({ template, lazies }) => {
+            bind(templateNode, ({ template, lazyNodes, lazySetups }) => {
                 const root = template.cloneNode(true)
-                return constMap(
-                    root,
-                    waitAll(
-                        lazies.map(({ path, make }) =>
-                            emitter.emit(
-                                nodeFromPath(root, path),
-                                make(item) as E
-                            )
+                const lazies = lazyNodes.map(({ path, make }) => {
+                    const stub = nodeFromPath(root, path)
+                    return bind(
+                        // if E is emittable, all dynamics are too
+                        emitter.emit(root, make(item) as any),
+                        (node) => emitter.emit(
+                            stub.parentNode!,
+                            replace(stub, node)
                         )
-                    ),
-                )
+                    )
+                })
+                pushAll(lazies, lazySetups.map(({ path, make }) =>
+                    emitter.emit(
+                        nodeFromPath(root, path),
+                        // if E is emittable, all dynamics are too
+                        make(item) as any 
+                    )
+                ))
+
+                return constMap(root, waitAll(lazies))
             })
         )
     }
 })
 
-type Provide<D, V> =
-    D & DynamicDriver<V, Action, N> & EventDriver<N>
+type Provide<D, V> = D
+    & EventDriver<N>
+    & DynamicSetupDriver<N, V, AnySetupAction>
+    & DynamicNodeDriver<N, V, AnyNodeAction>
 
-function compile<V, E extends AnyNodeAction<N>, D extends Drivers<N>>(
+function compile<V, E extends AnyNodeAction<N>>(
     parent: N,
     { elem }: Template<V, E, N>,
-    emitter: Emitter<N, E, D>,
+    emitter: Emitter<N, E|Replace<N>|CreateTag<N>, any>,
 ): Deferred<TemplateNode<V>> {
-    const lazyActions: LazyAction<V>[] = []
-    const e = emitter.withDrivers((d: D): Provide<D, V> => ({
+    const lazyNodes: LazyNode<V>[] = []
+    const lazySetups: LazySetup<V>[] = []
+
+    const e = emitter.withDrivers(<D extends Drivers<N>>(d: D): Provide<D, V> => ({
         ...d,
-        [DynamicType]: (node, { make }) => {
-            lazyActions.push({ node, make })
-            return node
+        [DynamicSetupType]: (node, { make }) => {
+            lazySetups.push({ node, make })
         },
+        [DynamicNodeType]: (parent, { make }, { emit }) => then(
+            emit(parent, emptyElem),
+            (node) => lazyNodes.push({ node, make })
+        ),
         [EventType]: (node, action) => {
             const make = () => action
-            lazyActions.push({ node, make })
-            return node
+            lazySetups.push({ node, make })
         }
     }))
 
     return map(
         e.emit(parent, elem),
-        (root) => {
-            const lazies = lazyActions.map(({ node, make }) => ({
+        (root) => ({
+            template: root,
+            lazyNodes: lazyNodes.map(({ node, make }) => ({
                 path: calcPath(root, node),
                 make
-            }))
-            return { template: root, lazies }
-        }
+            })),
+            lazySetups: lazySetups.map(({ node, make }) => ({
+                path: calcPath(root, node),
+                make
+            })),
+        })
     )
 }
 

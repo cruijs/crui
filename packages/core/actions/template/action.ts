@@ -1,22 +1,27 @@
 import { Action, AnyNodeAction, Driver, InfraAction, ProvideDriver, RemoveRestr, UtoI } from '../../types'
 import { Deferred } from '../../utils/deferred'
 import { action } from '../action'
-import { DynamicDriver, DynamicR } from './dynamic'
+import { DynamicNodeDriver, DynamicR, DynamicSetupDriver } from './dynamic'
 
 export const TemplateType = Symbol('template')
-export type TemplateDriver<N = any, V = any, E extends AnyNodeAction<N> = any> = {
+export type TemplateDriver<
+    N = any,
+    V = any,
+    E extends AnyNodeAction<N> = any,
+    S extends Action = never
+> = {
     [TemplateType]: Driver<
         N,
         Template<V, E, N>,
-        E,
+        E|S,
         MakeItem<V, N>
     >
 }
 export type MakeItem<V, N> = (item: V) => Deferred<N>
 
-type DeriveDriver<N, V, E extends AnyNodeAction<N>> = TemplateDriver<N, V, E> & UtoI<
+type DeriveDriver<N, V, E extends AnyNodeAction<N>> = TemplateDriver<N, V, E, any> & UtoI<
     ProvideDriver<
-        DynamicDriver<V, Action>, 
+        DynamicSetupDriver<V> & DynamicNodeDriver<V>, 
         E['_drivers']
     >
 >

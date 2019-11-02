@@ -40,20 +40,19 @@ export type InfraAction<
 
 export type SetupAction<
     T extends symbol,
-    D extends Drivers<any, DR>,
+    D extends Drivers<any, void>,
     RP = {},
-    DR = void
-> = Action<T, D, RP, DR, 'setup'>
+> = Action<T, D, RP, void, 'setup'>
 
 export type AnySetupAction =
-    SetupAction<any, any, any, any>
+    SetupAction<any, any, any>
 
 export type NodeAction<
     T extends symbol,
-    D extends Drivers<any, DR> = any,
-    DR = any,
+    D extends Drivers<N, N> = any,
+    N = any,
     RP = {},
-> = Action<T, D, RP, DR, 'node'>
+> = Action<T, D, RP, N, 'node'>
 
 export type AnyNodeAction<N = any> = NodeAction<any, any, N, any>
 

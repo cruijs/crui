@@ -1,4 +1,4 @@
-import { dynamic, h, hc, template, text } from '@crui/core';
+import { dynNode, dynSetup, h, hc, template, text } from '@crui/core';
 import { css } from '@crui/css-emotion';
 import { bindChecked, listView } from '@crui/reactive';
 import { Todo, TodoStore } from '../store';
@@ -10,8 +10,7 @@ export function TodoList(store: TodoStore) {
             padding: 0,
             margin: 0,
             paddingTop: '0.5rem',
-        })
-    ], [
+        }),
         listView(
             store.getVisibleTodos(),
             TodoTemplate(),
@@ -30,7 +29,7 @@ function TodoTemplate() {
         }),
     ], [
         h('input', [
-            dynamic((todo: Todo) =>
+            dynSetup((todo: Todo) =>
                 bindChecked(todo.done)
             ),
             css({
@@ -39,7 +38,7 @@ function TodoTemplate() {
             }),
         ]),
         hc('span', [
-            dynamic((todo: Todo) => text(todo.text))
+            dynNode((todo: Todo) => text(todo.text))
         ])
     ])
 

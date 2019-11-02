@@ -1,17 +1,16 @@
+import { h, hc, text } from '@crui/core';
+import { css } from '@crui/css-emotion';
 import { AddTodo } from './add-todo';
 import { Footer } from './footer';
 import { TodoStore } from './store';
 import { TodoList } from './todo-list';
-import { h } from '../v2/actions/elem';
-import { css } from '../v2/actions/css';
-import { text } from '../v2/actions/text';
 
+const Title = h('h1', [css({ textAlign: 'center', marginBottom: '2rem' })], [
+    text('CRUI - Todo')
+])
 export const TodoPage = (store: TodoStore) => 
-    h('div', [
-        h('h1', [
-            css({ textAlign: 'center', marginBottom: '2rem' }),
-            text('CRUI - Todo')
-        ]),
+    hc('div', [
+        Title,
         AddTodo(store),
         TodoList(store),
         Footer(store),

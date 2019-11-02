@@ -11,12 +11,12 @@
     "test": "jest --"
   },
   "dependencies": {
-    "@crui/core": "^0.1.0-alpha.11",
-    "@crui/css-emotion": "^0.1.0-alpha.11",
-    "@crui/css-emotion-reactive": "^0.1.0-alpha.11",
-    "@crui/reactive": "^0.1.0-alpha.11",
-    "@crui/transitions": "^0.1.0-alpha.11",
-    "emotion": "^10.0.9"
+    "@crui/core": "2.0.0-alpha",
+    "@crui/css-emotion": "2.0.0-alpha",
+    "@crui/css-emotion-reactive": "2.0.0-alpha",
+    "@crui/reactive": "2.0.0-alpha",
+    "@crui/transitions": "2.0.0-alpha",
+    "emotion": "^10.0.23"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

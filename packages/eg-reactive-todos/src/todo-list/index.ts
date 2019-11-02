@@ -1,24 +1,21 @@
-import { bindChecked } from '../../v2/actions/bind';
-import { css } from '../../v2/actions/css';
-import { h } from '../../v2/actions/elem';
-import { listView } from '../../v2/actions/rx-list-view';
-import { template } from '../../v2/actions/template';
-import { dynamic } from '../../v2/actions/template/dynamic';
-import { text } from '../../v2/actions/text';
+import { dynamic, h, hc, template, text } from '@crui/core';
+import { css } from '@crui/css-emotion';
+import { bindChecked, listView } from '@crui/reactive';
 import { Todo, TodoStore } from '../store';
 
 export function TodoList(store: TodoStore) {
     return h('ul', [
-        listView(
-            store.getVisibleTodos(),
-            TodoTemplate(),
-        ),
         css({
             listStyle: 'none',
             padding: 0,
             margin: 0,
             paddingTop: '0.5rem',
         })
+    ], [
+        listView(
+            store.getVisibleTodos(),
+            TodoTemplate(),
+        ),
     ])
 }
 
@@ -31,6 +28,7 @@ function TodoTemplate() {
             marginBottom: '0.5rem',
             cursor: 'pointer',
         }),
+    ], [
         h('input', [
             dynamic((todo: Todo) =>
                 bindChecked(todo.done)
@@ -40,14 +38,12 @@ function TodoTemplate() {
                 marginRight: '0.5rem',
             }),
         ]),
-        h('span', [
+        hc('span', [
             dynamic((todo: Todo) => text(todo.text))
         ])
     ])
 
-    return template<Todo, 'li', typeof child>('li', [
-        child
-    ])
+    return template<Todo, typeof child>(child)
 }
 /*
 const Remove = cssTx(

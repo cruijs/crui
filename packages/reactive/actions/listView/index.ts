@@ -1,4 +1,4 @@
-import { Action, Driver, NodeAction, Template, UtoI } from '@crui/core'
+import { Action, Driver, SetupAction, Template, UtoI } from '@crui/core'
 import { action } from '@crui/core/actions/action'
 import { DR$L } from '../../rx/list/types'
 
@@ -13,7 +13,7 @@ export type ListViewDriver<
     [ListViewType]: Driver<N, ListView<V, E>, E|S, void>
 }
 export type ListView<V extends object, E extends Template<V>> = 
-    NodeAction<
+    SetupAction<
         typeof ListViewType,
         ListViewDriver<any, V, E> & UtoI<E['_drivers']>,
         UtoI<E['_restriction']>

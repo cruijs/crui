@@ -1,3 +1,3 @@
-import { createTag } from '@crui/core';
+import { createTag } from './createTag';
 
 export const emptyElem = createTag('script')

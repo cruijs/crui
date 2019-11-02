@@ -29,7 +29,7 @@ type ReactiveDrivers<N = Node> =
     & SetNodeValueDriver<N>
     & $TextDriver<N>
 
-export const reactiveDrivers: ReactiveDrivers = {
+export const drivers: ReactiveDrivers = {
     ...bindCheckedDriver,
     ...bindValueDriver,
     ...make$ChildDriver(),

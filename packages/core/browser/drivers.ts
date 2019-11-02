@@ -18,6 +18,8 @@ import { InsertAtDriver } from '../actions/insertAt'
 import { insertAtDriver } from '../actions/insertAt/driver-browser'
 import { MemoizeDriver } from '../actions/memoize'
 import { makeMemoizeDriver } from '../actions/memoize/driver'
+import { MountDriver, MountedDriver } from '../actions/mount'
+import { makeMountDriver } from '../actions/mount/driver'
 import { PropDriver } from '../actions/prop'
 import { propDriver } from '../actions/prop/driver-browser'
 import { RemoveDriver } from '../actions/remove'
@@ -43,6 +45,8 @@ export type CoreDrivers<N extends Node = Element> =
     & GetPropDriver<N>
     & InsertAtDriver<Node>
     & MemoizeDriver<N>
+    & MountDriver<N>
+    & MountedDriver<N>
     & PropDriver<N>
     & RemoveDriver<Node>
     & ReplaceDriver<Node>
@@ -60,6 +64,7 @@ export const drivers: CoreDrivers = {
     ...getPropDriver,
     ...insertAtDriver,
     ...makeMemoizeDriver(),
+    ...makeMountDriver(),
     ...propDriver,
     ...removeDriver,
     ...replaceDriver,

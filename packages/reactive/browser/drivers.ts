@@ -22,7 +22,7 @@ type ReactiveDrivers<N = Node> =
     & BindValueDriver<N>
     & $ChildDriver<N>
     & $ChildrenDriver<N>
-    & FocusDriver<N>
+    & FocusDriver<HTMLElement>
     & IfThenElseDriver<N>
     & ListViewDriver<N>
     & $PropDriver<N>

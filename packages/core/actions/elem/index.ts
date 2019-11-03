@@ -1,5 +1,5 @@
 import { Tag, TagMR, TagR } from '../../restrictions/tag'
-import { AnySetupAction, AnyNodeAction, Driver, NodeAction, RemoveRestr, UtoI } from '../../types'
+import { AnyNodeAction, AnySetupAction, Driver, NodeAction, RemoveRestr, UtoI } from '../../types'
 import { action } from '../action'
 
 export const ElemType = Symbol('elem')
@@ -15,6 +15,7 @@ export type Elem<
     NodeAction<
         typeof ElemType,
         ElemD<A, C>,
+        any,
         ElemR<A, C>
     > & {
         tag: T,
@@ -28,7 +29,7 @@ type ElemR<A extends AnySetupAction, C extends AnyNodeAction> =
 type ElemD<A extends AnySetupAction, C extends AnyNodeAction> = 
     ElemDriver<any, A, C> & UtoI<A['_drivers']> & UtoI<C['_drivers']>
 
-export function h<T extends Tag, A extends AnySetupAction, C extends AnyNodeAction>(
+export function h<T extends Tag, A extends AnySetupAction, C extends AnyNodeAction = never>(
     tag: T,
     actions: readonly TagMR<A, T>[],
     children: readonly C[] = [],

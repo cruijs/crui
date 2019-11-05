@@ -11,6 +11,7 @@ export type CreateTag<N = any> =
     NodeAction<
         typeof CreateTagType,
         CreateTagDriver,
+        {},
         N
     > & {
         tag: Tag

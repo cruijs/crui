@@ -14,8 +14,8 @@ export type DynamicNodeDriver<
 export type DynamicNode<T, A extends AnyNodeAction> = NodeAction<
     typeof DynamicNodeType,
     DynamicNodeDriver<any, T, A> & A['_drivers'],
-    A['_return'],
-    DynamicR<T> & A['_restriction']
+    DynamicR<T> & A['_restriction'],
+    A['_return']
 > & {
     make: MakeAction<T, A>
 }

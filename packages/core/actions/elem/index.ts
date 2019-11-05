@@ -15,7 +15,6 @@ export type Elem<
     NodeAction<
         typeof ElemType,
         ElemD<A, C>,
-        any,
         ElemR<A, C>
     > & {
         tag: T,

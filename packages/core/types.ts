@@ -50,16 +50,21 @@ export type AnySetupAction =
 export type NodeAction<
     T extends symbol,
     D extends Drivers<N, N> = any,
-    N = any,
     RP = {},
+    N = any
 > = Action<T, D, RP, N, 'node'>
 
-export type AnyNodeAction<N = any> = NodeAction<any, any, N, any>
+export type AnyNodeAction<N = any> = NodeAction<any, any, any, N>
 
 export type MatchRestr<R, A> =
-    A extends Action<any, any, infer MR, any, any>
+    A extends Action<any, any, infer MR>
         ? R extends Pick<MR, Extract<keyof MR, keyof R>> ? A : never
         : never 
+
+export type NoRestr<R, A> =
+    A extends Action<any, any, infer MR>
+        ? MR extends R ? never : A
+        : never
 
 export type RemoveRestr<R, A> =
     A extends Action<any, any, infer MR, any, any>
@@ -67,7 +72,7 @@ export type RemoveRestr<R, A> =
         : never
 
 export type ProvideDriver<D, A> =
-    A extends Action<any, infer DR, any>
+    A extends Action<any, infer DR>
         ? Pick<DR, Exclude<keyof DR, keyof D>>
         : never
 

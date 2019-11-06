@@ -8,7 +8,17 @@ import { replace, Replace } from '../replace'
 import { Template, TemplateDriver, TemplateType } from './action'
 import { DynamicNodeDriver, DynamicNodeType, DynamicSetupDriver, DynamicSetupType } from './dynamic'
 
-type N = Node
+type List<T> = {
+    [index: number]: T
+    [Symbol.iterator](): IterableIterator<T>
+    length: number
+}
+
+interface SimpleNode {
+    parentNode: this|null
+    childNodes: List<this>
+    cloneNode(deep: boolean): this
+}
 
 type LazyN<V> = {
     path: NodePath,
@@ -18,16 +28,16 @@ type LazyS<V> = {
     path: NodePath,
     make: (item: V) => AnySetupAction
 }
-type LazyNode<V> = {
+type LazyNode<V, N> = {
     node: N,
     make: (item: V) => AnyNodeAction
 }
-type LazySetup<V> = {
+type LazySetup<V, N> = {
     node: N,
     make: (item: V) => AnySetupAction
 }
 type NodePath = number[]
-type TemplateNode<V> = {
+type TemplateNode<V, N> = {
     template: N,
     lazyNodes: LazyN<V>[]
     lazySetups: LazyS<V>[]
@@ -35,10 +45,11 @@ type TemplateNode<V> = {
 
 export const makeTemplateDriver = <
     V = any,
+    N extends SimpleNode = any,
     E extends AnyNodeAction<N> = any
 >(): TemplateDriver<N, V, E, EmptyNode<N>|Replace<N>> => ({
     [TemplateType]: (parent, action, emitter) => {
-        const templateNode = compile<V, E>(parent, action, emitter)
+        const templateNode = compile<V, N, E>(parent, action, emitter)
 
         return (item: V): Deferred<N> => (
             bind(templateNode, ({ template, lazyNodes, lazySetups }) => {
@@ -68,20 +79,20 @@ export const makeTemplateDriver = <
     }
 })
 
-type Provide<D, V> = D
+type Provide<D, V, N> = D
     & EventDriver<N>
     & DynamicSetupDriver<N, V, AnySetupAction>
     & DynamicNodeDriver<N, V, AnyNodeAction>
 
-function compile<V, E extends AnyNodeAction<N>>(
+function compile<V, N extends SimpleNode, E extends AnyNodeAction<N>>(
     parent: N,
     { elem }: Template<V, E, N>,
     emitter: Emitter<N, E|Replace<N>|EmptyNode<N>, any>,
-): Deferred<TemplateNode<V>> {
-    const lazyNodes: LazyNode<V>[] = []
-    const lazySetups: LazySetup<V>[] = []
+): Deferred<TemplateNode<V, N>> {
+    const lazyNodes: LazyNode<V, N>[] = []
+    const lazySetups: LazySetup<V, N>[] = []
 
-    const e = emitter.withDrivers(<D extends Drivers<N>>(d: D): Provide<D, V> => ({
+    const e = emitter.withDrivers(<D extends Drivers<N>>(d: D): Provide<D, V, N> => ({
         ...d,
         [DynamicSetupType]: (node, { make }) => {
             lazySetups.push({ node, make })
@@ -112,7 +123,7 @@ function compile<V, E extends AnyNodeAction<N>>(
     )
 }
 
-function calcPath(root: N, node: N): NodePath {
+function calcPath<N extends SimpleNode>(root: N, node: N): NodePath {
     let cur = node
     const path: NodePath = []
     while (cur.parentNode && cur !== root) {
@@ -128,6 +139,6 @@ function calcPath(root: N, node: N): NodePath {
     return path.reverse()
 }
 
-function nodeFromPath(root: N, path: NodePath): N {
+function nodeFromPath<N extends SimpleNode>(root: N, path: NodePath): N {
     return path.reduce((z, i) => z.childNodes[i], root)
 }

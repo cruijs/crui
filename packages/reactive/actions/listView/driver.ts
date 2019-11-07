@@ -1,11 +1,12 @@
-import { bind, Cleanup, cleanup, Deferred, joinAll, MakeItem, map, pipe, then, waitAll } from '@crui/core'
+import { bind, Cleanup, cleanup, Deferred, joinAll, MakeItem, map, pipe, Template, template as tpl, then, waitAll } from '@crui/core'
+import { AnyNodeAction } from '../../../core/types'
 import { StreamList, Update, UpdateType } from '../../rx/list'
 import { opBatch, opReplace, opSplice, opUpdate } from '../../rx/list/operations/factory'
 import { $Children, $children } from '../children'
-import { ListViewDriver, ListViewType, Tpl } from './index'
+import { ListViewDriver, ListViewType } from './index'
 
-type AReq<N> = Cleanup|$Children<N>
-export const makeListViewDriver = <N, T extends object = any, E extends Tpl<T, N> = any>(
+type AReq<N> = Template<any, any, N>|Cleanup|$Children<N>
+export const makeListViewDriver = <N, T extends object = any, E extends AnyNodeAction = any>(
 ): ListViewDriver<N, T, E, AReq<N>> => ({
     [ListViewType]: (parent, { stream, template }, { emit }) => {
         const cache = new Map<T, N>()
@@ -18,7 +19,7 @@ export const makeListViewDriver = <N, T extends object = any, E extends Tpl<T, N
 
         return waitAll([
             emit(parent, $children($nodes)),
-            bind(emit(parent, template), (render) => {
+            bind(emit(parent, tpl(template) as Template<any, any, N>), (render) => {
                 const withNodes = makeRenderNodes<N, T>(new Map(), render)
 
                 stream.subscribe((upd) => {

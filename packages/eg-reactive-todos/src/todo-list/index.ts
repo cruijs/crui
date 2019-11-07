@@ -1,4 +1,4 @@
-import { dynNode, dynSetup, h, hc, template, text } from '@crui/core';
+import { dynNode, dynSetup, h, hc, text } from '@crui/core';
 import { css } from '@crui/css-emotion';
 import { bindChecked, listView } from '@crui/reactive';
 import { Todo, TodoStore } from '../store';
@@ -19,7 +19,7 @@ export function TodoList(store: TodoStore) {
 }
 
 function TodoTemplate() {
-    const child = h('label', [
+    return h('label', [
         css({
             display: 'block',
             backgroundColor: 'aliceblue',
@@ -41,8 +41,6 @@ function TodoTemplate() {
             dynNode((todo: Todo) => text(todo.text))
         ])
     ])
-
-    return template<Todo, typeof child>(child)
 }
 /*
 const Remove = cssTx(

@@ -1,4 +1,4 @@
-import { MockNode } from '../../tests/mockNode'
+import { MockNode } from '../../mocks/mockNode'
 import { CreateTagDriver, CreateTagType } from './index'
 
 export const createTagDriver: CreateTagDriver<MockNode> = {

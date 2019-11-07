@@ -12,6 +12,7 @@ export class MockNode {
     public props: Obj = {}
     public events: Events = {}
     public style: Obj = {}
+    public value: string = ""
 
     constructor(tag: string) {
         this.tag = tag

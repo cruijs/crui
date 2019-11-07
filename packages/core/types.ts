@@ -1,7 +1,13 @@
 import { Emitter } from './scheduler/emitter'
 
-export type Driver<N, A extends Action, S extends Action = never, R = void> =
-    (node: N, action: A, emitter: Emitter<N, S>) => R
+export type Driver<
+    N,
+    A extends Action,
+    S extends Action = never,
+    R = void,
+    D extends Drivers<N> = any
+> =
+    (node: N, action: A, emitter: Emitter<N, S, D>) => R
 
 export type Drivers<N = any, R = N> = {
     [k: string]: Driver<N, any, any, R>

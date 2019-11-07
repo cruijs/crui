@@ -5,7 +5,7 @@ import { append, Append } from '../append'
 import { CreateTag, createTag } from '../createTag'
 import { Elem, ElemDriver, ElemType } from './index'
 
-export const makeElemDriver = <N, A extends AnySetupAction, C extends AnyNodeAction<N>>(
+export const makeElemDriver = <N, A extends AnySetupAction = any, C extends AnyNodeAction<N> = any>(
 ): ElemDriver<N, A, C> => ({
     [ElemType]: driver
 })
@@ -23,8 +23,9 @@ function driver<N, A extends AnySetupAction, C extends AnyNodeAction<N>>(
             joinAll(children.map((c) =>
                 emit(node, c)
             )),
-            (children) =>
-                waitAll(children.map((a) => emit(node, append(a))))
+            (children) => {
+                return waitAll(children.map((a) => emit(node, append(a))))
+            }
         ))
 
         return constMap(node, waitAll(ds))

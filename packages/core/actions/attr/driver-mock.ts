@@ -1,4 +1,4 @@
-import { MockNode } from '../../tests/mockNode'
+import { MockNode } from '../../mocks/mockNode'
 import { AttrDriver, AttrType } from './index'
 
 export const attrDriver: AttrDriver<MockNode> = {

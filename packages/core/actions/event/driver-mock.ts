@@ -1,4 +1,4 @@
-import { MockNode } from '../../tests/mockNode'
+import { MockNode } from '../../mocks/mockNode'
 import { EventDriver, EventType } from './index'
 
 export const eventDriver: EventDriver<MockNode> = {

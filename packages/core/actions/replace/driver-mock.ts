@@ -1,4 +1,4 @@
-import { MockNode } from '../../tests/mockNode'
+import { MockNode } from '../../mocks/mockNode'
 import { destroy } from '../destroyable'
 import { ReplaceDriver, ReplaceType } from './index'
 
@@ -10,7 +10,7 @@ export const replaceDriver: ReplaceDriver<MockNode> = {
 
         next.setParent(parent)
         prev.setParent(null)
-        parent.childNodes[i] = next
+        parent.childNodes.splice(i, 0, next)
 
         emit(prev, destroy)
     }

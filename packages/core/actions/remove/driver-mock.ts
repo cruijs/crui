@@ -1,4 +1,4 @@
-import { MockNode } from '../../tests/mockNode'
+import { MockNode } from '../../mocks/mockNode'
 import { destroy } from '../destroyable'
 import { RemoveDriver, RemoveType } from './index'
 

@@ -1,4 +1,4 @@
-import { MockNode } from '../../tests/mockNode'
+import { MockNode } from '../../mocks/mockNode'
 import { EmptyNodeDriver, EmptyNodeType } from './index'
 
 export const emptyNodeDriver: EmptyNodeDriver<MockNode> = {

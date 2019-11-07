@@ -1,4 +1,4 @@
-import { MockNode } from '../../tests/mockNode'
+import { MockNode } from '../../mocks/mockNode'
 import { PropDriver, PropType } from './index'
 
 export const propDriver: PropDriver<MockNode> = {

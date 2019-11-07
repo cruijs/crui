@@ -14,9 +14,9 @@ export function schedule<N, A extends Action, D extends Drivers<N>>(
         nextBatch.push(job)
     }
     const asyncEmit: Emit<N> = (job) => {
-        onNext(exec)
         syncEmit(job)
         curEmit = syncEmit
+        onNext(exec)
     }
     let curEmit: Emit<N> = syncEmit
     const emit: Emit<N> = (job) => curEmit(job)

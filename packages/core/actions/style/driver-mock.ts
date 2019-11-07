@@ -1,4 +1,4 @@
-import { MockNode } from '../../tests/mockNode'
+import { MockNode } from '../../mocks/mockNode'
 import { StyleDriver, StyleType } from './index'
 
 export const styleDriver: StyleDriver<MockNode> = {

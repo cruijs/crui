@@ -1,11 +1,10 @@
 import { TextDriver, TextType } from './index'
+import { MockNode } from '../../mocks/mockNode'
 
-export class MockText {
-    constructor(public text: string) {}
-}
-
-export const textDriver: TextDriver<any, MockText> = {
+export const textDriver: TextDriver<any, MockNode> = {
     [TextType]: (_, { data }) => {
-        return new MockText(data)
+        const node = new MockNode('text')
+        node.value = data
+        return node
     }
 }

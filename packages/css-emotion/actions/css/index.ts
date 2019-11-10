@@ -1,4 +1,4 @@
-import { Action, Driver, SetupAction, TagR } from '@crui/core'
+import { Action, Driver, SetupAction } from '@crui/core'
 import { action } from '@crui/core/actions/action'
 import { Interpolation } from 'emotion'
 
@@ -7,7 +7,7 @@ export type CssDriver<N = any, S extends Action = never> = {
     [CssType]: Driver<N, Css, S>
 }
 export type CssStyle<S> = Interpolation<S>
-export type Css<S = undefined> = SetupAction<typeof CssType, CssDriver, TagR> & {
+export type Css<S = undefined> = SetupAction<typeof CssType, CssDriver> & {
     style: CssStyle<S>
 }
 

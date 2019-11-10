@@ -1,4 +1,3 @@
-import { TagR } from '../../restrictions/tag'
 import { Driver, SetupAction } from '../../types'
 import { action } from '../action'
 
@@ -6,7 +5,7 @@ export const AttrType = Symbol('attr')
 export type AttrDriver<N = any> = {
     [AttrType]: Driver<N, Attr>
 }
-export type Attr = SetupAction<typeof AttrType, AttrDriver, TagR> & {
+export type Attr = SetupAction<typeof AttrType, AttrDriver> & {
     name: string,
     value: string,
 }

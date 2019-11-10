@@ -1,4 +1,4 @@
-import { Action, Driver, SetupAction, TagR } from '@crui/core'
+import { Action, Driver, SetupAction } from '@crui/core'
 import { action } from '@crui/core/actions/action'
 import { CssStyle } from '@crui/css-emotion'
 import { DR$B } from '@crui/reactive/rx/box'
@@ -8,7 +8,7 @@ export type DynCssDriver<N = any, S extends Action = never> = {
     [DynCssType]: Driver<N, DynCss, S>
 }
 export type $Style<S = undefined> = DR$B<CssStyle<S>>
-export type DynCss<S = undefined> = SetupAction<typeof DynCssType, DynCssDriver, TagR> & {
+export type DynCss<S = undefined> = SetupAction<typeof DynCssType, DynCssDriver> & {
     stream: $Style<S>
 }
 

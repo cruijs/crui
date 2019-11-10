@@ -1,4 +1,3 @@
-import { TagR } from '../../restrictions/tag';
 import { Driver, SetupAction } from '../../types';
 import { action } from '../action';
 
@@ -13,7 +12,7 @@ export const StyleType = Symbol('style')
 export type StyleDriver<N = any> = {
     [StyleType]: Driver<N, Style>
 }
-export type Style<K extends KS = KS> = SetupAction<typeof StyleType, StyleDriver, TagR> & {
+export type Style<K extends KS = KS> = SetupAction<typeof StyleType, StyleDriver> & {
     name: K,
     value: PS<K>,
 }

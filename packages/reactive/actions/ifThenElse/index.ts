@@ -23,7 +23,7 @@ export type IfThenElse<T extends AnyNodeAction, F extends AnyNodeAction> =
         wrap: Wrap,
     }
 
-export function ite<T extends AnyNodeAction, F extends AnyNodeAction>(
+export function $ite<T extends AnyNodeAction, F extends AnyNodeAction>(
     cond: Cond$B,
     onTrue: T,
     onFalse: F,

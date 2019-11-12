@@ -65,7 +65,7 @@ export type AnyNodeAction<N = any> = NodeAction<any, any, any, N>
 export type MatchRestr<R, A> =
     A extends Action<any, any, infer MR>
         ? R extends Pick<MR, Extract<keyof MR, keyof R>> ? A : never
-        : never 
+        : never
 
 export type NoRestr<R, A> =
     A extends Action<any, any, infer MR>

@@ -1,4 +1,4 @@
-import { dynNode, dynSetup, h, hc, text } from '@crui/core';
+import { AnyNodeAction, dynNode, dynSetup, h, hc, text } from '@crui/core';
 import { css } from '@crui/css-emotion';
 import { bindChecked, listView } from '@crui/reactive';
 import { Todo, TodoStore } from '../store';
@@ -19,7 +19,13 @@ export function TodoList(store: TodoStore) {
 }
 
 function TodoTemplate() {
-    return h('label', [
+    return label([
+        checkbox,
+        todoText
+    ])
+}
+
+const label = <C extends AnyNodeAction>(children: readonly C[]) => h('label', [
         css({
             display: 'block',
             backgroundColor: 'aliceblue',
@@ -27,21 +33,24 @@ function TodoTemplate() {
             marginBottom: '0.5rem',
             cursor: 'pointer',
         }),
-    ], [
-        h('input', [
-            dynSetup((todo: Todo) =>
-                bindChecked(todo.done)
-            ),
-            css({
-                verticalAlign: 'middle',
-                marginRight: '0.5rem',
-            }),
-        ]),
-        hc('span', [
-            dynNode((todo: Todo) => text(todo.text))
-        ])
-    ])
-}
+    ],
+    children
+)
+
+const checkbox = h('input', [
+    dynSetup((todo: Todo) =>
+        bindChecked(todo.done)
+    ),
+    css({
+        verticalAlign: 'middle',
+        marginRight: '0.5rem',
+    }),
+])
+
+const todoText = hc('span', [
+    dynNode((todo: Todo) => text(todo.text))
+])
+
 /*
 const Remove = cssTx(
     { height: 500, margin: 500, padding: 500 },

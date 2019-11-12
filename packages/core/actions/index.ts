@@ -1,5 +1,6 @@
 export * from './append'
 export * from './attr'
+export * from './context'
 export * from './createTag'
 export * from './destroyable'
 export * from './elem'

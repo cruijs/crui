@@ -15,18 +15,20 @@ export function makeSuspendDriver<
         [SuspendType]: (root, { loader, error, asyncNode }, emitter) => {
             const suspender = new Suspender()
 
-            const handleAsync = (node: N) => then(
-                emitter.emit(root, loader),
-                (stub) => {
-                    suspender.waitAll().then(
-                        () => emitter.emit(root, replace(stub, node)),
-                        (e: Error) => pipe(
-                            emitter.emit(root, error(e)),
-                            (errNode) => emitter.emit(root, replace(stub, errNode))
+            const handleAsync = (node: N) => {
+                return then(
+                    emitter.emit(root, loader),
+                    (stub) => {
+                        suspender.waitAll().then(
+                            () => emitter.emit(root, replace(stub, node)),
+                            (e: Error) => pipe(
+                                emitter.emit(root, error(e)),
+                                (errNode) => emitter.emit(root, replace(stub, errNode))
+                            )
                         )
-                    )
-                }
-            )
+                    }
+                )
+            }
 
             const provideDriver = <D extends Drivers>(d: D): D & WaitForDriver => ({
                 ...d,

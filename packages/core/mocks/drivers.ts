@@ -14,6 +14,8 @@ import { eventDriver } from '../actions/event/driver-mock'
 import { getPropDriver } from '../actions/getProp/driver-mock'
 import { GetPropDriver } from '../actions/getProp/index'
 import { insertAtDriver } from '../actions/insertAt/driver-mock'
+import { makeMountDriver } from '../actions/mount/driver'
+import { MountDriver } from '../actions/mount/mount'
 import { propDriver } from '../actions/prop/driver-mock'
 import { removeDriver } from '../actions/remove/driver-mock'
 import { replaceDriver } from '../actions/replace/driver-mock'
@@ -40,6 +42,7 @@ type Drivers<N = MockNode> =
     & ReplaceDriver<N>
     & StyleDriver<N>
     & TextDriver<N>
+    & MountDriver<N>
 
 export const mockDrivers: Drivers = {
     ...appendDriver,
@@ -55,4 +58,5 @@ export const mockDrivers: Drivers = {
     ...replaceDriver,
     ...styleDriver,
     ...textDriver,
+    ...makeMountDriver(),
 }

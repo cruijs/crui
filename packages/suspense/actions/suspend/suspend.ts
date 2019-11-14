@@ -1,4 +1,4 @@
-import { Action, Driver, NodeAction } from '@crui/core'
+import { Action, Deferred, Driver, Drivers, NodeAction } from '@crui/core'
 import { action } from '@crui/core/actions/action'
 import { AnyNodeAction, ProvideDriver } from '@crui/core/types'
 import { AsyncNodeMR, AsyncNodeRM, NoAsyncNode } from '../../restriction'
@@ -42,9 +42,10 @@ export type SuspendDriver<
     L extends AnyNodeAction = any,
     E extends AnyNodeAction = any,
     A extends AnyNodeAction = any,
-    S extends Action = never
+    S extends Action = never,
+    D extends Drivers = never
 > = {
-    [SuspendType]: Driver<N, Suspend<L, E, A>, L | E | A | S>
+    [SuspendType]: Driver<N, Suspend<L, E, A>, L | E | A | S, Deferred<N>, D>
 }
 
 export function suspend<

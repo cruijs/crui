@@ -5,7 +5,7 @@ export type Driver<
     A extends Action,
     S extends Action = never,
     R = void,
-    D extends Drivers<N> = any
+    D = any
 > =
     (node: N, action: A, emitter: Emitter<N, S, D>) => R
 

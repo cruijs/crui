@@ -39,6 +39,19 @@ const expectNode = (root: MockNode, expected: ExpectedNode) => {
     expect(toResult(root)).toEqual(expected)
 }
 
+const expectLoading = (root: MockNode) => {
+    expectNode(root, d('root', [
+        t('loading')
+    ]))
+}
+
+const afterNext = () => new Promise((resolve) => {
+    setTimeout(() => {
+        runNext()
+        resolve()
+    })
+})
+
 describe(suspend, () => {
     describe('nothing to wait for', () => {
         it('returns the renderd node', () => {
@@ -70,37 +83,31 @@ describe(suspend, () => {
         })
 
         it('first renders the loader', () => {
+            expectLoading(root)
+        })
+
+        it('renders error when promise is rejected', async () => {
+            testP.reject(new Error('rejected'))
+            await afterNext()
             expectNode(root, d('root', [
-                t('loading')
+                t('rejected')
             ]))
         })
 
-        it('renders error when promise is rejected', (done) => {
-            testP.reject(new Error('rejected'))
-            setTimeout(() => {
-                runNext()
-
-                expectNode(root, d('root', [
-                    t('rejected')
-                ]))
-                done()
-            })
-        })
-
-        fit('renders the node when promise succeed', (done) => {
+        it('renders the node when promise succeed', async () => {
             testP.resolve('resolved')
-            setTimeout(() => {
-                runNext()
-                expectNode(root, d('root', [
-                    t('resolved')
-                ]))
-                done()
-            })
+            // render asyncNode
+            await afterNext()
+            // replace loader
+            await afterNext()
+            expectNode(root, d('root', [
+                t('resolved')
+            ]))
         })
     })
 
     describe('multiple promises', () => {
-        it('wait for all to complete', (done) => {
+        it('wait for all to complete', async () => {
             const root = new MockNode('root')
             const p0 = testablePromise<string>()
             const p1 = testablePromise<string>()
@@ -119,41 +126,28 @@ describe(suspend, () => {
             const action = suspend(loader, error, aNode)
             schedule(controlled, root, drivers, mount(action))
 
-            expect(root.childNodes.length).toBe(1)
-            expect(root.childNodes[0].value).toBe('loading')
-
             p0.resolve('first')
             p1.resolve('second')
-            setTimeout(() => {
-                // run nested async node
-                runNext()
-                expect(root.childNodes.length).toBe(1)
-                expect(root.childNodes[0].value).toBe('loading')
-                
-                p2.resolve('third')
-                setTimeout(() => {
-                    // finish rendering and mount text('second, third')
-                    runNext()
-                    expect(root.childNodes.length).toBe(1)
-                    expect(root.childNodes[0].value).toBe('loading')
 
-                    setTimeout(() => {
-                        // replace loader with the completely rendered node
-                        runNext()
-                        expect(toResult(root)).toEqual(
-                            d('root', [
-                                d('div', [
-                                    t('first'),
-                                    d('span', [
-                                        t('second, third'),
-                                    ])
-                                ])
-                            ])
-                        )
-                        done()
-                    })
-                })
-            })
+            // run nested asyncNode
+            await afterNext()
+            expectLoading(root)
+            p2.resolve('third')
+
+            // finish rendering "second, third" text node
+            await afterNext()
+            expectLoading(root)
+
+            // replace loader with completely rendered node
+            await afterNext()
+            expectNode(root, d('root', [
+                d('div', [
+                    t('first'),
+                    d('span', [
+                        t('second, third'),
+                    ])
+                ])
+            ]))
         })
     })
 })

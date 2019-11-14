@@ -21,6 +21,9 @@ export class MockNode {
     }
 
     setParent(parent: this|null = null) {
+        if (parent && (parent.tag === 'text' || parent.tag === 'emptyNode'))
+            throw new Error(`Parent node '${parent.tag}' does not support children`)
+
         if (this.parentNode)
             remove(this.parentNode.childNodes, this)
 

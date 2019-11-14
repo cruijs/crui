@@ -13,9 +13,9 @@ export const makeImageDriver = <N, A extends AnySetupAction = any>(
                 const p = new Promise<void>((resolve, reject) => {
                     ds.push(
                         emit(img, prop('src', src)),
-                        emit(img, on('onload', () => resolve())),
-                        emit(img, on('onerror', (e: ErrorEvent) => {
-                            reject(new Error(e.message))
+                        emit(img, on('load', () => resolve())),
+                        emit(img, on('error', (e) => {
+                            reject(new Error((e as ErrorEvent).message))
                         })),
                     )
                 })

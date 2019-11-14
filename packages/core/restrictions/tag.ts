@@ -1,4 +1,4 @@
-import { AnySetupAction, MatchRestr } from '../types'
+import { AnySetupAction, MatchRestr, RemoveRestr } from '../types'
 
 export type TagR<T extends Tag = Tag> = {
     tag: T
@@ -6,6 +6,9 @@ export type TagR<T extends Tag = Tag> = {
 
 export type TagMR<A extends AnySetupAction, T extends Tag = Tag> =
     MatchRestr<TagR<T>, A>
+
+export type TagRM<A extends AnySetupAction> =
+    RemoveRestr<TagR, A>
 
 export type Tag = 'a' 
     | 'abbr' | 'address' | 'area' | 'article' | 'aside' | 'audio' | 'b'

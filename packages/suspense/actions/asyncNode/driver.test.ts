@@ -7,7 +7,7 @@ import { text } from '../../../core/actions/text/index'
 import { testablePromise } from '../../mocks/testablePromise'
 import { WaitForDriver, WaitForType } from '../suspend/waitFor'
 import { makeAsyncNodeDriver } from './driver'
-import { asyncNode } from './index'
+import { asyncNode } from './action'
 
 let runNext: Fn0
 const controlled = (f: Fn0) => runNext = f

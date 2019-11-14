@@ -1,6 +1,6 @@
 import { AnyNodeAction, bind, constMap, emptyNode, EmptyNode, Replace, replace, pipe, Deferred } from '@crui/core'
 import { waitFor, WaitFor } from '../suspend/waitFor'
-import { AsyncNodeDriver, AsyncNodeType } from './index'
+import { AsyncNodeDriver, AsyncNodeType } from './action'
 
 export const makeAsyncNodeDriver = <
     N,

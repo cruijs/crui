@@ -1,5 +1,4 @@
-import { bind, Cleanup, cleanup, Deferred, joinAll, MakeItem, map, pipe, Template, template as tpl, then, waitAll } from '@crui/core'
-import { AnyNodeAction } from '../../../core/types'
+import { AnyNodeAction, bind, Cleanup, cleanup, Deferred, joinAll, MakeItem, map, pipe, Template, template as tpl, then, waitAll } from '@crui/core'
 import { StreamList, Update, UpdateType } from '../../rx/list'
 import { opBatch, opReplace, opSplice, opUpdate } from '../../rx/list/operations/factory'
 import { $Children, $children } from '../children'
@@ -13,7 +12,7 @@ export const makeListViewDriver = <N, T extends object = any, E extends AnyNodeA
         const $nodes = new StreamList<N>([])
 
         emit(parent, cleanup(() => {
-            stream.destroy()
+            $nodes.destroy()
             cache.clear()
         }))
 

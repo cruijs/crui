@@ -6,7 +6,7 @@ export const CssType = Symbol('css')
 export type CssDriver<N = any, S extends Action = never> = {
     [CssType]: Driver<N, Css, S>
 }
-export type CssStyle<S> = Interpolation<S>
+export type CssStyle<S = undefined> = Interpolation<S>
 export type Css<S = undefined> = SetupAction<typeof CssType, CssDriver> & {
     style: CssStyle<S>
 }

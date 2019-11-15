@@ -1,6 +1,6 @@
 import { Action, AnyNodeAction, Driver, DynamicMR, DynamicRM, SetupAction, UtoI } from '@crui/core'
 import { action } from '@crui/core/actions/action'
-import { DR$L } from '../../rx/list/types'
+import { R$L } from '../../rx/list/types'
 
 export const ListViewType = Symbol('listview')
 export type ListViewDriver<
@@ -17,7 +17,7 @@ export type ListView<V extends object, E extends AnyNodeAction> =
         ListViewDriver<any, V, E> & UtoI<E['_drivers']>,
         UtoI<DynamicRM<V, E>>
     > & {
-        stream: DR$L<V>,
+        stream: R$L<V>,
         template: E
     }
 
@@ -25,7 +25,7 @@ export type ListView<V extends object, E extends AnyNodeAction> =
  * Warning: it will take full control over the Node children list!
  */
 export function listView<V extends object, E extends AnyNodeAction>(
-    stream: DR$L<V>,
+    stream: R$L<V>,
     template: DynamicMR<V, E>
 ): ListView<V, E> {
     return action({

@@ -1,39 +1,35 @@
 import { Tag, TagMR, TagR } from '../../restrictions/tag'
-import { AnyNodeAction, AnySetupAction, Driver, NodeAction, RemoveRestr, UtoI } from '../../types'
+import { AnyNodeAction, AnySetupAction, Driver, NodeAction, RemoveRestr, UtoI, Drivers } from '../../types'
 import { action } from '../action'
 
 export const ElemType = Symbol('elem')
-export type ElemDriver<N = any, A extends AnySetupAction = any, C extends AnyNodeAction = any> = {
-    [ElemType]: Driver<N, Elem<Tag, A, C>, A>
+export type ElemDriver<N = any> = {
+    [ElemType]: Driver<N, Elem>
 }
 
 export type Elem<
     T extends Tag = any,
-    A extends AnySetupAction = any,
-    C extends AnyNodeAction = any
+    D extends Drivers = any,
+    R = any
 > =
-    NodeAction<
-        typeof ElemType,
-        ElemD<A, C>,
-        ElemR<A, C>
-    > & {
+    NodeAction<typeof ElemType, D, R> & {
         tag: T,
-        actions: readonly A[],
-        children: readonly C[],
+        actions: readonly AnySetupAction[],
+        children: readonly AnyNodeAction[],
     }
 
 type ElemR<A extends AnySetupAction, C extends AnyNodeAction> = 
     UtoI<RemoveRestr<TagR<any>, A>> & UtoI<C['_restriction']>
 
 type ElemD<A extends AnySetupAction, C extends AnyNodeAction> = 
-    ElemDriver<any, A, C> & UtoI<A['_drivers']> & UtoI<C['_drivers']>
+    ElemDriver & UtoI<A['_drivers']> & UtoI<C['_drivers']>
 
 export function h<T extends Tag, A extends AnySetupAction, C extends AnyNodeAction = never>(
     tag: T,
     actions: readonly TagMR<A, T>[],
     children: readonly C[] = [],
-): Elem<T, A, C> {
-    return hr(tag, actions as readonly A[], children)
+) {
+    return hr(tag, actions as any as A[], children)
 }
 
 export function hc<T extends Tag, C extends AnyNodeAction>(
@@ -81,7 +77,7 @@ export function hr<T extends Tag, A extends AnySetupAction, C extends AnyNodeAct
     tag: T,
     actions: readonly A[],
     children: readonly C[] = []
-): Elem<T, A, C> {
+): Elem<T, ElemD<A, C>, ElemR<A, C>> {
     return action({
         type: ElemType,
         tag,

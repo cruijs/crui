@@ -82,5 +82,11 @@ export type ProvideDriver<D, A> =
         ? Pick<DR, Exclude<keyof DR, keyof D>>
         : never
 
+export type CombineD<D, A extends Action> =
+    D & UtoI<A['_drivers']>
+
+export type CombineR<R, A extends Action> =
+    R & UtoI<A['_restriction']>
+
 export type Unsubscribe = () => void
 export type AsyncFn = () => PromiseLike<void>

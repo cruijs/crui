@@ -6,8 +6,8 @@ type Events = { [k: string]: EventHandler[] }
 
 export class MockNode {
     public tag: string
-    public parentNode: this|null
-    public childNodes: this[]
+    public parentNode: MockNode|null
+    public childNodes: MockNode[]
     public attrs: Obj = {}
     public props: Obj = {}
     public events: Events = {}
@@ -20,14 +20,32 @@ export class MockNode {
         this.parentNode = null
     }
 
-    setParent(parent: this|null = null) {
-        if (parent && (parent.tag === 'text' || parent.tag === 'emptyNode'))
-            throw new Error(`Parent node '${parent.tag}' does not support children`)
+    setParent(parent: MockNode|null) {
+        this.assertParent(parent)
+        this.detach()
+        
+        this.parentNode = parent
+    }
 
+    detach() {
         if (this.parentNode)
             remove(this.parentNode.childNodes, this)
+        this.parentNode = null
+    }
 
-        this.parentNode = parent
+    attach(parent: MockNode) {
+        this.setParent(parent)
+        parent.childNodes.push(this)
+    }
+
+    attachAt(parent: MockNode, index: number) {
+        this.setParent(parent)
+        parent.childNodes.splice(index, 0, this)
+    }
+
+    protected assertParent(parent: MockNode|null) {
+        if (parent && (parent.tag === 'text' || parent.tag === 'emptyNode'))
+            throw new Error(`Parent node '${parent.tag}' does not support children`)
     }
 
     cloneNode(_: true) {

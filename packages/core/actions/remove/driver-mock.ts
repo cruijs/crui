@@ -4,7 +4,7 @@ import { RemoveDriver, RemoveType } from './index'
 
 export const removeDriver: RemoveDriver<MockNode> = {
     [RemoveType]: (_, { node }, { emit }) => {
-        node.setParent(null)
+        node.detach()
         emit(node, destroy)
     }
 }

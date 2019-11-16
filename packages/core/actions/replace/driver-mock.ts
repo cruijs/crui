@@ -8,9 +8,8 @@ export const replaceDriver: ReplaceDriver<MockNode> = {
         if (i === -1)
             throw Error('Not an child of parent node')
 
-        next.setParent(parent)
-        prev.setParent(null)
-        parent.childNodes.splice(i, 0, next)
+        prev.detach()
+        next.attachAt(parent, i)
 
         emit(prev, destroy)
     }

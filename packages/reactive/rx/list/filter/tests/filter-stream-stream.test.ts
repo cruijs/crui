@@ -7,14 +7,15 @@ import { Destroyable, DR$B, R$B, RW$B } from '../../../box/types';
 import { StreamList } from '../../stream';
 import { DR$L, R$L } from '../../types';
 
-type Pred<T> = Predicate$<StreamBox<T>>
-type Pred$<T> = RW$B<Pred<T>> & Destroyable
+type Pred$<T> = RW$B<Predicate$<Item<T>>> & Destroyable
 type Filtered<T> = DR$L<Item<T>>
 
+type Item<T> = { value: StreamBox<T> }
 const $l = <T>(list: T[]) => new StreamList(list.map($i))
 const $i = <T>(val: T) => ({ value: new StreamBox(val) })
-const $p$ = <T>(p$: Predicate$<StreamBox<T>>) => new StreamBox(p$)
-type Item<T> = { value: StreamBox<T> }
+const $p$ = <T>(p: (value: T) => boolean) => new StreamBox(
+    (item: Item<T>) => map(item.value, p)
+)
 
 function expectValues<T>(list: R$L<Item<T>>, expected: T[]) {
     expect(list.map((v) => v.value.get())).toEqual(expected)
@@ -44,8 +45,8 @@ describe($filter$$, () => {
 
         beforeEach(() => {
             list = $l([1, 10, 2])
-            pred = $p$((v) => map(v, (n) => n < 10))
-            ftrd = $filter$$(list, pred, (p) => (i) => p(i.value))
+            pred = $p$((n) => n < 10)
+            ftrd = $filter$$(list, pred)
         })
 
         afterEach(() => {
@@ -76,7 +77,7 @@ describe($filter$$, () => {
 
         describe('change predicate', () => {
             beforeEach(() => {
-                pred.set((s) => map(s, (n) => n >= 10))
+                pred.set((s) => map(s.value, (n) => n >= 10))
             })
 
             it('updates filtered', () => {
@@ -112,8 +113,8 @@ describe($filter$$, () => {
 
         beforeEach(() => {
             list = $l([true, false])
-            pred = $p$((v) => v)
-            ftrd = $filter$$(list, pred, (p) => (i) => p(i.value))
+            pred = $p$((v: boolean) => v)
+            ftrd = $filter$$(list, pred)
         })
 
         afterEach(() => {
@@ -150,7 +151,7 @@ describe($filter$$, () => {
             it('cleanup items', () => {
                 const count = list.map((v) => listeners(v.value))
 
-                pred.set((v) => v)
+                pred.set((i) => i.value)
 
                 expect(
                     list.map((v) => listeners(v.value))

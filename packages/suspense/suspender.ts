@@ -1,6 +1,4 @@
-import { WithSuspense } from './context';
-
-export class Suspender implements WithSuspense {
+export class Suspender {
     private promises: PromiseLike<any>[]
 
     constructor() {

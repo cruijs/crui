@@ -1,6 +1,7 @@
-import { Action, Deferred, Driver, Drivers, NodeAction } from '@crui/core'
+import { Action, Driver, Drivers, NodeAction } from '@crui/core'
 import { action } from '@crui/core/actions/action'
 import { AnyNodeAction, ProvideDriver } from '@crui/core/types'
+import { Deferred } from '@crui/core/utils/deferred'
 import { AsyncNodeMR, AsyncNodeRM, NoAsyncNode } from '../../restriction'
 import { WaitForDriver } from './waitFor'
 

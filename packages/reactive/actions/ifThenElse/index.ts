@@ -1,5 +1,6 @@
 import { Action, AnyNodeAction, Driver, memoize, NodeAction } from '@crui/core'
 import { action } from '@crui/core/actions/action'
+import { MorphingR } from '../../restrictions/morphing'
 import { Cond$B } from '../../rx/box'
 import { Wrap } from '../wrap'
 
@@ -15,7 +16,8 @@ export type IfThenElseDriver<
 export type IfThenElse<T extends AnyNodeAction, F extends AnyNodeAction> =
     NodeAction<
         typeof IfThenElseType,
-        IfThenElseDriver
+        IfThenElseDriver,
+        MorphingR
     > & {
         cond: Cond$B,
         onTrue: T,

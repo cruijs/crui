@@ -1,5 +1,6 @@
 import { Action, AnyNodeAction, Driver, DynamicMR, DynamicRM, NodeAction, UtoI } from '@crui/core'
 import { action } from '@crui/core/actions/action'
+import { MorphingR } from '../../restrictions/morphing'
 import { R$L } from '../../rx/list/types'
 
 export const ListViewType = Symbol('listview')
@@ -15,7 +16,7 @@ export type ListView<V extends object, E extends AnyNodeAction> =
     NodeAction<
         typeof ListViewType,
         ListViewDriver<any, V, E> & UtoI<E['_drivers']>,
-        UtoI<DynamicRM<V, E>>
+        MorphingR & UtoI<DynamicRM<V, E>>
     > & {
         stream: R$L<V>,
         template: E

@@ -1,5 +1,6 @@
 import { Action, AnyNodeAction, Cleanup, destroyable, Driver, NodeAction } from '@crui/core'
 import { action } from '@crui/core/actions/action'
+import { MorphingR } from '../../restrictions/morphing'
 import { DR$B } from '../../rx/box'
 import { Wrap } from '../wrap'
 
@@ -8,7 +9,11 @@ export type $ChildDriver<N = any, T = any, E extends AnyNodeAction = never, S ex
     [$ChildType]: Driver<N, $Child<T, E>, S|E|Cleanup, void>
 }
 
-export type $Child<T, E extends AnyNodeAction> = NodeAction<typeof $ChildType, $ChildDriver> & {
+export type $Child<T, E extends AnyNodeAction> = NodeAction<
+    typeof $ChildType,
+    $ChildDriver,
+    MorphingR
+> & {
     stream: DR$B<T>,
     make: (val: T) => E
     wrap: Wrap

@@ -2,7 +2,7 @@ import { Action, InfraAction, Driver } from '../../types'
 import { action } from '../action'
 
 export const FragmentType = Symbol('fragment')
-export type Fragment<N, F> = InfraAction<
+export type Fragment<N, F = N> = InfraAction<
     typeof FragmentType,
     FragmentDriver<N, F>,
     {},

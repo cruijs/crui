@@ -1,11 +1,11 @@
 import { AnyNodeAction, cleanup, Destroyable, Memoize, replace, Replace, then } from '@crui/core'
 import { $ChildDriver, $ChildType } from './index'
 
-export const make$ChildDriver = <N, E extends AnyNodeAction<N>>(): $ChildDriver<N, E, Replace<N>|Destroyable<E>|Memoize<E>> => ({
-    [$ChildType]: (_, { stream, wrap }, { emit }) => {
+export const make$ChildDriver = <N, E extends AnyNodeAction<N>, T = any>(): $ChildDriver<N, T, E, Replace<N>|Destroyable<E>|Memoize<E>> => ({
+    [$ChildType]: (_, { stream, make, wrap }, { emit }) => {
         let prev: N|undefined
-        const f = (elem: E) => then(
-            emit(_, wrap(elem)),
+        const f = (val: T) => then(
+            emit(_, wrap(make(val))),
             (node) => {
                 if (prev)
                     emit(_, replace(prev, node))

@@ -1,4 +1,4 @@
-import { Action, AnyNodeAction, Driver, DynamicMR, DynamicRM, SetupAction, UtoI } from '@crui/core'
+import { Action, AnyNodeAction, Driver, DynamicMR, DynamicRM, NodeAction, UtoI } from '@crui/core'
 import { action } from '@crui/core/actions/action'
 import { R$L } from '../../rx/list/types'
 
@@ -12,7 +12,7 @@ export type ListViewDriver<
     [ListViewType]: Driver<N, ListView<V, E>, E|S, void>
 }
 export type ListView<V extends object, E extends AnyNodeAction> = 
-    SetupAction<
+    NodeAction<
         typeof ListViewType,
         ListViewDriver<any, V, E> & UtoI<E['_drivers']>,
         UtoI<DynamicRM<V, E>>

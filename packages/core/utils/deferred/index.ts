@@ -77,10 +77,14 @@ export function waitAll(ds: readonly Readonly<Deferred<any>>[]): Deferred<void> 
     return deferred
 }
 
-export function joinAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<readonly T[]> {
+export function joinAll<A, B>(ds: readonly [Deferred<A>, Deferred<B>]): Deferred<readonly [A, B]>
+export function joinAll<A, B, C>(ds: readonly [Deferred<A>, Deferred<B>, Deferred<C>]): Deferred<readonly [A, B, C]>
+export function joinAll<A, B, C, D>(ds: readonly [Deferred<A>, Deferred<B>, Deferred<C>, Deferred<D>]): Deferred<readonly [A, B, C, D]>
+export function joinAll<T>(ds: readonly Readonly<Deferred<T>>[]): Deferred<readonly T[]>
+export function joinAll(ds: readonly Deferred<any>[]): Deferred<any> {
     let counter = ds.length
-    const deferred = new Deferred<readonly T[]>()
-    const collected: T[] = new Array(ds.length)
+    const deferred = new Deferred<readonly any[]>()
+    const collected: any[] = new Array(ds.length)
 
     if (counter === 0) {
         deferred.done(collected)

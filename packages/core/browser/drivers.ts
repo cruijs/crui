@@ -16,10 +16,12 @@ import { EmptyNodeDriver } from '../actions/emptyNode'
 import { emptyNodeDriver } from '../actions/emptyNode/driver-browser'
 import { EventDriver } from '../actions/event'
 import { eventDriver } from '../actions/event/driver-browser'
+import { FragmentDriver, fragmentDriver } from '../actions/fragment'
 import { GetPropDriver } from '../actions/getProp'
 import { getPropDriver } from '../actions/getProp/driver-browser'
 import { InsertAtDriver } from '../actions/insertAt'
 import { insertAtDriver } from '../actions/insertAt/driver-browser'
+import { InsertAtRefDriver, insertAtRefDriver } from '../actions/insertAtRef'
 import { MemoizeDriver } from '../actions/memoize'
 import { makeMemoizeDriver } from '../actions/memoize/driver'
 import { MountDriver, MountedDriver } from '../actions/mount'
@@ -36,6 +38,7 @@ import { TemplateDriver } from '../actions/template'
 import { makeTemplateDriver } from '../actions/template/driver-browser'
 import { TextDriver } from '../actions/text'
 import { textDriver } from '../actions/text/driver-browser'
+import { SimpleNode } from '../dom/simpleNode'
 
 export type CoreDrivers<N extends Node = Element> =
     AppendDriver<Node>
@@ -48,8 +51,10 @@ export type CoreDrivers<N extends Node = Element> =
     & ElemDriver<N>
     & EmptyNodeDriver<Comment>
     & EventDriver<N>
+    & FragmentDriver<Node, DocumentFragment>
     & GetPropDriver<N>
     & InsertAtDriver<Node>
+    & InsertAtRefDriver<SimpleNode>
     & MemoizeDriver<N>
     & MountDriver<N>
     & MountedDriver<N>
@@ -69,8 +74,10 @@ export const drivers: CoreDrivers = {
     ...makeElemDriver(),
     ...emptyNodeDriver,
     ...eventDriver,
+    ...fragmentDriver,
     ...getPropDriver,
     ...insertAtDriver,
+    ...insertAtRefDriver,
     ...makeMemoizeDriver(),
     ...makeMountDriver(),
     ...propDriver,

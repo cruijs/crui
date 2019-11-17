@@ -14,6 +14,7 @@ import { $PropDriver } from '../actions/prop'
 import { makePropDriver } from '../actions/prop/driver'
 import { SetNodeValueDriver } from '../actions/setNodeValue'
 import { setNodeValueDriver } from '../actions/setNodeValue/driver-browser'
+import { $StyleDriver, make$StyleDriver } from '../actions/style'
 import { $TextDriver } from '../actions/text'
 import { make$TextDriver } from '../actions/text/driver'
 
@@ -27,6 +28,7 @@ type ReactiveDrivers<N = Node> =
     & ListViewDriver<N>
     & $PropDriver<N>
     & SetNodeValueDriver<N>
+    & $StyleDriver<N>
     & $TextDriver<N>
 
 export const drivers: ReactiveDrivers = {
@@ -39,5 +41,6 @@ export const drivers: ReactiveDrivers = {
     ...makeListViewDriver(),
     ...makePropDriver(),
     ...setNodeValueDriver,
+    ...make$StyleDriver(),
     ...make$TextDriver(),
 }

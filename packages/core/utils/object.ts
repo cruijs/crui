@@ -23,6 +23,6 @@ export function equals<T extends {}>(a: T, b: T): boolean {
     return true
 }
 
-export function map<T extends {}, K extends keyof T, P>(obj: T, f: (v: T[K]) => P): P[] {
-    return keys(obj).map((k) => f(obj[k] as T[K]))
+export function map<T extends {}, K extends keyof T, P>(obj: T, f: (v: T[K], k: K) => P): P[] {
+    return keys(obj).map((k) => f(obj[k] as T[K], k as K))
 }

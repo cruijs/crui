@@ -1,3 +1,4 @@
+import { SimpleNode } from '../../dom/simpleNode'
 import { Emitter } from '../../scheduler'
 import { AnyNodeAction, AnySetupAction, Drivers } from '../../types'
 import { pushAll } from '../../utils/array'
@@ -7,18 +8,6 @@ import { EventDriver, EventType } from '../event'
 import { replace, Replace } from '../replace'
 import { Template, TemplateDriver, TemplateType } from './action'
 import { DynamicNodeDriver, DynamicNodeType, DynamicSetupDriver, DynamicSetupType } from './dynamic'
-
-type List<T> = {
-    [index: number]: T
-    [Symbol.iterator](): IterableIterator<T>
-    length: number
-}
-
-interface SimpleNode {
-    parentNode: this|null
-    childNodes: List<this>
-    cloneNode(deep: boolean): this
-}
 
 type LazyN<V> = {
     path: NodePath,

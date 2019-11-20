@@ -1,17 +1,16 @@
-import { noop } from '../noop'
 
 type Work<T> = (v: T) => void
 export class Deferred<T> {
     result?: T
-    then: Work<T> = noop
+    then: Work<T>[] = []
     isDone: Boolean = false
 
     done(v: T): void {
         this.result = v
         this.isDone = true
 
-        this.then(v)
-        this.then = noop
+        this.then.forEach((f) => f(v))
+        this.then = []
     }
 }
 
@@ -25,7 +24,7 @@ export function pipe<T>(d: Deferred<T>, f: Work<T>): void {
     if (d.isDone)
         f(d.result!)
     else
-        d.then = combineWork(d.then, f)
+        d.then.push(f)
 }
 
 export function then<T>(d: Deferred<T>, f: Work<T>): Deferred<T> {
@@ -57,6 +56,13 @@ export function bind<A, B>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<B>): 
         dependsOn(z, f(a))
     })
     return z
+}
+
+/**
+ * Execute the second action, but ignore it's return value
+ */
+export function bind_<A>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<any>): Deferred<A> {
+    return bind(d, (a) => constMap(a, f(a)))
 }
 
 export function waitAll(ds: readonly Readonly<Deferred<any>>[]): Deferred<void> {
@@ -99,11 +105,4 @@ export function joinAll(ds: readonly Deferred<any>[]): Deferred<any> {
     })
 
     return deferred
-}
-
-function combineWork<T>(a: Work<T>, b: Work<T>): Work<T> {
-    return (a === noop) ? b : (v: T) => {
-        a(v)
-        b(v)
-    }
 }

@@ -6,8 +6,17 @@ export const makeOnSceneResizeDriver = (): OnSceneResizeDriver => {
     const handlers: Fn0[] = []
     const invoke = (f: Fn0) => f()
 
-    window.addEventListener('resize', () => {
+    let to: NodeJS.Timeout|undefined
+    const runHandlers = () => {
+        to = undefined
         handlers.forEach(invoke)
+    }
+
+    window.addEventListener('resize', () => {
+        if (to !== undefined)
+            clearTimeout(to)
+
+        to = setTimeout(runHandlers, 350)
     })
 
     return {

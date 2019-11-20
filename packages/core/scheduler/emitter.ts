@@ -11,7 +11,7 @@ export type Job<N, A extends Action = Action, D extends A['_drivers'] = A['_driv
 
 export type Emit<N> = (job: Job<N>) => void
 
-export class Emitter<N, A0 extends Action = Action, D0 = Drivers<N>> {
+export class Emitter<N, A0 extends Action = Action, D0 = any> {
     constructor(
         private drivers: D0,
         private readonly realEmit: Emit<N>,

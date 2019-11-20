@@ -1,4 +1,5 @@
 import { Emitter } from './scheduler/emitter'
+import { Deferred } from './utils/deferred'
 
 export type Driver<
     N,
@@ -7,7 +8,7 @@ export type Driver<
     R = void,
     D = any
 > =
-    (node: N, action: A, emitter: Emitter<N, S, D>) => R
+    (node: N, action: A, emitter: Emitter<N, S, D>) => R|Deferred<R>
 
 export type Drivers<N = any, R = N> = {
     [k: string]: Driver<N, any, any, R>

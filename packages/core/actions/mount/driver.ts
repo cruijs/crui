@@ -1,8 +1,9 @@
 import { Drivers } from '../../types'
 import { bind, then } from '../../utils/deferred'
+import { mapPush } from '../../utils/map'
 import { append } from '../append'
-import { Handler, OnMountedDriver, OnMountedType } from './onMounted'
 import { MountDriver, MountType } from './action'
+import { Handler, OnMountedDriver, OnMountedType } from './onMounted'
 
 export const makeMountDriver = <N extends object>(): MountDriver<N> => {
     const handlers: Map<N, Handler<N>[]> = new Map()
@@ -32,16 +33,4 @@ export const makeMountDriver = <N extends object>(): MountDriver<N> => {
             )
         }
     }
-}
-
-type MapLike<K, V> = {
-    get(key: K): V|undefined
-    set(key: K, value: V): void
-}
-function mapPush<K, V>(map: MapLike<K, V[]>, key: K, value: V): void {
-    const list = map.get(key)
-    if (list == null)
-        map.set(key, [value])
-    else
-        list.push(value)
 }

@@ -22,9 +22,10 @@ import { getPropDriver } from '../actions/getProp/driver-browser'
 import { InsertAtDriver } from '../actions/insertAt'
 import { insertAtDriver } from '../actions/insertAt/driver-browser'
 import { InsertAtRefDriver, insertAtRefDriver } from '../actions/insertAtRef'
+import { JunctureDriver, makeJunctureDriver } from '../actions/juncture'
 import { MemoizeDriver } from '../actions/memoize'
 import { makeMemoizeDriver } from '../actions/memoize/driver'
-import { MountDriver, MountedDriver } from '../actions/mount'
+import { MountDriver } from '../actions/mount'
 import { makeMountDriver } from '../actions/mount/driver'
 import { PropDriver } from '../actions/prop'
 import { propDriver } from '../actions/prop/driver-browser'
@@ -55,15 +56,15 @@ export type CoreDrivers<N extends Node = Element> =
     & GetPropDriver<N>
     & InsertAtDriver<Node>
     & InsertAtRefDriver<SimpleNode>
+    & JunctureDriver<N>
     & MemoizeDriver<N>
     & MountDriver<N>
-    & MountedDriver<N>
     & PropDriver<N>
     & RemoveDriver<Node>
     & ReplaceDriver<Node>
     & StyleDriver<HTMLElement>
     & TemplateDriver<Node>
-    & TextDriver<Node>
+    & TextDriver<Node, Text>
 
 export const drivers: CoreDrivers = {
     ...appendDriver,
@@ -78,6 +79,7 @@ export const drivers: CoreDrivers = {
     ...getPropDriver,
     ...insertAtDriver,
     ...insertAtRefDriver,
+    ...makeJunctureDriver(),
     ...makeMemoizeDriver(),
     ...makeMountDriver(),
     ...propDriver,

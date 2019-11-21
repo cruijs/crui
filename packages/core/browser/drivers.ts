@@ -19,10 +19,10 @@ import { eventDriver } from '../actions/event/driver-browser'
 import { FragmentDriver, fragmentDriver } from '../actions/fragment'
 import { GetPropDriver } from '../actions/getProp'
 import { getPropDriver } from '../actions/getProp/driver-browser'
+import { HoistOnMountedDriver, makeHoistOnMountedDriver } from '../actions/hoistOnMounted'
 import { InsertAtDriver } from '../actions/insertAt'
 import { insertAtDriver } from '../actions/insertAt/driver-browser'
 import { InsertAtRefDriver, insertAtRefDriver } from '../actions/insertAtRef'
-import { JunctureDriver, makeJunctureDriver } from '../actions/juncture'
 import { MemoizeDriver } from '../actions/memoize'
 import { makeMemoizeDriver } from '../actions/memoize/driver'
 import { MountDriver } from '../actions/mount'
@@ -56,9 +56,9 @@ export type CoreDrivers<N extends Node = Element> =
     & GetPropDriver<N>
     & InsertAtDriver<Node>
     & InsertAtRefDriver<SimpleNode>
-    & JunctureDriver<N>
     & MemoizeDriver<N>
     & MountDriver<N>
+    & HoistOnMountedDriver<N>
     & PropDriver<N>
     & RemoveDriver<Node>
     & ReplaceDriver<Node>
@@ -79,9 +79,9 @@ export const drivers: CoreDrivers = {
     ...getPropDriver,
     ...insertAtDriver,
     ...insertAtRefDriver,
-    ...makeJunctureDriver(),
     ...makeMemoizeDriver(),
     ...makeMountDriver(),
+    ...makeHoistOnMountedDriver(),
     ...propDriver,
     ...removeDriver,
     ...replaceDriver,

@@ -6,7 +6,7 @@ import { AppendDriver, AppendType } from '../append'
 import { InsertAtDriver, InsertAtType } from '../insertAt'
 import { Handler, onMounted, OnMounted, OnMountedDriver, OnMountedType } from '../mount/onMounted'
 import { ReplaceDriver, ReplaceType } from '../replace'
-import { JunctureDriver, JunctureType } from './action'
+import { HoistOnMountedDriver, HoistOnMountedType } from './action'
 
 type Drivers<N> =
     AppendDriver<N>
@@ -19,12 +19,12 @@ type Enhancer<N> =
 type NodeHandlers<N> =
     Map<N, Handler<N>[]>
 
-export const makeJunctureDriver = <N, E extends AnyNodeAction>(
-): JunctureDriver<N, E, OnMounted<N>> => {
+export const makeHoistOnMountedDriver = <N, E extends AnyNodeAction>(
+): HoistOnMountedDriver<N, E, OnMounted<N>> => {
     const nodeHandlers: NodeHandlers<N> = new Map()
 
     return {
-        [JunctureType]: (_, { elem }, emitter) => {
+        [HoistOnMountedType]: (_, { elem }, emitter) => {
             let root: N | undefined
 
             const enhance = <A extends Action, S extends Action>(

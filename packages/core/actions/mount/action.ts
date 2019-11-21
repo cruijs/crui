@@ -1,7 +1,6 @@
 import { AnyNodeAction, Driver, InfraAction } from '../../types'
 import { action } from '../action'
 import { Append } from '../append'
-import { Mounted } from './mounted'
 
 export const MountType = Symbol('mount')
 export type Mount<E extends AnyNodeAction> = InfraAction<
@@ -12,7 +11,7 @@ export type Mount<E extends AnyNodeAction> = InfraAction<
 }
 
 export type MountDriver<N, E extends AnyNodeAction = any> = {
-    [MountType]: Driver<N, Mount<E>, E|Append<N>|Mounted>
+    [MountType]: Driver<N, Mount<E>, E|Append<N>>
 }
 
 export function mount<E extends AnyNodeAction>(elem: E): Mount<E> {

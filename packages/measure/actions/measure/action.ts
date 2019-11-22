@@ -1,5 +1,6 @@
 import { Action, AnyNodeAction, Driver, NodeAction } from '@crui/core'
 import { action } from '@crui/core/actions/action'
+import { NoMorphingR } from '@crui/reactive/restrictions/morphing'
 import { WDim } from '../../dimensions'
 
 export const MeasureType = Symbol('measure')
@@ -20,7 +21,10 @@ export type MeasureDriver<
     [MeasureType]: Driver<N, Measure<E>, E|S, N>
 }
 
-export function measure<E extends AnyNodeAction = any>(dim: WDim, elem: E): Measure<E> {
+export function measure<E extends AnyNodeAction = any>(
+    dim: WDim,
+    elem: NoMorphingR<E>
+): Measure<E> {
     return action({
         type: MeasureType,
         elem,

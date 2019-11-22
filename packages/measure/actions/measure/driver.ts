@@ -1,4 +1,4 @@
-import { Action, AppendType, AttrType, Cleanup, Driver, Drivers, InsertAtType, PropType, RemoveType, ReplaceType, StyleType, then } from '@crui/core'
+import { Action, AnyNodeAction, AppendType, AttrType, Cleanup, Driver, Drivers, InsertAtType, onMounted, OnMounted, PropType, RemoveType, ReplaceType, StyleType, then } from '@crui/core'
 import { Emitter } from '@crui/core/scheduler/emitter'
 import { bind, bind_, constMap, Deferred } from '@crui/core/utils/deferred'
 import { SetNodeValueType } from '@crui/reactive'
@@ -8,7 +8,11 @@ import { onSceneResize, OnSceneResize } from '../onSceneResize/action'
 import { RecalcDimType } from '../recalcDim'
 import { MeasureDriver, MeasureType } from './action'
 
-export const makeMeasureDriver = <N>(): MeasureDriver<N, any, CalcDimensions|Cleanup|OnSceneResize> => ({
+type AReq<N> =
+    CalcDimensions | Cleanup | OnSceneResize | OnMounted<N>
+
+export const makeMeasureDriver = <N, E extends AnyNodeAction>(
+): MeasureDriver<N, E, AReq<N>> => ({
     [MeasureType]: (parent, { dim, elem }, e) => {
         // currently there is no way to have a generic Object indexed by Symbol
         const drivers = recalculateOn(dim, [
@@ -31,7 +35,7 @@ export const makeMeasureDriver = <N>(): MeasureDriver<N, any, CalcDimensions|Cle
                     recalculate(dim, node, emitter)
                 }
                 emitter.emit(node, onSceneResize(recalc))
-                return emitter.emit(node, onMounted(recalc))
+                return emitter.emit(node, onMounted<N>(recalc))
             }
         )
     }
@@ -49,13 +53,7 @@ const recalculateOn = <D extends Drivers, S extends keyof D>(dim: WDim, actionsT
     )
 }
 
-function withRecalc<
-    N,
-    A extends Action,
-    S extends Action,
-    R,
-    D
->(
+function withRecalc<N, A extends Action, S extends Action, R, D>(
     dim: WDim,
     driver: Driver<N, A, S|CalcDimensions, R, D>
 ): Driver<N, A, S|CalcDimensions, R, D> {
@@ -72,7 +70,7 @@ function withRecalc<
     }
 }
 
-function recalculate<N>(dim: WDim, node: N, emitter: Emitter<N, CalcDimensions>) {
+function recalculate<N, S extends Action>(dim: WDim, node: N, emitter: Emitter<N, S|CalcDimensions>) {
     return then(
         emitter.emit(node, calcDimensions),
         (rect) => {

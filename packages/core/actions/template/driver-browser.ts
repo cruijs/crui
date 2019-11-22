@@ -9,27 +9,31 @@ import { replace, Replace } from '../replace'
 import { Template, TemplateDriver, TemplateType } from './action'
 import { DynamicNodeDriver, DynamicNodeType, DynamicSetupDriver, DynamicSetupType } from './dynamic'
 
-type LazyN<V> = {
-    path: NodePath,
+type LazyN<V, N> = {
+    path: NodePath
+    emitter: Emitter<N>
     make: (item: V) => AnyNodeAction
 }
-type LazyS<V> = {
-    path: NodePath,
+type LazyS<V, N> = {
+    path: NodePath
+    emitter: Emitter<N>
     make: (item: V) => AnySetupAction
 }
 type LazyNode<V, N> = {
-    node: N,
+    node: N
+    emitter: Emitter<N>
     make: (item: V) => AnyNodeAction
 }
 type LazySetup<V, N> = {
-    node: N,
+    node: N
+    emitter: Emitter<N>
     make: (item: V) => AnySetupAction
 }
 type NodePath = number[]
 type TemplateNode<V, N> = {
     template: N,
-    lazyNodes: LazyN<V>[]
-    lazySetups: LazyS<V>[]
+    lazyNodes: LazyN<V, N>[]
+    lazySetups: LazyS<V, N>[]
 }
 
 export const makeTemplateDriver = <
@@ -43,22 +47,20 @@ export const makeTemplateDriver = <
         return (item: V): Deferred<N> => (
             bind(templateNode, ({ template, lazyNodes, lazySetups }) => {
                 const root = template.cloneNode(true)
-                const lazies = lazyNodes.map(({ path, make }) => {
+                const lazies = lazyNodes.map(({ path, make, emitter }) => {
                     const stub = nodeFromPath(root, path)
                     return bind(
-                        // if E is emittable, all dynamics are too
-                        emitter.emit(root, make(item) as any),
+                        emitter.emit(root, make(item)),
                         (node) => emitter.emit(
                             stub.parentNode!,
                             replace(stub, node)
                         )
                     )
                 })
-                pushAll(lazies, lazySetups.map(({ path, make }) =>
+                pushAll(lazies, lazySetups.map(({ path, make, emitter }) =>
                     emitter.emit(
                         nodeFromPath(root, path),
-                        // if E is emittable, all dynamics are too
-                        make(item) as any 
+                        make(item)
                     )
                 ))
 
@@ -83,16 +85,16 @@ function compile<V, N extends SimpleNode, E extends AnyNodeAction<N>>(
 
     const e = emitter.withDrivers(<D extends Drivers<N>>(d: D): Provide<D, V, N> => ({
         ...d,
-        [DynamicSetupType]: (node, { make }) => {
-            lazySetups.push({ node, make })
+        [DynamicSetupType]: (node, { make }, emitter) => {
+            lazySetups.push({ node, make, emitter })
         },
-        [DynamicNodeType]: (parent, { make }, { emit }) => then(
-            emit(parent, emptyNode),
-            (node) => lazyNodes.push({ node, make })
+        [DynamicNodeType]: (parent, { make }, emitter) => then(
+            emitter.emit(parent, emptyNode),
+            (node) => lazyNodes.push({ node, make, emitter })
         ),
-        [EventType]: (node, action) => {
+        [EventType]: (node, action, emitter) => {
             const make = () => action
-            lazySetups.push({ node, make })
+            lazySetups.push({ node, make, emitter })
         }
     }))
 
@@ -100,12 +102,14 @@ function compile<V, N extends SimpleNode, E extends AnyNodeAction<N>>(
         e.emit(parent, elem),
         (root) => ({
             template: root,
-            lazyNodes: lazyNodes.map(({ node, make }) => ({
+            lazyNodes: lazyNodes.map(({ node, make, emitter }) => ({
                 path: calcPath(root, node),
+                emitter,
                 make
             })),
-            lazySetups: lazySetups.map(({ node, make }) => ({
+            lazySetups: lazySetups.map(({ node, make, emitter }) => ({
                 path: calcPath(root, node),
+                emitter,
                 make
             })),
         })

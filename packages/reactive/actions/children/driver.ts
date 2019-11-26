@@ -3,6 +3,7 @@ import { Emitter } from '@crui/core/scheduler/emitter';
 import { joinAll, Deferred } from '../../../core/utils/deferred/index'
 import { Update, UpdateType } from '../../rx/list/types';
 import { $ChildrenDriver, $ChildrenType } from './index';
+import { junctureNode, JunctureNode } from '../../../core/actions/junctureNode/action'
 
 type F<T> = (val: T) => void
 function buffered<T>(f: F<T>): [F<T>, Fn0] {
@@ -18,19 +19,29 @@ function buffered<T>(f: F<T>): [F<T>, Fn0] {
     ]
 }
 
-type AReq<N> = Append<N>|Remove<N>|EmptyNode|Fragment<N>|InsertAtRef<N>
+
+type AReq<N> = Append<N>
+    | Remove<N>
+    | EmptyNode
+    | Fragment<N>
+    | InsertAtRef<N>
+    | JunctureNode<N>
+
 export const make$ChildrenDriver = <N>(): $ChildrenDriver<N, AReq<N>> => ({
     [$ChildrenType]: (parent, { stream }, { emit }) => {
         let unroll: Fn0
-        return then(
-            makeFragment(stream.get(), parent, emit, (zero) => {
-                const b = buffered((upd: Update<N>) => {
-                    runUpdate(parent, zero, emit, upd)
-                })
-                stream.subscribe(b[0])
-                unroll = b[1]
-            }),
-            () => unroll()
+        return bind(
+            emit(parent, junctureNode<N>()),
+            ({ emit }) => then(
+                makeFragment(stream.get(), parent, emit, (zero) => {
+                    const b = buffered((upd: Update<N>) => {
+                        runUpdate(parent, zero, emit, upd)
+                    })
+                    stream.subscribe(b[0])
+                    unroll = b[1]
+                }),
+                () => unroll()
+            )
         )
     }
 })

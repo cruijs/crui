@@ -1,4 +1,4 @@
-import { Fn0 } from '@crui/core/utils/combine'
+import { Fn0 } from '@crui/core/types'
 
 export type Cancel = () => void
 export type Guard = (f: Fn0) => Fn0

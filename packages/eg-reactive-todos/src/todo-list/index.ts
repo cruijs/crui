@@ -11,6 +11,7 @@ export function TodoList(store: TodoStore) {
             margin: 0,
             paddingTop: '0.5rem',
         }),
+    ], [
         listView(
             store.getVisibleTodos(),
             TodoTemplate(),
@@ -19,9 +20,11 @@ export function TodoList(store: TodoStore) {
 }
 
 function TodoTemplate() {
-    return label([
-        checkbox,
-        todoText
+    return hc('li', [
+        label([
+            checkbox,
+            todoText
+        ])
     ])
 }
 

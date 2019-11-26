@@ -1,10 +1,12 @@
-import { AnyNodeAction, bind, Cleanup, cleanup, Deferred, joinAll, MakeItem, map, pipe, Template, template as tpl, then, waitAll } from '@crui/core'
+import { AnyNodeAction, bind, Cleanup, cleanup, Deferred, joinAll, MakeItem, map, pipe, Template, template as tpl, then } from '@crui/core'
 import { StreamList, Update, UpdateType } from '../../rx/list'
 import { opBatch, opReplace, opSplice, opUpdate } from '../../rx/list/operations/factory'
 import { $Children, $children } from '../children'
 import { ListViewDriver, ListViewType } from './index'
 
-type AReq<N> = Template<any, any, N>|Cleanup|$Children<N>
+type Tpl<N> = Template<any, any, N>
+type AReq<N> = Tpl<N>|Cleanup|$Children<N>
+
 export const makeListViewDriver = <N, T extends object = any, E extends AnyNodeAction = any>(
 ): ListViewDriver<N, T, E, AReq<N>> => ({
     [ListViewType]: (parent, { stream, template }, { emit }) => {
@@ -16,24 +18,26 @@ export const makeListViewDriver = <N, T extends object = any, E extends AnyNodeA
             cache.clear()
         }))
 
-        return waitAll([
-            emit(parent, $children($nodes)),
-            bind(emit(parent, tpl(template) as Template<any, any, N>), (render) => {
-                const withNodes = makeRenderNodes<N, T>(new Map(), render)
+        const fill = bind(emit(parent, tpl(template) as Tpl<N>), (render) => {
+            const withNodes = makeRenderNodes<N, T>(new Map(), render)
 
-                stream.subscribe((upd) => {
-                    pipe(
-                        opMap(withNodes, upd),
-                        (op) => $nodes.apply(op)
-                    )
-                })
-
-                return then(
-                    withNodes(stream.get()),
-                    (nodes) => $nodes.set(nodes)
+            stream.subscribe((upd) => {
+                pipe(
+                    opMap(withNodes, upd),
+                    (op) => $nodes.apply(op)
                 )
             })
-        ])
+
+            return then(
+                withNodes(stream.get()),
+                (nodes) => $nodes.set(nodes)
+            )
+        })
+
+        return bind(
+            fill,
+            () => emit(parent, $children($nodes)),
+        )
     }
 })
 

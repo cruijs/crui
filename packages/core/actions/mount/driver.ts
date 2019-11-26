@@ -1,19 +1,19 @@
-import { Drivers } from '../../types'
+import { Drivers, Fn0 } from '../../types'
 import { bind, then } from '../../utils/deferred'
-import { mapPush } from '../../utils/map'
 import { append } from '../append'
 import { MountDriver, MountType } from './action'
 import { Handler, OnMountedDriver, OnMountedType } from './onMounted'
 
+const invoke = (f: Fn0) => f()
 export const makeMountDriver = <N extends object>(): MountDriver<N> => {
-    const handlers: Map<N, Handler<N>[]> = new Map()
+    let handlers: Handler[] = []
 
     return {
         [MountType]: (root, { elem }, emitter) => {
             const drivers = <D extends Drivers>(d: D): D & OnMountedDriver<N> => ({
                 ...d,
-                [OnMountedType]: (node, { handler }) => {
-                    mapPush(handlers, node, handler)
+                [OnMountedType]: (_, { handler }) => {
+                    handlers.push(handler)
                 }
             })
 
@@ -24,10 +24,8 @@ export const makeMountDriver = <N extends object>(): MountDriver<N> => {
                 (node) => then(
                     emit(root, append(node)),
                     () => {
-                        handlers.forEach((hs, node) => hs.forEach((handler) => {
-                            handler(node)
-                        }))
-                        handlers.clear()
+                        handlers.forEach(invoke)
+                        handlers = []
                     }
                 )
             )

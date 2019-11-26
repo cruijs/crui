@@ -10,7 +10,7 @@ export type ListViewDriver<
     E extends AnyNodeAction = any,
     S extends Action = never
 > = {
-    [ListViewType]: Driver<N, ListView<V, E>, E|S, void>
+    [ListViewType]: Driver<N, ListView<V, E>, E|S, N>
 }
 export type ListView<V extends object, E extends AnyNodeAction> = 
     NodeAction<

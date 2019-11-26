@@ -1,10 +1,10 @@
 import { Tag } from '../../restrictions/tag'
-import { Driver, NodeAction } from '../../types'
+import { Action, Driver, NodeAction } from '../../types'
 import { action } from '../action'
 
 export const CreateTagType = Symbol('create-tag')
-export type CreateTagDriver<N = any> = {
-    [CreateTagType]: Driver<N, CreateTag<N>>
+export type CreateTagDriver<N = any, S extends Action = never> = {
+    [CreateTagType]: Driver<N, CreateTag<N>, S, N>
 }
 
 export type CreateTag<N = any> =

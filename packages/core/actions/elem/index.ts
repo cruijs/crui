@@ -1,10 +1,10 @@
 import { Tag, TagMR, TagR } from '../../restrictions/tag'
-import { AnyNodeAction, AnySetupAction, Driver, NodeAction, RemoveRestr, UtoI, Drivers } from '../../types'
+import { Action, AnyNodeAction, AnySetupAction, Driver, Drivers, NodeAction, RemoveRestr, UtoI } from '../../types'
 import { action } from '../action'
 
 export const ElemType = Symbol('elem')
-export type ElemDriver<N = any> = {
-    [ElemType]: Driver<N, Elem>
+export type ElemDriver<N = any, S extends Action = never> = {
+    [ElemType]: Driver<N, Elem, S, N>
 }
 
 export type Elem<

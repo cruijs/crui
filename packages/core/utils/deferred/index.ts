@@ -1,5 +1,5 @@
-
 type Work<T> = (v: T) => void
+
 export class Deferred<T> {
     result?: T
     then: Work<T>[] = []
@@ -67,12 +67,11 @@ export function bind_<A>(d: Readonly<Deferred<A>>, f: (a: A) => Deferred<any>): 
 
 export function waitAll(ds: readonly Readonly<Deferred<any>>[]): Deferred<void> {
     let counter = ds.length
-    const deferred = new Deferred<void>()
     
-    if (counter === 0) {
-        deferred.done()
-    }
+    if (counter === 0)
+        return completed<void>(undefined)
 
+    const deferred = new Deferred<void>()
     ds.forEach((d) => {
         pipe(d, () => {
             if (--counter === 0)

@@ -6,7 +6,7 @@ import { Wrap } from '../wrap'
 
 export const $ChildType = Symbol('$child')
 export type $ChildDriver<N = any, T = any, E extends AnyNodeAction = never, S extends Action = never> = {
-    [$ChildType]: Driver<N, $Child<T, E>, S|E|Cleanup, void>
+    [$ChildType]: Driver<N, $Child<T, E>, S|E|Cleanup, N>
 }
 
 export type $Child<T, E extends AnyNodeAction> = NodeAction<

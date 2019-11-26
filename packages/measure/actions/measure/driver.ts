@@ -8,11 +8,14 @@ import { onSceneResize, OnSceneResize } from '../onSceneResize/action'
 import { RecalcDimType } from '../recalcDim'
 import { MeasureDriver, MeasureType } from './action'
 
-type AReq<N> =
-    CalcDimensions | Cleanup | OnSceneResize | OnMounted<N>
+type AReq =
+    CalcDimensions 
+    | Cleanup
+    | OnSceneResize
+    | OnMounted
 
 export const makeMeasureDriver = <N, E extends AnyNodeAction>(
-): MeasureDriver<N, E, AReq<N>> => ({
+): MeasureDriver<N, E, AReq> => ({
     [MeasureType]: (parent, { dim, elem }, e) => {
         // currently there is no way to have a generic Object indexed by Symbol
         const drivers = recalculateOn(dim, [
@@ -35,7 +38,7 @@ export const makeMeasureDriver = <N, E extends AnyNodeAction>(
                     recalculate(dim, node, emitter)
                 }
                 emitter.emit(node, onSceneResize(recalc))
-                return emitter.emit(node, onMounted<N>(recalc))
+                return emitter.emit(node, onMounted(recalc))
             }
         )
     }

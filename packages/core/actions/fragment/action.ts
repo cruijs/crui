@@ -12,7 +12,7 @@ export type Fragment<N, F = N> = InfraAction<
 }
 
 export type FragmentDriver<N = any, F = any, S extends Action = never> = {
-    [FragmentType]: Driver<N, Fragment<N, F>, S, void, F>
+    [FragmentType]: Driver<N, Fragment<N, F>, S, F>
 }
 
 export function fragment<N, F = N>(children: N[]): Fragment<N, F> {

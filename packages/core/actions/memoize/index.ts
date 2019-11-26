@@ -3,7 +3,7 @@ import { action } from '../action'
 
 export const MemoizeType = Symbol('memoize')
 export type MemoizeDriver<N, E extends AnyNodeAction = any, S extends Action = never> = {
-    [MemoizeType]: Driver<N, Memoize<E>, E|S>
+    [MemoizeType]: Driver<N, Memoize<E>, E|S, N>
 }
 export type Memoize<E extends AnyNodeAction> = 
     InfraAction<

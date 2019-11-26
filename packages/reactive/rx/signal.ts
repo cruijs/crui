@@ -1,6 +1,6 @@
-import { Unsubscribe } from '@crui/core/types';
+import { Unsubscribe, Fn0 } from '@crui/core/types';
 import { remove } from '@crui/core/utils/array';
-import { Fn0, runAll } from '@crui/core/utils/combine';
+import { runAll } from '@crui/core/utils/combine';
 
 export class Signal {
     private listeners: Fn0[] = []

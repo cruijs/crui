@@ -26,6 +26,8 @@ import { textDriver } from '../actions/text/driver-mock'
 import { TextDriver } from '../actions/text/index'
 import { MockFragment } from './mockFragment'
 import { MockNode } from './mockNode'
+import { TestDriver } from './test/action'
+import { testActionMockDriver } from './test/driver-mock'
 
 type Drivers<N = MockNode> =
     AppendDriver<N>
@@ -45,6 +47,7 @@ type Drivers<N = MockNode> =
     & TextDriver<N>
     & MountDriver<N>
     & FragmentDriver<MockNode, MockFragment>
+    & TestDriver
 
 export const mockDrivers: Drivers = {
     ...appendDriver,
@@ -62,4 +65,5 @@ export const mockDrivers: Drivers = {
     ...textDriver,
     ...makeMountDriver(),
     ...fragmentDriverMock,
+    ...testActionMockDriver
 }

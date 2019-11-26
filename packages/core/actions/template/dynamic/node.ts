@@ -9,7 +9,7 @@ export type DynamicNodeDriver<
     T = any,
     A extends AnyNodeAction = any
 > = {
-    [DynamicNodeType]: Driver<N, DynamicNode<T, A>, EmptyNode<N>>
+    [DynamicNodeType]: Driver<N, DynamicNode<T, A>, EmptyNode<N>, N>
 }
 export type DynamicNode<T, A extends AnyNodeAction> = NodeAction<
     typeof DynamicNodeType,

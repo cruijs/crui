@@ -1,6 +1,6 @@
 import { SimpleNode } from '../../dom/simpleNode'
 import { Emitter } from '../../scheduler'
-import { AnyNodeAction, AnySetupAction, Drivers } from '../../types'
+import { AnyNodeAction, AnySetupAction } from '../../types'
 import { pushAll } from '../../utils/array'
 import { bind, constMap, Deferred, map, then, waitAll } from '../../utils/deferred'
 import { emptyNode, EmptyNode } from '../emptyNode'
@@ -70,8 +70,7 @@ export const makeTemplateDriver = <
     }
 })
 
-type Provide<D, V, N> = D
-    & EventDriver<N>
+type Provide<D extends EventDriver, V, N> = D
     & DynamicSetupDriver<N, V, AnySetupAction>
     & DynamicNodeDriver<N, V, AnyNodeAction>
 
@@ -82,17 +81,21 @@ function compile<V, N extends SimpleNode, E extends AnyNodeAction<N>>(
 ): Deferred<TemplateNode<V, N>> {
     const lazyNodes: LazyNode<V, N>[] = []
     const lazySetups: LazySetup<V, N>[] = []
+    let isTemplate = true
 
-    const e = emitter.withDrivers(<D extends Drivers<N>>(d: D): Provide<D, V, N> => ({
+    const e = emitter.withDrivers(<D extends EventDriver<N>>(d: Readonly<D>): Provide<D, V, N> => ({
         ...d,
         [DynamicSetupType]: (node, { make }, emitter) => {
             lazySetups.push({ node, make, emitter })
         },
         [DynamicNodeType]: (parent, { make }, emitter) => then(
-            emitter.emit(parent, emptyNode),
+            emitter.emit(parent, emptyNode as EmptyNode<N>),
             (node) => lazyNodes.push({ node, make, emitter })
         ),
         [EventType]: (node, action, emitter) => {
+            if (!isTemplate)
+                return d[EventType](node, action, emitter)
+
             const make = () => action
             lazySetups.push({ node, make, emitter })
         }
@@ -100,19 +103,22 @@ function compile<V, N extends SimpleNode, E extends AnyNodeAction<N>>(
 
     return map(
         e.emit(parent, elem),
-        (root) => ({
-            template: root,
-            lazyNodes: lazyNodes.map(({ node, make, emitter }) => ({
-                path: calcPath(root, node),
-                emitter,
-                make
-            })),
-            lazySetups: lazySetups.map(({ node, make, emitter }) => ({
-                path: calcPath(root, node),
-                emitter,
-                make
-            })),
-        })
+        (root) => {
+            isTemplate = false
+            return ({
+                template: root,
+                lazyNodes: lazyNodes.map(({ node, make, emitter }) => ({
+                    path: calcPath(root, node),
+                    emitter,
+                    make
+                })),
+                lazySetups: lazySetups.map(({ node, make, emitter }) => ({
+                    path: calcPath(root, node),
+                    emitter,
+                    make
+                })),
+            })
+        }
     )
 }
 

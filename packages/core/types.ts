@@ -90,4 +90,5 @@ export type CombineR<R, A extends Action> =
     R & UtoI<A['_restriction']>
 
 export type Unsubscribe = () => void
-export type AsyncFn = () => PromiseLike<void>
+export type Fn0 = () => void
+export type AsyncFn = () => Deferred<void>

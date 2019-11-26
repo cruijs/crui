@@ -1,5 +1,4 @@
-import { Action, Drivers } from '../types';
-import { Fn0 } from '../utils/combine';
+import { Action, Drivers, Fn0 } from '../types';
 import { Deferred, dependsOn } from '../utils/deferred';
 import { Emit, Emitter, Job } from './emitter';
 

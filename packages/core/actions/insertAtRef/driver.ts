@@ -8,14 +8,15 @@ export const insertAtRefDriver: InsertAtRefDriver<SimpleNode, InsertAt<SimpleNod
         if (offset === undefined)
             throw new Error('Ref is not a children of Parent')
 
-        emit(parent, insertAt(node, offset + index))
+        emit(parent, insertAt(node, offset + 1 + index))
     }
 }
 
 function indexOfRef(parent: SimpleNode, ref: SimpleNode): number|undefined {
-    for (let i in parent.childNodes)
+    const len = parent.childNodes.length
+    for (let i = 0; i < len; ++i)
         if (parent.childNodes[i] === ref)
-            return Number(i)
+            return i
 
     return undefined
 }

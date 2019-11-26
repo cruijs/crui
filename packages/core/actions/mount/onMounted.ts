@@ -1,21 +1,21 @@
-import { Action, Driver, SetupAction } from '../../types'
+import { Action, Driver, Fn0, InfraAction } from '../../types'
 import { action } from '../action'
 
-export const OnMountedType = Symbol('onMounted')
-export type OnMounted<N> = SetupAction<
-    typeof OnMountedType,
-    OnMountedDriver<N>
-> & {
-    handler: Handler<N>
-}
+export type Handler = Fn0
 
-export type Handler<N> = (node: N) => void
+export const OnMountedType = Symbol('onMounted')
+export type OnMounted = InfraAction<
+    typeof OnMountedType,
+    OnMountedDriver
+> & {
+    handler: Handler
+}
 
 export type OnMountedDriver<N = any, S extends Action = never> = {
-    [OnMountedType]: Driver<N, OnMounted<N>, S>
+    [OnMountedType]: Driver<N, OnMounted, S>
 }
 
-export function onMounted<N>(handler: Handler<N>): OnMounted<N> {
+export function onMounted(handler: Handler): OnMounted {
     return action({
         type: OnMountedType,
         handler,

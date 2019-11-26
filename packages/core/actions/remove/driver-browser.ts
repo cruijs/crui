@@ -1,5 +1,5 @@
 import { destroy } from '../destroyable'
-import { RemoveDriver, RemoveType } from './index'
+import { RemoveDriver, RemoveType } from './action'
 
 export const removeDriver: RemoveDriver<Node> = {
     [RemoveType]: (parent, { node }, { emit }) => {

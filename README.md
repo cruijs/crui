@@ -1,3 +1,7 @@
+# Be aware
+This repository is currently unmaintained and is still in experimental phase. **Usage of it in production is strongly discouraged**.
+
+---
 # CRUI
 CRUI stands for and is meant to be:
 - **C**omposable: each element is highly composable. This makes the library work towards your needs instead of the other way around.
